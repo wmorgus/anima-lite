@@ -1,0 +1,81 @@
+---
+description: ari-map — probe a repo and write a four-cause spine (material, formal, efficient, final). Run once for each repo in the port pair before ari-argue.
+globs:
+alwaysApply: false
+---
+
+# ari-map
+
+Spine-finding: probe a repo's material, formal, efficient, and final causes and write the result to a named spine file.
+
+## Inputs
+
+- Repo path and label (`proto` or `prod` — determines output filename).
+- The corresponding spine file if it already exists (`.anima-lite/spine-proto.md` or `.anima-lite/spine-prod.md`) — read to determine refresh-vs-create.
+
+## When to run
+
+- No spine file exists yet for this repo.
+- The existing spine's `Commit:` hash doesn't match current HEAD.
+- A file outside the spine's declared module boundaries now imports into it.
+- Build/CI config changed since the spine's `Commit:`.
+- Caller or user flags the spine as wrong.
+
+If a current spine exists, skip — proceed directly to ari-argue.
+
+## Active orientations
+
+**Lite face.** The Formal section is where the lite face does its work. Document inconsistencies between stated and actual patterns as named findings — "The README claims X; the actual code does Y" — not as hedges. Eliding an inconsistency misleads ari-argue's telos check and ari-port's substrate translations.
+
+## Process
+
+Probe the repo and answer all four causes. Don't skip one because it seems obvious — obvious causes go stale silently.
+
+**Material — what it's made of.** Languages, frameworks, data structures, schemas, key dependencies, state shape. Load-bearing parts only. Test: if this material were swapped for an equivalent, would the software still make the same argument?
+
+**Formal — what pattern organizes it.** Layering, module boundaries, dominant design pattern(s), control flow. Identify the actual pattern from what the code does, not from what the README claims. Note where the pattern is inconsistently applied — those seams are where ports go wrong.
+
+**Efficient — what acts on it.** CI/CD pipeline, branching model, review process, build tooling, how prototypes here graduate to prod. Most often missing from architecture docs; most likely to silently break a port.
+
+**Final — what it's for.** The telos, inferred backward from the other three. State confidence and evidence explicitly. Evidence sources: routing/entry points, surviving comments and naming, test names and assertions, what gets the most defensive code. Where evidence conflicts or is thin, say so — low-confidence is more useful than confidently wrong.
+
+## Output
+
+Write `.anima-lite/spine-<label>.md`:
+
+```markdown
+# Spine: <repo-name> (<label>)
+Generated: <date>
+Commit: <short git hash of HEAD when this spine was generated>
+Confidence: <high|medium|low>
+Refresh trigger: <the specific condition that should invalidate this spine>
+
+## Material
+<what it's made of>
+
+## Formal
+<the pattern, including where it's inconsistently applied>
+
+## Efficient
+<what builds/tests/deploys it>
+
+## Final
+<inferred telos>
+**Evidence:** <what you traced backward from>
+**Confidence:** <high|medium|low>, with reasoning
+
+## Disclaimers
+This spine points in a direction. It is not a guarantee. Treat any claim
+here that materially affects a port decision as worth a quick verification
+pass against the actual code, not as settled fact.
+```
+
+Cap content at ~150 lines. Exceeding that means over-promising precision — cut to load-bearing facts.
+
+## Notes
+
+Each spine is shared, repo-level state. Commit both to the repo. If two branches regenerate a spine independently, the merge conflict is intentional signal — resolve by re-probing fresh, not by picking one side.
+
+Both `spine-proto.md` and `spine-prod.md` must be current before ari-argue can run.
+
+If staleness fires, re-run the full probe rather than patching the old file, and diff the new spine against the old one so the change is visible.

@@ -1,0 +1,70 @@
+---
+description: ari-argue — read both spines and the feature, identify what it's arguing, classify every detail as substrate or claim, confirm claim changes with the user, write a branch-scoped contract.
+globs:
+alwaysApply: false
+---
+
+# ari-argue
+
+Argumentation: determine what a feature is claiming to the user, separate from how it happens to be implemented, and get the human to confirm anything that would change if the claim itself moved.
+
+## Inputs
+
+- `.anima-lite/spine-proto.md` and `.anima-lite/spine-prod.md` (both must exist and be current — if either is missing or stale, run ari-map for the affected repo first).
+- The feature/diff/branch being ported.
+- Current git branch name (for output naming).
+
+## Preconditions
+
+- Both `spine-proto.md` and `spine-prod.md` exist and are current. If either is missing or stale, halt and run ari-map for the affected repo.
+- A specific feature/diff is identified. This skill operates on one feature per invocation.
+
+## Active orientations
+
+**Ari face.** Telos authority is senior here. Check the feature's argument against the prod spine's final cause before classifying anything. A feature that contradicts the prod telos is a routing question — scope creep or telos error — not a classification question. Route it before proceeding to step 3.
+
+**Builder face.** Classification is argument-work. Substrate vs. claim is determined by whether the user's understanding of what the feature promises would change — not "does this look different" but "does this promise different."
+
+## Process
+
+**1. Read both spines.** Check the feature's argument against both final causes. If a telos conflict is detected: present the conflict to the user, name whether it reads as a telos error (the spine's final cause is wrong) or scope creep (the feature is beyond what this repo is for), and wait for explicit confirmation before continuing. Do not write the contract until the user has acknowledged the conflict. Note the proto spine's `Commit:` hash; the contract will pin to it.
+
+**2. Identify the argument.** What relationship or promise is this feature establishing with the user — not what it does mechanically. A confirmation dialog before a destructive action argues "you should not lose data by accident." A widget choice is usually medium, unless the choice itself is load-bearing.
+
+**3. Classify every implementation detail.**
+
+*Substrate* — free to translate: widget library swap, renaming, file restructuring, styling system, error message wording (not its existence).
+
+*Claim* — requires explicit confirmation: removing a UI element the prototype had, dropping a confirmation step, relaxing validation, changing who gets notified, changing reversible to permanent. When ambiguous, escalate to step 4.
+
+**4. Confirm every claim change with the user.** One at a time, never bundled. Frame concretely: state what the prototype does, what the prod pattern would do instead, and that this is an argument-level decision. If the user is unreachable, default to preserving the claim and mark it "preserved by default, pending confirmation" — never silently resolve ambiguity.
+
+## Output
+
+Write `.anima-lite/contracts/<branch-slug>.md`:
+
+```markdown
+# Contract: <feature-name>
+Branch: <branch-slug>
+Generated: <date>
+Spine commit: <Commit: hash from spine-proto.md at time of writing>
+Status: FROZEN FOR SESSION — do not modify without re-running ari-argue
+
+## The argument
+<one or two sentences: what is this feature claiming to the user>
+
+## Substrate changes (free to translate)
+- <detail> — <why this is medium, not claim>
+
+## Claim changes (confirmed with user)
+- <detail> — Decision: <preserve|change-to-X> — Confirmed: <yes/default-preserve, with date>
+
+## Open questions
+<anything not yet confirmed; ari-port must halt and escalate if it hits these>
+```
+
+## Notes
+
+Branch-scoping exists because multiple branches can be mid-port off the same prototype at once. Don't write to a singleton `contract.md`.
+
+Once written with no open Open Questions, the contract is frozen for the session and ready for ari-port. If ari-port later finds the contract contradicted by the real code, treat that as new evidence and re-run from step 3 with the specific contradiction named — not a do-over from scratch.

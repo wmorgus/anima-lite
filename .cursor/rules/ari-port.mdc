@@ -1,0 +1,57 @@
+---
+description: ari-port — translate the feature from proto to prod using spine and contract as binding context. Runs only after ari-map and ari-argue have produced current, hash-matched artifacts.
+globs:
+alwaysApply: false
+---
+
+# ari-port
+
+Execution: the hard epistemic work happened upstream — this should feel mechanical. If it feels ambiguous, that's a sign the contract was incomplete, not a cue to use judgment alone.
+
+## Inputs
+
+- `.anima-lite/spine-proto.md` and `.anima-lite/spine-prod.md`
+- `.anima-lite/contracts/<branch-slug>.md` for the current branch and feature
+- The prototype code being translated
+
+## Preconditions
+
+1. Both `spine-proto.md` and `spine-prod.md` exist and are not stale. If either is stale or missing: halt, run ari-map for the affected repo.
+2. `contracts/<branch-slug>.md` exists for the current branch and feature, status is not "DRAFT," and has no unconfirmed items in Open Questions. If any fail: halt, run ari-argue.
+3. The contract's `Spine commit:` hash matches `spine-proto.md`'s current `Commit:`. If mismatched: summarize what changed in the spine and ask the user whether the contract still holds or needs a re-pass through ari-argue. Don't auto-fail or proceed silently.
+
+## Active orientations
+
+**Ari face (self-policing).** Every blip carries a `Contracting failure?` field. This is not optional metadata — it is the self-policing obligation: each uncovered case is an occasion to ask whether the contract was incomplete, not just what to do now. A blip that skips this question exempts the contracting phase from the quality sweep.
+
+## Process
+
+- **Substrate changes** — translate freely, using the prod repo's formal cause (from `spine-prod.md`) as the guide for idiom and structure. The medium changes; the argument doesn't.
+- **Claim changes** — implement exactly per the contract's confirmed decision. Do not relitigate mid-execution.
+- **Anything not covered by the contract** — log as a blip immediately and make the conservative choice (preserve current behavior) unless the user has pre-authorized judgment calls on uncovered cases.
+- **Contract contradicted** — if the contract is actively wrong (not incomplete, but contradicted by what the prototype code does): halt. Write the contradiction to blips as `CONTRACT-BREAK` and report that execution is paused pending a re-run of ari-argue with this new information.
+
+## Output
+
+Append to `.anima-lite/blips/<branch-slug>.md` throughout the session:
+
+```markdown
+## Blip: <short title>
+Severity: <info|review-suggested|CONTRACT-BREAK>
+Location: <file:line>
+What happened: <the decision>
+Why: <reasoning>
+Downstream consequence: <what this means going forward>
+Contracting failure?: <what should have been in the contract to cover this — or "n/a" if genuinely unforeseeable>
+```
+
+At session end:
+1. Summarize blips grouped by severity, leading with `review-suggested` or above.
+2. State which contract items (claim changes) were actually exercised.
+3. Leave `.anima-lite/` artifacts in place.
+
+## Notes
+
+One contract per feature. A second feature on the same branch needs its own ari-argue pass and its own contract file, even if the spine is reused.
+
+No concurrency locking for two sessions against the same branch-slug simultaneously — out of scope for a prototyping-stage tool.
