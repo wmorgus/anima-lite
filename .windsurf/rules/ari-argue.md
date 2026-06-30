@@ -25,7 +25,15 @@ Argumentation: determine what a feature is claiming to the user, separate from h
 
 **2. Identify the argument.** What promise is this feature establishing with the user — not what it does mechanically.
 
-**3. Classify every detail.** Substrate (free to translate): widget library swap, renaming, file restructuring, styling, error message wording. Claim (requires confirmation): removing a UI element, dropping a confirmation step, relaxing validation, changing reversible to permanent. When ambiguous, escalate to step 4.
+**3. Classify every detail.** Substrate (free to translate): widget library swap, renaming, file restructuring, styling, colors, fonts, animation library. Wording is substrate only when the semantic register is unchanged. Claim (requires confirmation): removing a UI element, dropping a confirmation step, relaxing validation, changing reversible to permanent. Three categories that consistently look like substrate but are not:
+
+**Interaction model.** How the user physically moves through the feature — collapse/expand, auto-advance, one-at-a-time focus, toggle behavior. Classify interaction patterns as claims by default.
+
+**Semantic register.** Register shift is a claim: endorsement → disclaimer, celebration → warning, brand confidence → liability caveat. Two different promises, not two phrasings.
+
+**Structural visual hierarchy.** Colors are substrate; whether primary metrics live in a hero block versus a flat grid is not — it reflects the feature's argument about what matters. Confirm before flattening.
+
+When ambiguous, escalate to step 4.
 
 **4. Confirm every claim change with the user.** One at a time, never bundled. If the user is unreachable, default to preserving the claim — never silently resolve ambiguity.
 

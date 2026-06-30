@@ -10,9 +10,17 @@ Code is a structure of promises to a user. Translation has to preserve the promi
 
 Every implementation detail is either **substrate** or **claim**.
 
-**Substrate** — the medium. Translate freely: library swap, rename, file restructure, styling, test framework, error message wording (not its existence). These don't change what the software promises.
+**Substrate** — the medium. Translate freely: library swap, rename, file restructure, styling, colors, fonts, animation library, test framework. Wording is substrate only when the semantic register is unchanged — two phrasings of the same promise.
 
 **Claim** — the argument itself. Requires explicit user confirmation before changing: dropping a confirmation step, relaxing a validation, removing a UI element the prototype had, changing reversible to permanent, changing who gets notified. When unsure: would a user who understood the feature's promise notice a difference in the promise? If yes — claim.
+
+Three categories that consistently look like substrate but are not:
+
+**Interaction model.** How the user physically moves through the feature — collapse/expand, auto-advance, one-at-a-time focus, toggle behavior. Classify interaction patterns as claims by default; only call them substrate if the specific pattern demonstrably doesn't affect the promise.
+
+**Semantic register.** Register shift is a claim: endorsement → disclaimer, celebration → warning, brand confidence → liability caveat. Two different promises, not two phrasings of the same promise.
+
+**Structural visual hierarchy.** Colors and fonts are substrate. Whether the primary metrics live in a prominent hero block versus a flat card grid is not — it reflects what the feature argues the user should feel is important. Confirm before flattening.
 
 **Conservative default.** When uncertain, preserve. A missed claim change is recoverable. A silently changed claim is invisible until a user relies on the old promise and the system fails them.
 
