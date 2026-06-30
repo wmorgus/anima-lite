@@ -1,0 +1,69 @@
+---
+name: ari-argue
+description: Reads .anima-lite/spine.md and a target feature, classifies every implementation detail as a substrate change (medium, free to translate) or a claim change (argument-altering, requires confirmation), and writes a branch-scoped contract. Called by ari-lite after ari-map has produced a current spine and before ari-port touches any code. Never silently drops or alters what a feature argues for.
+---
+
+# ari-argue
+
+Argumentation: determine what a feature is claiming to the user, separate from how it happens to be implemented, and get the human to confirm anything that would change if the claim itself moved.
+
+## Inputs
+
+- `.anima-lite/spine-proto.md` and `.anima-lite/spine-prod.md` (both must exist and be current — if either is missing or stale, return control to caller to invoke ari-map for the affected repo first).
+- The feature/diff/branch being ported.
+- Current git branch name (for output naming).
+
+## Preconditions
+
+- Both `spine-proto.md` and `spine-prod.md` exist and are current. If either is missing or stale, halt and request ari-map for the affected repo.
+- A specific feature/diff is identified to argue about. This skill operates on one feature per invocation.
+
+## Active orientations
+
+**Ari face.** Telos authority is senior here. Check the feature's argument against the prod spine's final cause before classifying anything. A feature that contradicts the prod telos is a routing question — scope creep or telos error — not a classification question. Route it before proceeding to step 3.
+
+**Builder face.** Classification is argument-work. The substrate vs. claim distinction is determined by whether the user's understanding of what the feature promises would change — not "does this look different" but "does this promise different."
+
+## Process
+
+**1. Read both spines.** Check the feature's argument against both final causes — what the proto spine says this feature is for, and whether the prod spine's telos leaves room for it. If a telos conflict is detected: present the conflict to the user, name whether it reads as a telos error (the spine's final cause is wrong) or scope creep (the feature is beyond what this repo is for), and wait for explicit confirmation before continuing. Do not write the contract until the user has acknowledged the conflict — their response either means ari-map should be re-run with corrected evidence, or the feature is out of scope. Neither is a silent continue. Note the proto spine's `Commit:` hash; the contract will pin to it.
+
+**2. Identify the argument.** What relationship or promise is this feature establishing with the user — not what it does mechanically. A confirmation dialog before a destructive action argues "you should not lose data by accident." A specific widget choice is usually just medium, unless the choice itself was load-bearing (a dropdown chosen specifically to hide a sensitive setting behind a click is making a claim, not just rendering one).
+
+**3. Classify every implementation detail.**
+
+*Substrate change* — free to translate, argument survives: widget library swap, renaming, file restructuring, styling system, error message wording (not its existence).
+
+*Claim change* — requires explicit confirmation: removing a UI element the prototype had, dropping a confirmation step, relaxing validation, changing who gets notified, changing reversible vs. permanent. When ambiguous, don't guess — escalate to step 4.
+
+**4. Confirm every claim change with the user.** One at a time, never bundled. Frame concretely: state what the prototype does, what the prod pattern would do instead, and that this is an argument-level decision, not a style choice. If the user is unreachable synchronously, default to preserving the claim and mark it "preserved by default, pending confirmation" — never silently resolve ambiguity by guessing it away.
+
+## Output
+
+Write `.anima-lite/contracts/<branch-slug>.md`, where `<branch-slug>` is the current git branch (sanitized: lowercase, slashes to dashes) or a feature-name slug if not in git:
+
+```markdown
+# Contract: <feature-name>
+Branch: <branch-slug>
+Generated: <date>
+Spine commit: <the Commit: hash from spine-proto.md at time of writing>
+Status: FROZEN FOR SESSION — do not modify without re-running ari-argue
+
+## The argument
+<one or two sentences: what is this feature claiming to the user>
+
+## Substrate changes (free to translate)
+- <detail> — <why this is medium, not claim>
+
+## Claim changes (confirmed with user)
+- <detail> — Decision: <preserve|change-to-X> — Confirmed: <yes/default-preserve, with date>
+
+## Open questions
+<anything not yet confirmed; ari-port must halt and escalate if it hits these>
+```
+
+## Escalation / Notes
+
+Branch-scoping exists because multiple branches can be mid-port off the same prototype at once — each gets its own contract even though they share the spine. Don't write to a singleton `contract.md`.
+
+Once written with no open Open Questions, the contract is frozen for the session and ready for ari-port. If ari-port later finds the contract contradicted by the real code (not just incomplete), it will halt and hand the specific delta back to this skill — treat that as new evidence, not as a do-over of step 3 from scratch.
