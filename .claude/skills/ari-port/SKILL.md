@@ -92,6 +92,33 @@ The validation agent returns one of:
 
 On FAIL: loop back to Step 2, fix the specific finding, re-validate. Do not declare completion before the validation agent returns PASS or PASS (pending review) with acknowledged items.
 
+**D. Live browser validation (strongly recommended, optional)** — if the contract specifies a `playwright:` block (see contract format below), the validation agent runs a browser pass using Playwright MCP tools after the static checks pass. The browser pass is a second validation layer: it confirms claims are not only implemented in code but functional in a running browser.
+
+If `playwright:` is present in the contract, the validation agent:
+1. Navigates to `playwright.login_url` and performs the login sequence specified in `playwright.login_steps`
+2. Navigates to `playwright.feature_url`
+3. Takes a full-page screenshot
+4. For each claim in `playwright.checks`, performs the specified interaction and verifies the expected outcome
+5. Logs any failure as a `CONTRACT-BREAK` blip — a claim that passes static code review but fails live in the browser is a CONTRACT-BREAK
+
+The Playwright pass does not replace the static check — both must pass. If the dev server is not running, skip D and note it as an info blip: `Severity: info — Playwright pass skipped: dev server not reachable at <url>`.
+
+**Contract `playwright:` block format** (add to the contract file):
+```markdown
+## Playwright verification
+login_url: http://localhost:8080/demo?pl2-demo-type=tutor&demo-category=toolkit
+feature_url: http://localhost:8080/PLUS/TutorReview
+checks:
+  - claim: "Claim 4 — feedback text minimum"
+    steps: "Click 'Not Helpful' button on the first insight card"
+    expect: "Textarea appears with character count label showing '0/10 characters minimum'; Submit button is disabled"
+  - claim: "Claim 5 — training accordion"
+    steps: "Click 'Recommended Training' accordion header"
+    expect: "Training cards expand and are visible"
+```
+
+Each check names the claim, the interaction steps (human-readable, Playwright agent will interpret), and the expected outcome. If an expected outcome is not met, that is a CONTRACT-BREAK for the named claim.
+
 ## Output
 
 Write `.anima-lite/plans/<branch-slug>.md` before execution (Step 1 output).
