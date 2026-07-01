@@ -83,6 +83,8 @@ The validation agent checks three things independently, reading changed files di
 
 **C. Blip severity routing** — `review-suggested` blips are surfaced to the user and require acknowledgment before PASS. `info` blips are noted but don't block. `CONTRACT-BREAK` blips mean execution should have already halted — if one reaches validation, that is itself a FAIL.
 
+Additional CONTRACT-BREAK trigger: any user-visible broken interaction is a CONTRACT-BREAK regardless of invariant letter. "The feature works" is always an implicit invariant. Specifically: if a user action results in a silent failure or no-op (a control is enabled but the triggered operation fails with no feedback), that is CONTRACT-BREAK — not `review-suggested`. This cannot be waved through to human review. Functional correctness of implemented claims is non-negotiable; the stated invariant text is a floor, not a ceiling.
+
 The validation agent returns one of:
 - **PASS** — all claims implemented; all blip classifications correct; no `review-suggested` blips pending acknowledgment
 - **PASS (pending review)** — claims and blip classifications correct, but `review-suggested` blips present; surface to user for acknowledgment, then PASS
