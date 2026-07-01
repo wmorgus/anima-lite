@@ -9,15 +9,18 @@ Execution: "let it fly, human watches for issues." The hard epistemic work happe
 
 ## Inputs
 
-- `.anima-lite/spine-proto.md` and `.anima-lite/spine-prod.md`
-- `.anima-lite/contracts/<branch-slug>.md` for the current branch and feature
-- The prototype code being translated
+- `.anima-lite/spine-proto/telos.md` — commit hash for precondition check.
+- `.anima-lite/spine-prod/formal.md` — primary reference for substrate translation. This is the guide for idiom and structure: new code must follow the prod repo's architectural patterns, not copy the proto's.
+- `.anima-lite/spine-prod/telos.md` — for the don't-contradict rules; substrate translations must not violate them.
+- Pull `material.md` or `efficient.md` from either spine directory if a specific translation decision requires it.
+- `.anima-lite/contracts/<branch-slug>.md` for the current branch and feature.
+- The prototype code being translated.
 
 ## Preconditions
 
-1. Both `spine-proto.md` and `spine-prod.md` exist and are not stale. If either is stale or missing: halt, request ari-map for the affected repo.
+1. Both `spine-proto/` and `spine-prod/` exist and `telos.md` in each is current. If either is stale or missing: halt, request ari-map for the affected repo.
 2. `contracts/<branch-slug>.md` exists for the current branch and feature, status is not "DRAFT," and has no unconfirmed items in Open Questions. If any fail: halt, request ari-argue.
-3. The contract's `Spine commit:` hash matches `spine-proto.md`'s current `Commit:`. If mismatched — another branch refreshed the spine since this contract was confirmed — don't auto-fail or proceed silently. Summarize what changed in the spine (diff against the prior version via git history if recoverable) and ask the user whether the contract still holds or needs a quick re-pass through ari-argue.
+3. The contract's `Spine commit:` hash matches `spine-proto/telos.md`'s current `Commit:`. If mismatched — another branch refreshed the spine since this contract was confirmed — don't auto-fail or proceed silently. Summarize what changed and ask the user whether the contract still holds or needs a quick re-pass through ari-argue.
 
 Do not proceed on partial or mismatched context. This is the failure mode the whole pipeline exists to prevent: code moved without its meaning, or moved against terrain that already shifted underneath it.
 

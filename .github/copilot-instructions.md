@@ -29,14 +29,16 @@ Three categories that consistently look like substrate but are not:
 Ports run in three phases. Each produces artifacts the next phase reads.
 
 ### Phase 1: ari-map
-Run for each repo in the port pair. Produces `spine-proto.md` and `spine-prod.md` in `.anima-lite/`.
+Run for each repo in the port pair. Produces `spine-proto/` and `spine-prod/` directories in `.anima-lite/`, each containing four files.
 
-Each spine is a four-cause map: **Material** (what it's made of), **Formal** (the architecture pattern — including where it's inconsistently applied), **Efficient** (build/CI/deploy), **Final** (inferred telos with evidence and confidence). Both spines must be current (commit-hash matched) before phase 2.
+**`telos.md`** — coding-agent entry point. Carries the commit hash, the repo's purpose as a decision constraint, and don't-contradict rules (imperative constraints new code must not violate). Load this first.
+
+**`material.md`**, **`formal.md`**, **`efficient.md`** — analytical reference depth for ari-argue and ari-port. The formal file is the primary guide for substrate translations. Both spine directories must be current (commit-hash matched in telos.md) before phase 2.
 
 ### Phase 2: ari-argue
-Reads both spines + the feature. Identifies what the feature is arguing (not what it does — what it promises). Classifies every detail as substrate or claim. Confirms each claim change with the user one at a time, never bundled. Produces `.anima-lite/contracts/<branch-slug>.md`. Contract is frozen once phase 3 begins.
+Reads both telos files + both formal files + the feature. Identifies what the feature is arguing (not what it does — what it promises). Classifies every detail as substrate or claim. Confirms each claim change with the user one at a time, never bundled. Produces `.anima-lite/contracts/<branch-slug>.md`. Contract is frozen once phase 3 begins.
 
-If a telos conflict is detected (the feature contradicts the prod spine's final cause): surface the conflict, name whether it's a telos error or scope creep, wait for explicit confirmation. Do not write the contract until acknowledged.
+If a telos conflict is detected (the feature contradicts the prod telos's Purpose or don't-contradict rules): surface the conflict, name whether it's a telos error or scope creep, wait for explicit confirmation. Do not write the contract until acknowledged.
 
 ### Phase 3: ari-port
 Translates substrate freely using the prod spine's formal cause as the guide. Implements confirmed claim changes exactly as confirmed. Logs anything not covered by the contract as a blip in `.anima-lite/blips/<branch-slug>.md`. Halts if the contract is actively contradicted by the real code — that's a `CONTRACT-BREAK`, not a blip.

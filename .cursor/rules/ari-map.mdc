@@ -1,83 +1,81 @@
 ---
-description: ari-map — probe a repo and write a four-cause spine (material, formal, efficient, final). Run once for each repo in the port pair before ari-argue.
+description: ari-map — probe a repo and write a four-file spine directory (telos + material + formal + efficient). Run once for each repo in the port pair before ari-argue.
 globs:
 alwaysApply: false
 ---
 
 # ari-map
 
-Spine-finding: probe a repo's material, formal, efficient, and final causes and write the result to a named spine file.
+Spine-finding: probe a repo's four causes and write the result to `.anima-lite/spine-<label>/`. The telos file is the coding-agent-facing entry point; the cause files are analytical reference for ari-argue and ari-port.
 
 ## Inputs
 
-- Repo path and label (`proto` or `prod` — determines output filename).
-- The corresponding spine file if it already exists (`.anima-lite/spine-proto.md` or `.anima-lite/spine-prod.md`) — read to determine refresh-vs-create.
+- Repo path and label (`proto` or `prod` — determines output directory name).
+- `.anima-lite/spine-<label>/telos.md` if it exists — read `Commit:` to determine refresh-vs-create.
 
 ## When to run
 
-- No spine file exists yet for this repo.
-- The existing spine's `Commit:` hash doesn't match current HEAD.
+- `.anima-lite/spine-<label>/` does not exist yet.
+- `telos.md`'s `Commit:` hash doesn't match current HEAD.
 - A file outside the spine's declared module boundaries now imports into it.
 - Build/CI config changed since the spine's `Commit:`.
 - Caller or user flags the spine as wrong.
 
-If a current spine exists, skip — proceed directly to ari-argue.
+If a current spine directory exists, skip — proceed directly to ari-argue.
 
 ## Active orientations
 
-**Lite face.** The Formal section is where the lite face does its work. Document inconsistencies between stated and actual patterns as named findings — "The README claims X; the actual code does Y" — not as hedges. Eliding an inconsistency misleads ari-argue's telos check and ari-port's substrate translations.
+**Lite face.** `formal.md` is where the lite face does its work. Document inconsistencies between stated and actual patterns as named findings — "The README claims X; the actual code does Y" — not as hedges. Eliding an inconsistency misleads ari-argue's telos check and ari-port's substrate translations.
 
 **Scope fence.** This spine maps one repo only. Do not reference the other repo in the port pair, compare to the proto, or anticipate what ari-argue will find. Cross-repo comparison is ari-argue's job. Name what this repo does; leave what it means for the port to ari-argue.
 
 ## Process
 
-Probe the repo and answer all four causes. Don't skip one because it seems obvious — obvious causes go stale silently.
+Probe the repo and answer all four causes. Don't skip one because it seems obvious.
 
-**Material — what it's made of.** Languages, frameworks, data structures, schemas, key dependencies, state shape. Load-bearing parts only. Test: if this material were swapped for an equivalent, would the software still make the same argument?
+**Material — what it's made of.** Languages, frameworks, data structures, schemas, key dependencies, state shape. Load-bearing parts only.
 
-**Formal — what pattern organizes it.** Layering, module boundaries, dominant design pattern(s), control flow. Identify the actual pattern from what the code does, not from what the README claims. Note where the pattern is inconsistently applied — those seams are where ports go wrong.
+**Formal — what pattern organizes it.** Layering, module boundaries, dominant design patterns, control flow. Identify the actual pattern from what the code does, not what the README claims. Name inconsistencies as findings.
 
-**Efficient — what acts on it.** CI/CD pipeline, branching model, review process, build tooling, how prototypes here graduate to prod. Most often missing from architecture docs; most likely to silently break a port.
+**Efficient — what acts on it.** CI/CD, branching, build tooling, how changes get deployed.
 
-**Final — what it's for.** The telos, inferred backward from the other three. State confidence and evidence explicitly. Evidence sources: routing/entry points, surviving comments and naming, test names and assertions, what gets the most defensive code. Where evidence conflicts or is thin, say so — low-confidence is more useful than confidently wrong.
+**Final — what it's for (telos).** Inferred backward from the other three. State confidence and evidence. From the telos, derive don't-contradict rules: imperative constraints a coding agent must not violate.
 
 ## Output
 
-Write `.anima-lite/spine-<label>.md`:
+Write four files to `.anima-lite/spine-<label>/`:
 
+**`telos.md`** — coding-agent entry point. Short. Imperative.
 ```markdown
-# Spine: <repo-name> (<label>)
-Generated: <date>
-Commit: <short git hash of HEAD when this spine was generated>
+# Telos: <repo-name> (<label>)
+Commit: <short git hash>
 Confidence: <high|medium|low>
-Refresh trigger: <the specific condition that should invalidate this spine>
+Refresh trigger: <condition>
 
-## Material
-<what it's made of>
+## Purpose
+<2-3 sentences: what this codebase exists to do, as a decision constraint>
 
-## Formal
-<the pattern, including where it's inconsistently applied>
+## Don't contradict
+- <imperative rule derived from telos>
+- <3-5 concrete, checkable rules>
 
-## Efficient
-<what builds/tests/deploys it>
-
-## Final
-<inferred telos>
-**Evidence:** <what you traced backward from>
-**Confidence:** <high|medium|low>, with reasoning
+## Cause files (reference depth)
+- [material.md](material.md) — tech stack and load-bearing dependencies
+- [formal.md](formal.md) — architecture patterns; new code follows these
+- [efficient.md](efficient.md) — build/CI/deploy; how to verify changes
 
 ## Disclaimers
-This spine points in a direction. It is not a guarantee. Treat any claim
-here that materially affects a port decision as worth a quick verification
-pass against the actual code, not as settled fact.
+Telos is inferred, not declared. Verify before relying on specific claims.
 ```
 
-Cap content at ~150 lines. Exceeding that means over-promising precision — cut to load-bearing facts.
+**`material.md`**, **`formal.md`**, **`efficient.md`** — analytical reference. Each ~50 lines max.
+```markdown
+# <Cause>: <repo-name> (<label>)
+(Reference depth — see telos.md for entry point and commit hash)
+
+<analytical content>
+```
 
 ## Notes
 
-Each spine is shared, repo-level state. Commit both to the repo. If two branches regenerate a spine independently, the merge conflict is intentional signal — resolve by re-probing fresh, not by picking one side.
-
-Both `spine-proto.md` and `spine-prod.md` must be current before ari-argue can run.
-
-If staleness fires, re-run the full probe rather than patching the old file, and diff the new spine against the old one so the change is visible.
+Commit the full spine directory — it's shared repo-level state. Both `spine-proto/` and `spine-prod/` must be current before ari-argue can run. Merge conflicts on spine files are intentional signal — resolve by re-probing fresh.

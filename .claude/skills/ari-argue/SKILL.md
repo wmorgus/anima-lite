@@ -9,13 +9,15 @@ Argumentation: determine what a feature is claiming to the user, separate from h
 
 ## Inputs
 
-- `.anima-lite/spine-proto.md` and `.anima-lite/spine-prod.md` (both must exist and be current — if either is missing or stale, return control to caller to invoke ari-map for the affected repo first).
+- `.anima-lite/spine-proto/telos.md` and `.anima-lite/spine-prod/telos.md` — read first; telos check happens here.
+- `.anima-lite/spine-proto/formal.md` and `.anima-lite/spine-prod/formal.md` — read for substrate classification (what patterns the prod spine uses informs what's a free translation vs. a structural claim).
+- Pull `material.md` or `efficient.md` from either spine directory if a specific detail requires it.
 - The feature/diff/branch being ported.
 - Current git branch name (for output naming).
 
 ## Preconditions
 
-- Both `spine-proto.md` and `spine-prod.md` exist and are current. If either is missing or stale, halt and request ari-map for the affected repo.
+- Both `spine-proto/` and `spine-prod/` directories exist and `telos.md` in each is current (Commit: hash matches HEAD). If either is missing or stale, halt and request ari-map for the affected repo.
 - A specific feature/diff is identified to argue about. This skill operates on one feature per invocation.
 
 ## Active orientations
@@ -26,7 +28,7 @@ Argumentation: determine what a feature is claiming to the user, separate from h
 
 ## Process
 
-**1. Read both spines.** Check the feature's argument against both final causes — what the proto spine says this feature is for, and whether the prod spine's telos leaves room for it. If a telos conflict is detected: present the conflict to the user, name whether it reads as a telos error (the spine's final cause is wrong) or scope creep (the feature is beyond what this repo is for), and wait for explicit confirmation before continuing. Do not write the contract until the user has acknowledged the conflict — their response either means ari-map should be re-run with corrected evidence, or the feature is out of scope. Neither is a silent continue. Note the proto spine's `Commit:` hash; the contract will pin to it.
+**1. Read both telos files.** Check the feature's argument against both purposes and don't-contradict rules — what the proto telos says this feature is for, and whether the prod telos leaves room for it. If a telos conflict is detected: present the conflict to the user, name whether it reads as a telos error (the spine's purpose is wrong) or scope creep (the feature is beyond what this repo is for), and wait for explicit confirmation before continuing. Do not write the contract until the user has acknowledged the conflict. Neither outcome is a silent continue. Note the proto telos's `Commit:` hash; the contract will pin to it.
 
 **2. Identify the argument.** What relationship or promise is this feature establishing with the user — not what it does mechanically. A confirmation dialog before a destructive action argues "you should not lose data by accident." A specific widget choice is usually just medium, unless the choice itself was load-bearing (a dropdown chosen specifically to hide a sensitive setting behind a click is making a claim, not just rendering one).
 
@@ -56,7 +58,7 @@ Write `.anima-lite/contracts/<branch-slug>.md`, where `<branch-slug>` is the cur
 # Contract: <feature-name>
 Branch: <branch-slug>
 Generated: <date>
-Spine commit: <the Commit: hash from spine-proto.md at time of writing>
+Spine commit: <the Commit: hash from spine-proto/telos.md at time of writing>
 Status: FROZEN FOR SESSION — do not modify without re-running ari-argue
 
 ## The argument

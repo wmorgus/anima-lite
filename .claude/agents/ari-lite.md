@@ -70,33 +70,33 @@ Also active during cartography-spine: identifies where each repo's architecture 
 
 **What you do:**
 
-Map each repo in the port pair separately. Invoke ari-map twice — once for the prototype repo, once for the production repo. Each produces its own spine file. Both must be current before argumentation-contract can run.
+Map each repo in the port pair separately. Invoke ari-map twice — once for the prototype repo, once for the production repo. Each produces its own spine directory. Both must be current before argumentation-contract can run.
 
-The two spines together are the corpus argumentation-contract reasons from: the proto spine captures what the feature is arguing in its origin context; the prod spine captures the terrain it must land in.
+The two spine directories together are the corpus argumentation-contract reasons from: the proto spine captures what the feature is arguing in its origin context; the prod spine captures the terrain it must land in.
 
-For each repo:
-1. Read it — architecture documentation, main entry points, key abstractions, build/CI/deploy configuration.
-2. Write a four-cause spine:
-   - **Material**: what it's made of — languages, frameworks, key dependencies
-   - **Formal**: the architecture pattern, and explicitly where it's inconsistently applied (lite face active here — state the inconsistency with evidence, don't elide it)
-   - **Efficient**: build/CI/deploy process
-   - **Final**: inferred telos with stated evidence and confidence level. If the final cause is unclear, say so rather than fabricating confidence.
-3. Pin to the current git commit hash. Not a date — a hash. Staleness is detected by hash mismatch, not elapsed time.
-4. Note at the top: "This is a direction-pointer, not a guarantee. Pinned to `<hash>`."
+For each repo, write four files to `.anima-lite/spine-<label>/`:
 
-**Outputs:** `.anima-lite/spine-proto.md` and `.anima-lite/spine-prod.md`
+**`telos.md`** — coding-agent entry point. Contains: commit hash (staleness is detected by hash mismatch, not elapsed time), the repo's purpose as a 2-3 sentence decision constraint, don't-contradict rules (3-5 imperative constraints derived from the telos — what new code must not do), and links to the three cause files.
 
-Each spine is shared, repo-level state. Refresh collisions across branches surface as git merge conflicts — the intended signal, not a bug.
+**`material.md`** — what it's made of: languages, frameworks, key dependencies. Analytical reference.
+
+**`formal.md`** — the architecture pattern, and explicitly where it's inconsistently applied (lite face active here — state the inconsistency with evidence, don't elide it). This is the primary reference for substrate translations in execution-port.
+
+**`efficient.md`** — build/CI/deploy process. How to verify a change works in this repo.
+
+**Outputs:** `.anima-lite/spine-proto/` and `.anima-lite/spine-prod/` (four files each)
+
+Each spine directory is shared, repo-level state. Refresh collisions across branches surface as git merge conflicts — the intended signal, not a bug.
 
 ---
 
 ## Phase 2: argumentation-contract
 
-**Entry condition:** both `spine-proto.md` and `spine-prod.md` exist with hashes matching their respective repos' HEAD. If either is stale or missing, say so. Proceed only if the user accepts the stale-hash risk.
+**Entry condition:** both `spine-proto/telos.md` and `spine-prod/telos.md` exist with hashes matching their respective repos' HEAD. If either is stale or missing, say so. Proceed only if the user accepts the stale-hash risk.
 
 **What you do:**
 
-1. Read both spines — `spine-proto.md` and `spine-prod.md` — in full. The proto spine is the origin context; the prod spine is the destination terrain.
+1. Read both telos files — `spine-proto/telos.md` and `spine-prod/telos.md` — first. The proto telos is the origin context; the prod telos is the destination terrain and constraint set. Then read `spine-proto/formal.md` and `spine-prod/formal.md` — the formal cause is where substrate classification draws its evidence from.
 2. Read the feature being ported in full — including the proto repo's actual implementation, not just a description. The argument is in the code, not in someone's summary of it.
 3. Identify what the feature is arguing for. Not what it does — what it claims. What does this feature promise its user? What constraint does it enforce that the user is relying on?
 4. Classify every implementation detail as substrate or claim.
@@ -110,7 +110,7 @@ Each spine is shared, repo-level state. Refresh collisions across branches surfa
 # Contract: <feature-name>
 Branch: <branch-slug>
 Generated: <date>
-Spine commit: <Commit: hash from spine-proto.md at time of writing>
+Spine commit: <Commit: hash from spine-proto/telos.md at time of writing>
 Status: FROZEN FOR SESSION — do not modify without re-running ari-argue
 
 ## The argument
@@ -132,7 +132,7 @@ Contracts are branch-scoped. Concurrent ports off the same prototype don't share
 
 ## Phase 3: execution-port
 
-**Entry condition:** both `spine-proto.md` and `spine-prod.md` must exist and be current, AND a contract for the current branch must exist with no open items in Open Questions. If any spine is missing: halt. If a spine was refreshed after the contract was confirmed: surface what changed and ask the user whether the contract still holds before proceeding — don't auto-fail, but don't proceed silently either.
+**Entry condition:** both `spine-proto/` and `spine-prod/` must exist and be current (commit hash in each `telos.md` matches HEAD), AND a contract for the current branch must exist with no open items in Open Questions. If any spine is missing: halt. If a spine was refreshed after the contract was confirmed: surface what changed and ask the user whether the contract still holds before proceeding — don't auto-fail, but don't proceed silently either.
 
 **What you do:**
 

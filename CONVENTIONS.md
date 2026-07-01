@@ -19,13 +19,13 @@ Every implementation detail is **substrate** or **claim**.
 ## Workflow
 
 ```
-ari-map   → probe each repo, write spine-proto.md + spine-prod.md
-ari-argue → read both spines + feature, classify details, confirm claim changes, write contract
-ari-port  → translate substrate freely, implement confirmed claims exactly, log blips
+ari-map   → probe each repo, write spine-proto/ + spine-prod/ (telos + 3 cause files each)
+ari-argue → read both telos files + formal files + feature, classify details, confirm claim changes, write contract
+ari-port  → translate substrate freely using prod formal.md, implement confirmed claims exactly, log blips
 ```
 
 ### ari-map
-Four-cause spine per repo: Material, Formal (including inconsistencies), Efficient, Final (inferred telos + evidence + confidence). Hash-pinned. Both must be current before ari-argue.
+Four-file spine directory per repo: `telos.md` (coding-agent entry point: purpose + don't-contradict rules + commit hash), `material.md`, `formal.md`, `efficient.md` (analytical reference). Hash-pinned in telos.md. Both directories must be current before ari-argue.
 
 ### ari-argue
 Identifies what the feature argues (not does — argues). Classifies all details. Confirms claim changes one at a time, never bundled. Telos conflict with prod spine → surface, name it, wait for confirmation before proceeding. Produces `.anima-lite/contracts/<branch-slug>.md`.
@@ -45,8 +45,10 @@ Contracting failure?: <what should have been in the contract, or "n/a">
 ## Artifacts
 
 ```
-.anima-lite/spine-proto.md       committed, shared, commit-pinned
-.anima-lite/spine-prod.md        committed, shared, commit-pinned
+.anima-lite/spine-proto/         committed, shared, commit-pinned
+  telos.md                       coding-agent entry point + commit hash
+  material.md / formal.md / efficient.md   analytical reference
+.anima-lite/spine-prod/          same structure
 .anima-lite/contracts/<branch>   branch-scoped, frozen once port begins
 .anima-lite/blips/<branch>       branch-scoped translation log
 ```
