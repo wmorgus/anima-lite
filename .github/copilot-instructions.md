@@ -16,7 +16,7 @@ Every implementation detail is either **substrate** or **claim**.
 
 Three categories that consistently look like substrate but are not:
 
-**Interaction model.** How the user physically moves through the feature — collapse/expand, auto-advance, one-at-a-time focus, toggle behavior. Classify interaction patterns as claims by default; only call them substrate if the specific pattern demonstrably doesn't affect the promise.
+**Interaction model.** How the user physically moves through the feature — collapse/expand, auto-advance, one-at-a-time focus, toggle behavior. Classify interaction patterns as claims by default; only call them substrate if the specific pattern demonstrably doesn't affect the promise. When writing the contract, name the invariant the interaction enforces AND the sub-tasks — not just the sub-tasks. A contract that names only sub-tasks passes to ari-port without stating what they exist to enforce.
 
 **Semantic register.** Register shift is a claim: endorsement → disclaimer, celebration → warning, brand confidence → liability caveat. Two different promises, not two phrasings of the same promise.
 

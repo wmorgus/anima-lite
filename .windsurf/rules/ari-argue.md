@@ -27,7 +27,7 @@ Argumentation: determine what a feature is claiming to the user, separate from h
 
 **3. Classify every detail.** Substrate (free to translate): widget library swap, renaming, file restructuring, styling, colors, fonts, animation library. Wording is substrate only when the semantic register is unchanged. Claim (requires confirmation): removing a UI element, dropping a confirmation step, relaxing validation, changing reversible to permanent. Three categories that consistently look like substrate but are not:
 
-**Interaction model.** How the user physically moves through the feature — collapse/expand, auto-advance, one-at-a-time focus, toggle behavior. Classify interaction patterns as claims by default.
+**Interaction model.** How the user physically moves through the feature — collapse/expand, auto-advance, one-at-a-time focus, toggle behavior. Classify interaction patterns as claims by default. When writing the contract, name the invariant the interaction enforces AND the sub-tasks — not just the sub-tasks. A contract that names only sub-tasks passes to ari-port without stating what they exist to enforce.
 
 **Semantic register.** Register shift is a claim: endorsement → disclaimer, celebration → warning, brand confidence → liability caveat. Two different promises, not two phrasings.
 
