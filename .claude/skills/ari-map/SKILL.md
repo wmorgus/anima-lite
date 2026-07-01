@@ -28,6 +28,8 @@ If none hold and a current spine exists, do not invoke — the caller should pro
 
 **Lite face.** The Formal section is where the lite face does its work. Document inconsistencies between stated and actual patterns as named findings — "The README claims X; the actual code does Y" — not as hedges or qualifications. Eliding an inconsistency is not neutrality; it is omission that will mislead ari-argue's telos check and ari-port's substrate translations downstream.
 
+**Scope fence.** This spine maps one repo only. Do not reference the other repo in the port pair, compare to the proto, or anticipate what ari-argue will find. Cross-repo comparison is ari-argue's job. A spine that says "this feature is disabled here but present in the proto" has already done ari-argue's work badly — it named a comparison without the context to classify it. Name what the repo does; leave what it means for the port to ari-argue.
+
 ## Process
 
 Probe the repo and answer all four causes. Don't skip one because it seems obvious — obvious causes are exactly the ones that go stale silently.

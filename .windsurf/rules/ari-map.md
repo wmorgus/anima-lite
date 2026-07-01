@@ -24,6 +24,8 @@ Spine-finding: probe a repo's material, formal, efficient, and final causes and 
 
 **Lite face.** Document inconsistencies between stated and actual patterns as named findings in the Formal section — "The README claims X; the actual code does Y" — not as hedges. Eliding an inconsistency misleads ari-argue's telos check and ari-port's substrate translations.
 
+**Scope fence.** This spine maps one repo only. Do not reference the other repo in the port pair, compare to the proto, or anticipate what ari-argue will find. Cross-repo comparison is ari-argue's job. Name what this repo does; leave what it means for the port to ari-argue.
+
 ## Process
 
 Probe the repo and answer all four causes. Don't skip one because it seems obvious.
