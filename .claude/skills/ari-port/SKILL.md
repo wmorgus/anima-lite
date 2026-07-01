@@ -183,7 +183,51 @@ Deferred:
 [paste blip log summary — info blips only; CONTRACT-BREAKs would have blocked this PR]
 ```
 
-**4e. Present for approval.** Surface the PR description and the staged diff summary to the user. Do NOT run `gh pr create` without explicit user confirmation — PRs are social objects. Once approved, the user or agent runs `gh pr create --body "$(cat .anima-lite/pr-<branch-slug>.md)"`.
+**4e. Write the catch-up summary.** Write `.anima-lite/catchup-<branch-slug>.md` — a self-contained briefing document designed to be fed directly to a review agent (or a senior engineer doing an AI-assisted review). It must give the reviewer everything they need to understand not just what changed but why, without requiring access to the conversation or prior context.
+
+Structure:
+
+```markdown
+# Catch-Up: <feature-name> port
+
+## What this is
+One paragraph: what feature was ported, from which proto source, to which prod target, and what it does for the user. Written for someone who hasn't seen the conversation.
+
+## Repo context
+- **Proto** (<repo name>): <telos — one sentence from spine-proto/telos.md>
+- **Prod** (<repo name>): <telos — one sentence from spine-prod/telos.md>
+- **Key translation constraint**: <the most important formal-cause difference between the repos — e.g. "React/Vite → Java servlet + JSP + jQuery; no client-side state management">
+
+## What changed and why
+
+### Substrate (translate freely — no argument change)
+For each substrate change: one line stating what was translated and what prod convention it follows.
+
+### Claim changes (confirmed by user — argument is preserved)
+For each claim, in implementation order:
+**<Claim N — name>**
+- Argument: <what the user experiences and why it matters — one sentence>
+- Why it's a claim: <what would change about the argument if this were done differently>
+- Invariant: <the non-negotiable observable behavior>
+- Implementation: <files changed and what each does — be specific enough that a reviewer can find it>
+
+## Deferred
+<items not ported, with reason>
+
+## Blips
+<paste full blip log — all severities. A reviewer should know every non-obvious decision made during execution.>
+
+## What to focus on in review
+Based on blip severity and claim complexity, the highest-attention areas are:
+- <area 1>: <why>
+- <area 2>: <why>
+(Generate this list from the blips and claim invariants — what is most likely to break silently?)
+
+## How to verify
+<paste the playwright: checks from the contract, reformatted as a human-readable test script. Include the dev server start command from setup_notes.>
+```
+
+**4f. Present for approval.** Surface the PR description and the staged diff summary to the user. Do NOT run `gh pr create` without explicit user confirmation — PRs are social objects. Once approved, the user or agent runs `gh pr create --body "$(cat .anima-lite/pr-<branch-slug>.md)"`.
 
 The reconcile step is complete when: working tree is clean of unrelated changes, all port files are staged, and the PR description is written and surfaced.
 
@@ -208,8 +252,8 @@ A blip is logged whenever: a substrate change has a non-obvious downstream conse
 At session end (after reconcile complete):
 1. Summarize blips.md conversationally, grouped by severity, leading with `review-suggested` or above.
 2. State explicitly which contract items (claim changes) were exercised and validated.
-3. Surface the PR description and staged diff for user approval.
-4. Leave the spine directories, contract, plan, blips, and PR draft in place — don't delete `.anima-lite/`.
+3. Surface the PR description, catch-up summary, and staged diff for user approval.
+4. Leave the spine directories, contract, plan, blips, PR draft, and catch-up summary in place — don't delete `.anima-lite/`.
 
 ## Escalation / Notes
 
