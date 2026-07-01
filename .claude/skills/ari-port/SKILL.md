@@ -209,6 +209,8 @@ One paragraph: what feature was ported, from which proto source, to which prod t
 - **Proto** (<repo name>): <telos — one sentence from spine-proto/telos.md>
 - **Prod** (<repo name>): <telos — one sentence from spine-prod/telos.md>
 - **Key translation constraint**: <the most important formal-cause difference between the repos — e.g. "React/Vite → Java servlet + JSP + jQuery; no client-side state management">
+- **Framework versions relevant to this PR**: <any version-specific syntax choices a reviewer might flag as wrong — e.g. "Bootstrap 4: data-toggle/data-target (not data-bs-*); jQuery 3.x">
+- **Diff base**: `git diff <base-commit>..HEAD` — the 5 commits on this branch against `<base-commit>` (v11.3.0.4 tag or equivalent)
 
 ## What changed and why
 
@@ -220,24 +222,27 @@ For each claim, in implementation order:
 **<Claim N — name>**
 - Argument: <what the user experiences and why it matters — one sentence>
 - Why it's a claim: <what would change about the argument if this were done differently>
-- Invariant: <the non-negotiable observable behavior>
-- Implementation: <files changed and what each does — be specific enough that a reviewer can find it>
+- Invariant: <the non-negotiable observable behavior — include file:line for the key enforcement point>
+- Old behavior: <one line on what the code did before this claim was ported — so the reviewer can confirm the delta without diffing>
+- Implementation: <files changed with line numbers — specific enough that a reviewer can jump directly. For config files (XML, properties), include the element name or bean ID, not just the file path.>
 
 ## Deferred
-<items not ported, with reason>
+<items not ported — one line each, reason only if non-obvious. Omit items that are simply out of scope with no ambiguity.>
 
 ## Blips
-<paste full blip log — all severities. A reviewer should know every non-obvious decision made during execution.>
+<review-suggested and CONTRACT-BREAK blips only. Info blips that are dev-diary residue (e.g. "we considered X but dropped it") are noise — omit them. Each blip must answer: what does the reviewer need to check, and why does it matter?>
 
 ## What to focus on in review
 Based on blip severity and claim complexity, the highest-attention areas are:
-- <area 1>: <why>
-- <area 2>: <why>
-(Generate this list from the blips and claim invariants — what is most likely to break silently?)
+- <area 1> (`file:line`): <why — what breaks silently if this is wrong>
+- <area 2> (`file:line`): <why>
+(Generate from blips and claim invariants. Every item must have a file:line anchor and a concrete failure mode, not just "check this area.")
 
 ## How to verify
-<paste the playwright: checks from the contract, reformatted as a human-readable test script. Include the dev server start command from setup_notes.>
+<Dev server start command, login URL, feature URL. Then per-claim checks from the playwright: block — each check names the interaction and the exact expected outcome. Include what "not verifiable" means for stub-data checks so a reviewer knows it's expected, not skipped.>
 ```
+
+**Quality bar for the catch-up doc:** A reviewer with zero prior context should be able to open this doc, jump to any invariant via the file:line anchor, confirm the old-vs-new delta, and run the verify steps — without asking a follow-up question. If writing any section requires knowledge that isn't in the doc itself, add it.
 
 **4f. Present for approval.** Surface the PR description and the staged diff summary to the user. Do NOT run `gh pr create` without explicit user confirmation — PRs are social objects. Once approved, the user or agent runs `gh pr create --body "$(cat .anima-lite/pr-<branch-slug>.md)"`.
 
