@@ -50,6 +50,7 @@ Contracting failure?: <what should have been in the contract, or "n/a">
   material.md / formal.md / efficient.md   analytical reference
 .anima-lite/spine-prod/          same structure
 .anima-lite/contracts/<branch>   branch-scoped, frozen once port begins
+.anima-lite/plans/<branch>       execution plan written before any code moves
 .anima-lite/blips/<branch>       branch-scoped translation log
 ```
 
