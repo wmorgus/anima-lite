@@ -5,7 +5,7 @@ description: Performs the code translation from prototype to prod repo, using sp
 
 # ari-port
 
-Three steps: plan → execute → validate. The hard epistemic work happened upstream in ari-argue. If execution feels ambiguous, that's a sign the contract was incomplete, not a cue to use judgment alone.
+Four steps: plan → execute → validate → reconcile. The hard epistemic work happened upstream in ari-argue. If execution feels ambiguous, that's a sign the contract was incomplete, not a cue to use judgment alone.
 
 ## Inputs
 
@@ -68,6 +68,25 @@ Work through the plan using the contract as the filter for every decision:
 
 If the contract is actively wrong — not incomplete, but contradicted by what the prototype code does — **halt**. Write the contradiction to blips as `CONTRACT-BREAK` and report execution paused pending a re-run of ari-argue.
 
+**Commit discipline** — commit after each claim is fully implemented, before moving to the next. Do not accumulate all changes into a single working-tree blob. The commit message format:
+
+```
+port(<feature>): <claim name> — <one-line summary>
+
+Contract: .anima-lite/contracts/<branch-slug>.md
+Claim: <Claim N>
+```
+
+Example: `port(monthly-report): isLowData empty state — show limited-data alert when <5 sessions`
+
+Rules:
+- Substrate-only changes (no claim) may be batched into a single `port(<feature>): substrate — <description>` commit at the start.
+- Each confirmed claim change gets its own commit. If a claim spans multiple files (e.g. Java DTO + JS), they commit together — the claim is the unit, not the file.
+- Never commit dev-only config changes (e.g. `hbm2ddl.auto=none`, dummy secret files). These are working-tree scaffolding, not part of the port.
+- New files must be explicitly `git add`ed — don't assume they'll be picked up.
+
+Clean commit history is load-bearing for Step 4 (reconcile). A reviewer reading the git log should be able to map each commit to a contract claim without opening the code.
+
 ### Step 3 — Validate
 
 After execution, spawn a **validation agent** with clean context. The validation agent receives:
@@ -119,6 +138,55 @@ checks:
 
 Each check names the claim, the interaction steps (human-readable, Playwright agent will interpret), and the expected outcome. If an expected outcome is not met, that is a CONTRACT-BREAK for the named claim.
 
+### Step 4 — Reconcile
+
+After validation PASS, prepare the working tree for PR. This step runs in the prod repo, not the anima-lite repo.
+
+**4a. Identify and separate unrelated changes.** Run `git diff HEAD` and inspect every modified file. Flag any change not traceable to a contract claim or its required substrate. Common sources:
+- Dev-only config (`hbm2ddl.auto=none`, dummy secret files, local build properties)
+- Compatibility fixes surfaced during local build (e.g. Java version enum syntax)
+- Files accidentally modified during investigation
+
+For each unrelated change: revert it from the working tree (`git checkout HEAD -- <file>`) and note it in the reconcile summary. If the change is a legitimate fix (not just dev scaffolding), note it for a separate PR.
+
+**4b. Stage everything that belongs.** Explicitly `git add` all modified and new files that are part of the port. New files (e.g. `training_section.js`) must be staged manually — confirm they are tracked.
+
+**4c. Verify the final diff.** Run `git diff --staged` and confirm:
+- Every staged change maps to a contract claim or required substrate
+- No dev-only changes are staged
+- No unintended files are staged
+
+**4d. Draft the PR description.** Write `.anima-lite/pr-<branch-slug>.md`:
+
+```markdown
+## Summary
+
+Ports [feature name] from plus-uno prototype to prod.
+
+Claim changes (confirmed by user):
+- **[Claim 1 name]**: [one-line description]
+- **[Claim 2 name]**: [one-line description]
+...
+
+Deferred:
+- [item]: [reason]
+
+## Files changed
+[list key files and what each does — one line each]
+
+## Test plan
+- [ ] Load /PLUS/TutorReview as a tutor with AI insights data
+- [ ] [per-claim check from playwright: block, one checkbox each]
+- [ ] Confirm no regression on existing insight review flow
+
+## Blips
+[paste blip log summary — info blips only; CONTRACT-BREAKs would have blocked this PR]
+```
+
+**4e. Present for approval.** Surface the PR description and the staged diff summary to the user. Do NOT run `gh pr create` without explicit user confirmation — PRs are social objects. Once approved, the user or agent runs `gh pr create --body "$(cat .anima-lite/pr-<branch-slug>.md)"`.
+
+The reconcile step is complete when: working tree is clean of unrelated changes, all port files are staged, and the PR description is written and surfaced.
+
 ## Output
 
 Write `.anima-lite/plans/<branch-slug>.md` before execution (Step 1 output).
@@ -137,10 +205,11 @@ Contracting failure?: <what should have been in the contract to cover this — o
 
 A blip is logged whenever: a substrate change has a non-obvious downstream consequence; something uncovered by the contract came up and got a conservative default; a prod-repo convention conflicts with the prototype's approach and one was chosen; or anything a user skimming the PR would likely miss but want to know.
 
-At session end (after validation PASS):
+At session end (after reconcile complete):
 1. Summarize blips.md conversationally, grouped by severity, leading with `review-suggested` or above.
 2. State explicitly which contract items (claim changes) were exercised and validated.
-3. Leave the spine directories, contract, plan, and blips in place — don't delete `.anima-lite/`.
+3. Surface the PR description and staged diff for user approval.
+4. Leave the spine directories, contract, plan, blips, and PR draft in place — don't delete `.anima-lite/`.
 
 ## Escalation / Notes
 
