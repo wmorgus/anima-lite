@@ -60,6 +60,16 @@ Surface the plan before executing. If a blocker is found in planning, halt here 
 
 ### Step 2 — Execute
 
+**Feature branch first.** Before touching any code, check the current branch in the prod repo. If you are on a long-lived branch (`main`, `master`, `dev`, `develop`, `staging`, or any branch that appears to be an integration target), create and switch to a feature branch named after the contract slug:
+
+```
+git checkout -b <branch-slug>
+```
+
+If a branch with that name already exists, check it out and verify it's at the same base as the current integration branch (no stale commits). If the branch is ahead of the integration target in unexpected ways, halt and ask the user.
+
+Do not make any commits on a long-lived branch. All port commits must land on the feature branch. The commit discipline below is meaningless if the commits end up on `dev` — there is no clean PR surface to review against.
+
 Work through the plan using the contract as the filter for every decision:
 
 - **Substrate changes** — translate freely, using the prod spine's `formal.md` as the guide for idiom and structure.
@@ -142,7 +152,9 @@ Each check names the claim, the interaction steps (human-readable, Playwright ag
 
 After validation PASS, prepare the working tree for PR. This step runs in the prod repo, not the anima-lite repo.
 
-**4a. Identify and separate unrelated changes.** Run `git diff HEAD` and inspect every modified file. Flag any change not traceable to a contract claim or its required substrate. Common sources:
+**4a. Confirm you are on the feature branch.** Run `git branch --show-current` and verify the current branch is the feature branch created in Step 2 (named after the contract slug). If you are still on a long-lived branch (`dev`, `main`, etc.) with uncommitted port changes, stop. Create the feature branch now (`git checkout -b <slug>`), move the commits there (`git cherry-pick` if needed), and reset the long-lived branch to its pre-port state. The PR target is the integration branch (e.g. `dev`) — confirm it exists on the remote before running `gh pr create`.
+
+**4b. Identify and separate unrelated changes.** Run `git diff HEAD` and inspect every modified file. Flag any change not traceable to a contract claim or its required substrate. Common sources:
 - Dev-only config (`hbm2ddl.auto=none`, dummy secret files, local build properties)
 - Compatibility fixes surfaced during local build (e.g. Java version enum syntax)
 - Files accidentally modified during investigation
