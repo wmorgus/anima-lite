@@ -72,16 +72,23 @@ If the contract is actively wrong — not incomplete, but contradicted by what t
 
 After execution, spawn a **validation agent** with clean context. The validation agent receives:
 - The frozen contract (`.anima-lite/contracts/<branch-slug>.md`)
-- The list of files changed
-- The blips log
+- The blips log (`.anima-lite/blips/<branch-slug>.md`)
+- The list of files changed and their content
 
-The validation agent checks: for each confirmed claim change in the contract, is it implemented correctly in the actual code? It reads the changed files directly — it does not rely on the execution agent's summary of what it did.
+The validation agent checks three things independently, reading changed files directly — not relying on the execution agent's summary:
+
+**A. Claim implementation** — for each confirmed claim change in the contract: is it implemented correctly? Absent or partial = FAIL.
+
+**B. Blip classification quality** — for each blip with `Contracting failure?: n/a`: does the blip describe something that was actually a claim-level decision (something that should have gone to ari-argue)? If yes, that `n/a` is a misclassification = FAIL. This is the self-audit check the execution agent ran on itself — the validator audits the auditor.
+
+**C. Blip severity routing** — `review-suggested` blips are surfaced to the user and require acknowledgment before PASS. `info` blips are noted but don't block. `CONTRACT-BREAK` blips mean execution should have already halted — if one reaches validation, that is itself a FAIL.
 
 The validation agent returns one of:
-- **PASS** — all confirmed claims implemented as contracted; no unlogged drift found
-- **FAIL: <specific finding>** — a confirmed claim is absent, partially implemented, or contradicts the contract
+- **PASS** — all claims implemented; all blip classifications correct; no `review-suggested` blips pending acknowledgment
+- **PASS (pending review)** — claims and blip classifications correct, but `review-suggested` blips present; surface to user for acknowledgment, then PASS
+- **FAIL: <specific finding>** — a confirmed claim absent/partial/contradicted, or a blip misclassification caught
 
-On FAIL: loop back to Step 2, fix the specific finding, re-validate. Session ends only when the validation agent returns PASS. Do not declare completion before validation passes.
+On FAIL: loop back to Step 2, fix the specific finding, re-validate. Do not declare completion before the validation agent returns PASS or PASS (pending review) with acknowledged items.
 
 ## Output
 
