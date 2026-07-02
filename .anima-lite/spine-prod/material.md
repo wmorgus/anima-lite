@@ -4,7 +4,7 @@
 ## Languages
 - Java — Jakarta EE 6.0 servlet API, Tomcat 11.0.23
 - JSP + JSTL — server-side rendering
-- JavaScript — no transpile step, ES modules in tutor_review/ only
+- JavaScript — no transpile step; ES modules dominant for feature-level JS (30+ JSPs use type="module"); legacy shared utilities remain global-scope jQuery
 - Sass/SCSS — compiled via `npx sass`, not a bundler
 - SQL — MySQL 8, schema managed by hand-written scripts in java/sql/pl2/
 
@@ -15,9 +15,9 @@
 - Log4j2 — logging
 - org.json (JSONObject/JSONArray) — JSON serialization; no Jackson
 
-## Frontend libraries (code-derived: pl2_head.jspf script/link tags)
-- jQuery 3.5.1 — DOM and AJAX (confirmed: `/javascript/lib/jquery-3.5.1.min.js`)
-- Bootstrap 4.1.3 — layout + collapse/modal components (confirmed: bootstrap.js header comment)
+## Frontend libraries (code-derived: pl2_head.jspf script/link tags + file headers)
+- jQuery 3.5.1 — DOM and AJAX (confirmed: `/javascript/lib/jquery-3.5.1.js` header)
+- Bootstrap 4.1.3 — layout + collapse/modal components (confirmed: bootstrap.js header)
   - Data attributes: `data-toggle`/`data-target` (Bootstrap 4 syntax, NOT `data-bs-*`)
 - Highcharts — data visualization (confirmed: javascript/pl2/highcharts/)
 - DataTables — tabular display (confirmed: javascript/pl2/DataTables/)

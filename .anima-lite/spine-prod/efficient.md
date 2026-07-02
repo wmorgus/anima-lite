@@ -1,5 +1,5 @@
 # Efficient: plus web-app (prod)
-(Reference depth — see telos.md for entry point and commit hash)
+(Reference depth — see telos.md for entry point and commit hash — HEAD: 29d41e50)
 
 ## Build tooling (code-derived: build.xml + .github/workflows/)
 - Apache Ant (java/build.xml) — primary build system; no Maven, Gradle, or npm pipeline
