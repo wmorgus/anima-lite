@@ -38,6 +38,7 @@ If none hold and a current spine directory exists, do not invoke — proceed dir
 2. Per layer in the formal cause, read at least 2 representative files to confirm the pattern holds, not just the most prominent one
 3. For any pattern claim in `formal.md`, grep to confirm it before asserting — e.g., if claiming "all servlets extend AbstractServlet," grep for `extends AbstractServlet` and count; if there are exceptions, name them as findings
 4. For `material.md` library entries, grep package manifests, lock files, or vendor dirs for version strings — don't assert a version you haven't confirmed
+5. If `.anima-lite/features/` exists, read any ledger files relevant to the current probe before writing `formal.md` and `telos.md`. Treat as soft reference — explicitly softer than the spine. Source is port-generated, not independently probed. Use ledger entries as pointers to confirm, not as authority to copy. If the probe confirms a ledger observation, it may graduate into the spine; if the probe contradicts it, the spine wins and the ledger entry was stale — note it as a finding.
 
 These steps don't need to be exhaustive. They need to be enough that each assertion in the output is code-derived, not plausible-from-memory.
 
@@ -52,6 +53,20 @@ Probe the repo and answer all four causes. Don't skip one because it seems obvio
 **Final — what it's for (the telos).** Inferred backward from the other three, not a declared mission statement. State confidence and evidence. Where evidence conflicts or is thin, say so.
 
 From the Final cause, derive **don't-contradict rules** — imperative constraints a coding agent must not violate. These are statements like "do not introduce X," "all Y must go through Z," "new entities require step A and step B." They are the telos translated into action constraints.
+
+**Comprehensive feature map.** Attempt a comprehensive feature map — identify every user-facing feature in the repo, not just the ones tied to the current port. For each identified feature, create a stub in `.anima-lite/features/` at the deepest level the probe can confirm without over-claiming. "The feature exists and its entry point is X" is a valid `stub:1`. Do not require full-chain visibility before creating a stub; require only that every populated field was confirmed in code.
+
+How to identify features: trace entry points (servlet URL mappings, route configs, JSP file inventory) and group them by user-facing function. A feature is a user-facing capability — not a utility, not a shared service. When in doubt whether something is a feature or infrastructure, ask: does a human user interact with this directly? If yes, it is a feature.
+
+ari-map writes the stub. ari-port enriches it. Two sessions may touch the same file; the `stub:` header makes coverage state legible at a glance.
+
+**The different-feature test.** Before writing any observation into a cause file, ask: would this be useful to an agent working on a different feature in the same repo? Yes → it belongs in the spine. No → it belongs in the contract or blips for the feature that surfaced it.
+
+Pass example: "All servlets return AJAX responses wrapped in a `{status, data}` envelope" — true across the repo, useful to any port touching any servlet. Spine.
+
+Fail example: "The monthly-report servlet returns an empty array when session count is below five" — true only of this feature's logic, useful only to this port. Contract.
+
+When in doubt, keep it out. Wrong in a contract costs one feature; wrong in the spine misleads every future port.
 
 ## Output
 
@@ -123,7 +138,24 @@ Provenance rule: tag each finding as (code-derived) or (README-stated).
 ari-port treats formal.md as ground truth for substrate decisions. A README-stated
 pattern that the code contradicts silently misdirects translations. The tag lets
 ari-port and human reviewers know which claims need a verification pass before
-acting on them.>
+acting on them.
+
+Seam protocol rule: documenting that layers exist is not documenting what crosses
+between them. A layer diagram without seam protocols is scaffolding — it names
+boundaries but omits the load-bearing content a port must translate. For each
+major layer boundary, state the communication protocol: the shape of data as it
+crosses. Examples: servlet→JS (AJAX response envelope shape), JSP→browser
+(static asset path conventions), Java→Hibernate (entity wiring requirements).
+Where a seam exists but protocol could not be confirmed from code, say so as a
+named gap — not a missing entry. A port that gets the layers right and the seam
+wrong produces code that compiles and fails at the boundary.
+
+Concrete example rule: the telos file's don't-contradict rules include "new X
+requires..." checklists. Ground each such checklist here with one concrete
+instantiation from the actual codebase — trace a real entity through every step
+the checklist names, with file paths. The purpose is not to document that
+feature; it is to make the pattern inspectable, so a future agent can verify
+each step against a known-good example rather than trusting an abstract list.>
 ```
 
 ---
@@ -141,6 +173,85 @@ How to verify a change works in this repo.>
 ---
 
 Cap each cause file at ~50 lines. If you're exceeding that, you're over-promising precision. Cut to load-bearing facts.
+
+## Feature Ledger
+
+Features live at `.anima-lite/features/<slug>.md` — at the anima-lite root, not under any repo spine. A cross-repo feature (a change spanning two webapps) has a natural home there; a single-repo feature declares its repo in the header. Spines do not contain features; spines reference them by slug.
+
+The ledger is a different artifact from the spine. The spine answers "what is true repo-wide." The ledger answers "what is true about this one feature." The different-feature test is the boundary: an observation that passes the test lives in the spine; one that fails lives in the ledger.
+
+Future mechanism (not required now): hash-controlled versioned copies per repo, so each port pins to the feature-doc version it used. Note the intent; do not build the versioning yet.
+
+### Stub depth
+
+ari-map creates a comprehensive feature map — every feature it can identify in the repo, stubbed as deep as it can decisively assert, no more. The failure mode is not the shallow stub. It is the dishonest stub: fields filled with assertions the agent cannot confirm. A shallow honest stub is a correct artifact; a deep dishonest one is a trap that reads as authority.
+
+Stub levels (use these exact labels in the file header):
+- `stub:0` — feature identified, existence confirmed, nothing else
+- `stub:1` — entry point confirmed (URL mapping → servlet or equivalent)
+- `stub:2` — entry point + primary data structure confirmed (DTO class + key fields)
+- `stub:3` — full observable chain confirmed by ari-map probe, or enriched by ari-port
+
+At `stub:3`, the `source:` field distinguishes probe-confirmed from port-distilled. A reader trusting a `stub:3` entry must check `source:` before treating it as probe-grade.
+
+Every field not yet confirmed is written as `not traced` — never left blank. Blank reads as absence; `not traced` reads as unknown. The distinction is load-bearing.
+
+### Feature ledger file template
+
+`.anima-lite/features/<slug>.md`:
+
+~~~markdown
+# Feature: <feature name>
+slug: <feature-slug>
+repo(s): <repo slug, or comma-separated for cross-repo features>
+stub: <0|1|2|3>
+source: <ari-map-probe | ari-port-enriched | manual>
+prod-commit: <short hash at time of population>
+goes-stale: <one line — what would invalidate this, e.g. "DTO schema change, servlet rename">
+
+## Identity
+<one sentence — what this feature does for the user. not traced if unconfirmed.>
+
+## Entry points
+<URL mapping → servlet/controller → template path; confirmed from routing config.
+ not traced if unconfirmed.>
+
+## Primary data structure
+<DTO or equivalent class + key fields observed. not traced if unconfirmed.>
+
+---
+Everything below is enriched by ari-port after a port run.
+At stub:0–2, all fields below are `not traced`.
+
+## Full data flow
+<entry → service → data layer → entity chain, with class names. not traced.>
+
+## Client-side wiring
+<JS/TS files involved, render function names, data binding pattern. not traced.>
+
+## State machine
+<if a multi-step user flow: states and transitions. not traced or n/a.>
+
+## Feature gates
+<flags, conditions, admin-only guards — anything that conditions availability.
+ not traced or none.>
+
+## Seam-specific protocols
+<communication patterns unique to this feature's boundaries. Repo-wide seam
+ protocols live in the spine, not here. not traced.>
+
+## Known quirks
+<observations that surprised — not general patterns. Each entry names the
+ contract or blip it was distilled from. not traced or none.>
+
+## Port provenance
+<contract slug + prod commit hash this enrichment was distilled from. n/a until
+ first port.>
+~~~
+
+Field ownership:
+- **ari-map** populates at probe time: all header fields, Identity, Entry points, Primary data structure, and status markers (`not traced` on all unconfirmed fields)
+- **ari-port** enriches after a port run: Full data flow, Client-side wiring, State machine, Feature gates, Seam-specific protocols, Known quirks, Port provenance — and updates `stub:`, `source:`, and `prod-commit:` to reflect the enrichment
 
 ## Escalation / Notes
 

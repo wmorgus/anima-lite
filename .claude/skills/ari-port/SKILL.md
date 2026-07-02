@@ -248,6 +248,20 @@ Based on blip severity and claim complexity, the highest-attention areas are:
 
 The reconcile step is complete when: working tree is clean of unrelated changes, all port files are staged, and the PR description is written and surfaced.
 
+### Step 5 — Harvest the feature ledger
+
+After reconcile is complete, harvest the durable feature-area knowledge this port produced. This is not a new probe — it distills from artifacts already written (blips, catch-up doc, contract). The target is `.anima-lite/features/<feature-slug>.md`. If it exists (an ari-map stub), enrich it to `stub:3`. If it does not exist, create it at `stub:3` directly using the template in ari-map's Feature Ledger section.
+
+**What goes in the ledger vs. what stays out:**
+- **In**: observations that pass a weaker test than the spine — useful to any agent in this subsystem, even one working on a different feature. Seam-specific protocols. Known quirks with traceable sources. State machines. Feature gates.
+- **Out**: anything tied to this feature's specific argument (that is the contract's job). Anything true repo-wide (that is the spine's job). If an observation would pass the spine's different-feature test, it belongs there via an ari-map refresh, not here.
+
+Every `Known quirks` entry must name the blip or catch-up section it was distilled from — so a future agent can assess staleness against the source.
+
+If nothing qualifies for the ledger, write no file and note that in the session summary. An empty ledger entry is worse than none: it reads as "this feature has no durable knowledge" when the truth is "nothing qualified for harvest."
+
+Commit the ledger file alongside the spine — it persists across sessions.
+
 ## Output
 
 Write `.anima-lite/plans/<branch-slug>.md` before execution (Step 1 output).
@@ -271,6 +285,7 @@ At session end (after reconcile complete):
 2. State explicitly which contract items (claim changes) were exercised and validated.
 3. Surface the PR description, catch-up summary, and staged diff for user approval.
 4. Leave the spine directories, contract, plan, blips, PR draft, and catch-up summary in place — don't delete `.anima-lite/`.
+5. If Step 5 produced a ledger file, state its slug and stub level. If it did not, state that no durable feature knowledge qualified for harvest.
 
 ## Escalation / Notes
 
