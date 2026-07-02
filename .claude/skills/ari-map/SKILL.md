@@ -32,6 +32,15 @@ If none hold and a current spine directory exists, do not invoke — proceed dir
 
 ## Process
 
+**Minimum probe before writing.** Spine files look authoritative regardless of probe depth — a shallow probe misleads ari-port's substrate decisions just as confidently as a deep one. Before writing any cause file, run these steps:
+
+1. `find <repo> -type f | head -200` (or equivalent) — enumerate actual structure; don't infer from README
+2. Per layer in the formal cause, read at least 2 representative files to confirm the pattern holds, not just the most prominent one
+3. For any pattern claim in `formal.md`, grep to confirm it before asserting — e.g., if claiming "all servlets extend AbstractServlet," grep for `extends AbstractServlet` and count; if there are exceptions, name them as findings
+4. For `material.md` library entries, grep package manifests, lock files, or vendor dirs for version strings — don't assert a version you haven't confirmed
+
+These steps don't need to be exhaustive. They need to be enough that each assertion in the output is code-derived, not plausible-from-memory.
+
 Probe the repo and answer all four causes. Don't skip one because it seems obvious — obvious causes go stale silently.
 
 **Material — what it's made of.** Languages, frameworks, data structures, schemas, key dependencies, state shape. Load-bearing parts only. Test: if this material were swapped for an equivalent, would the software still make the same argument?
@@ -86,7 +95,14 @@ a coding decision as worth a quick verification pass against the actual code.
 (Reference depth — see telos.md for entry point and commit hash)
 
 <Languages, frameworks, data structures, schemas, key dependencies, state shape.
-Load-bearing parts only. Organized for lookup, not for narrative reading.>
+Load-bearing parts only. Organized for lookup, not for narrative reading.
+
+Version pin rule: every library or framework entry must include a version if one
+is detectable (package.json, pom.xml, build.gradle, lock file, vendor dir, CDN
+URL). Write "Bootstrap 4.x" not "Bootstrap". If version is genuinely undetectable,
+write "Bootstrap (version unknown)" — an absent version is a gap, not a default.
+Version strings matter at port time: syntax choices (e.g. data-toggle vs
+data-bs-toggle) are version-specific and a reviewer cannot verify them without this.>
 ```
 
 ---
@@ -98,7 +114,16 @@ Load-bearing parts only. Organized for lookup, not for narrative reading.>
 (Reference depth — see telos.md for entry point and commit hash)
 
 <Architecture pattern, layering, module boundaries, dominant design patterns,
-the shape of a typical change. Named inconsistencies as findings.>
+the shape of a typical change. Named inconsistencies as findings.
+
+Provenance rule: tag each finding as (code-derived) or (README-stated).
+- (code-derived): you grepped or read files and the pattern is confirmed in actual code
+- (README-stated): the README or docs claim this; you have not verified it in code
+
+ari-port treats formal.md as ground truth for substrate decisions. A README-stated
+pattern that the code contradicts silently misdirects translations. The tag lets
+ari-port and human reviewers know which claims need a verification pass before
+acting on them.>
 ```
 
 ---
