@@ -28,6 +28,22 @@ When unsure: ask whether a user who understood the feature's promise would notic
 
 ---
 
+## Why four causes?
+
+The four causes aren't four independent probes concatenated into a spine. They're a progressively sharper understanding of the same system — each cause presupposes the previous and is made legible by what follows.
+
+Material tells you what the system is made of. Necessary but not sufficient: you can enumerate every library and still not understand why the code makes the choices it does.
+
+Formal tells you how the material is organized — the pattern that made those choices cohere. But patterns serve something; the pattern alone doesn't tell you whether it's doing its job.
+
+Efficient tells you what acts on the system — how it changes, who deploys, what the feedback loop is. This surfaces constraints the formal pattern can't express, because they live outside the codebase itself.
+
+Final is what all three are *for*. It's not a summary appended at the end; it's the frame that retrospectively explains why the material, formal, and efficient causes are what they are. A formal pattern is only a finding once you know whether it serves or contradicts the telos.
+
+For agentic coding specifically: most architecture docs give you material and maybe formal, leaving telos implicit. Every agent working in the codebase then re-derives it independently — and inconsistently. Making the telos explicit and senior gives every downstream decision a shared anchor. When the probe subagents find that a helper class is monolithic and violates strict layering, the telos tells you whether that's technical debt to fix or an established pattern to follow. Without it, both answers are defensible and agents will diverge.
+
+---
+
 ## Execution flow
 
 ```mermaid

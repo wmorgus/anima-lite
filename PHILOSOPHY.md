@@ -11,7 +11,7 @@ When unsure which: ask whether a user who understood the feature's promise would
 
 ---
 
-**Why ports fail silently.** A port that changes the argument without noticing feels complete. Mechanics work, tests pass. The promise changed. Nobody flagged it. This is the failure mode anima-lite exists to prevent.
+**Why ports fail silently.** A port that changes the argument without noticing feels complete. Mechanics work, tests pass. The promise changed. Nobody flagged it. This is the failure mode anima-lite exists to prevent. The harness enforces that classification happened and is well-formed — the blip format, the validation agent, the contracting-failure self-audit all check structure. What it cannot verify is that a substrate call wasn't a claim in disguise that an operator waved through; the machine checks form, the human checks honesty, which is why the gates are non-skippable.
 
 ---
 
