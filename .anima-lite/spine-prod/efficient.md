@@ -1,50 +1,40 @@
 # Efficient: plus web-app (prod)
 (Reference depth — see telos.md for entry point and commit hash)
 
-## Build tooling
-- Apache Ant (java/build.xml) — primary build system
-- No Maven, no Gradle, no npm build pipeline (npx sass is a compile step, not a bundler)
-- External libs: java/extlib/ — checked in, no dependency resolution at build time
+## Build tooling (code-derived: build.xml + .github/workflows/)
+- Apache Ant (java/build.xml) — primary build system; no Maven, Gradle, or npm pipeline
+- External libs in java/extlib/ — checked in, no dependency resolution at build time
+- `npx sass` — Sass compile step (not a bundler)
 
 ## Key Ant targets
-- ant compile — compile Java sources only
-- ant deploy — compile + Sass + deploy to local Tomcat (main dev loop)
-- ant deployAll — deploy + configuration files
-- ant compile-sass — Sass only
-- ant clean — clean build artifacts
-- ant war.vm — package production WAR
-- ant release.plus — WAR + SQL + lessons (full release artifact)
-- ant updateVersionInfo — stamp version into source + SQL + urlrewrite.xml
-- ant clean.db.pl2 — drop and recreate database tables (requires db.properties)
+- `ant compile` — compile Java sources only
+- `ant deploy` — compile + Sass + deploy to local Tomcat (main dev loop)
+- `ant deployAll` — deploy + configuration files (use after applicationContext.xml changes)
+- `ant compile-sass` — Sass only
+- `ant war.vm` — package production WAR
+- `ant release.plus` — WAR + SQL + lessons (full release artifact)
+- `ant clean.db.pl2` — drop and recreate database tables
 
 ## Local dev prerequisites
-- java/build.properties (copy from build.properties.sample): local.tomcat, local.docroot, base.files.dir, plus.admin
-- java/db.properties (copy from db.properties.sample): MySQL credentials, pl2_db
-- Local Tomcat installation (path set in build.properties)
+- `java/build.properties` (copy from build.properties.sample): local.tomcat, local.docroot, base.files.dir
+- `java/db.properties` (copy from db.properties.sample): MySQL credentials, pl2_db
+- Java 17 required for Tomcat 11 (code-derived: Tomcat 11.0.23 requires JDK 17+)
+- Known blocker: `StudentsServlet.java` uses `case EdTechName.IXL:` syntax (illegal in Java 17); blocks `ant deployAll` until fixed (separate PR pending)
 
-## Docker path
-- docker/docker-compose.yml — full stack (Tomcat + MySQL + LLM + email)
-- docker/plus-dev-compose.yml — faster dev containers
-- Box CLI required to download build dependencies before Docker build
-- Database reset: remove plus_plus-mysql-volume
+## CI/CD (code-derived: .github/workflows/)
+- Integration branch: `dev` (PRs target dev, not main)
+- GitHub Actions: `check-tables-pl2.yml` — triggers on PRs to `dev` that touch `java/sql/pl2**`
+  - Runs `create_tables_pl2.sql` + recent alter scripts in Docker; schema validation only
+  - Second workflow: `sql-notification.yml`
+- No compile/deploy CI — schema validation only; all functional verification is manual
 
-## CI/CD
-- GitHub Actions: .github/workflows/check-tables-pl2.yml
-  - Trigger: PRs to dev branch
-  - Action: runs create_tables_pl2.sql, checks recent alter scripts
-  - Uses docker/check-tables/ compose
-- No compile/deploy CI — schema validation only
-- Main integration branch: dev (not main)
-
-## Schema management
-- Location: java/sql/pl2/v9.x/
-- Create: create/create_tables_pl2.sql
-- Drop: delete/drop_tables_pl2.sql
-- Migrations: alter/ directory, version-specific scripts
-- Hibernate validation mode = validate — schema must match mappings or startup fails
+## Schema management (code-derived: java/sql/pl2/)
+- Create: `java/sql/pl2/v9.x/create/create_tables_pl2.sql` (use v11.x for fresh installs)
+- Migrations: `java/sql/pl2/v9.x/alter/` — hand-written, version-specific scripts
+- Hibernate `hbm2ddl.auto=validate` — schema must match HBM mappings or startup fails
 
 ## Verifying a change
-1. ant deploy (or ant deployAll for config changes)
-2. Browser test against local Tomcat (http://localhost:8080)
-3. For schema changes: run alter script manually, then ant deploy
-4. No automated test suite — all verification is manual + CI schema check on PR
+1. `ant deployAll` (for config changes) or `ant deploy` (Java + JS only)
+2. Browser test at `http://localhost:8080`
+3. Schema changes: run alter script manually before deploy
+4. No automated test suite — manual + CI schema check on PR
