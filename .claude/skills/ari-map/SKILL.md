@@ -45,12 +45,18 @@ If none hold and a current spine directory exists, do not invoke — proceed dir
 Each subagent receives:
 - The repo path
 - The probe steps for its cause only (steps 2–3 for formal, step 4 for material, build/CI configs for efficient)
-- This instruction: return structured findings with three fields — `confirmed` (what was verified in code), `unconfirmed` (what couldn't be pinned), `named_findings` (inconsistencies, gaps, or surprises worth carrying into the spine)
+- The tentative telos inferred by the main agent before fanning out
+- This instruction: return structured findings with four fields — `confirmed` (what was verified in code), `unconfirmed` (what couldn't be pinned), `named_findings` (inconsistencies, gaps, or surprises worth carrying into the spine), `skeptical_findings` (things that looked off while doing the primary probe — see below)
 
 Subagent assignments:
-- `probe:material` — grep manifests and lock files for versions; read package files; confirm dependency versions; return findings in the three-field format
-- `probe:formal` — read representative files per layer; grep for pattern claims; confirm seam protocols; return findings
-- `probe:efficient` — read build configs and CI workflow files; confirm targets and deploy paths; return findings
+
+- `probe:material` — grep manifests and lock files for versions; read package files; confirm dependency versions; return findings in the four-field format. **Skeptical read (secondary):** flag any version entry that looks like a timed fact rather than a stable syntax pin — EOL claims, security advisory status, and deprecation judgments expire at the source and must not be frozen into the spine. Flag any dependency that appears in the code but not in the manifest, or vice versa. The skeptical read is free because the subagent is already reading.
+
+- `probe:formal` — read representative files per layer; grep for pattern claims; confirm seam protocols; return findings. **Skeptical read (secondary):** flag any place where the actual code contradicts what the spine currently says (if a prior spine exists), or any internal inconsistency in the patterns found (e.g., "9 servlets extend AbstractServlet, 27 extend HttpServlet directly" — the inconsistency itself is a finding, not just the count). The skeptical read is free because the subagent is already reading.
+
+- `probe:efficient` — read build configs and CI workflow files; confirm targets and deploy paths; return findings. **Skeptical read (secondary):** flag any hidden build dependency or surprising constraint found — a compile-time blocker not mentioned in the README, a CI check that runs on conditions not obvious from the config, an implicit environment assumption baked into a target. The skeptical read is free because the subagent is already reading.
+
+Skeptical findings from all three subagents surface as named findings in the relevant cause file (`named_findings`) or as notes in the appropriate section. They are not a separate output artifact — they are part of the same structured return.
 
 The main agent waits for all three, synthesizes the findings, then writes the four spine files and feature ledger stubs. The initial `find` enumeration (step 1) stays with the main agent — it determines scope before fanning out.
 
@@ -58,15 +64,15 @@ These steps don't need to be exhaustive. They need to be enough that each assert
 
 Probe the repo and answer all four causes. Don't skip one because it seems obvious — obvious causes go stale silently.
 
-**Material — what it's made of.** Languages, frameworks, data structures, schemas, key dependencies, state shape. Load-bearing parts only. Test: if this material were swapped for an equivalent, would the software still make the same argument?
-
-**Formal — what pattern organizes it.** Layering, module boundaries, dominant design patterns, control flow, the shape of a typical change. Identify the actual pattern from what the code does, not what the README claims. Note where the pattern is inconsistently applied — those seams are where ports go wrong.
-
-**Efficient — what acts on it.** CI/CD pipeline, branching model, build tooling, how changes get deployed. Most often missing from architecture docs; most likely to silently break a port.
-
-**Final — what it's for (the telos).** Inferred backward from the other three, not a declared mission statement. State confidence and evidence. Where evidence conflicts or is thin, say so.
+**Final — what it's for (the telos).** Probe this first. Final cause is not a peer in a flat list — it is the frame that makes the other three legible. Begin by reading high-signal evidence: entry points (what URLs/routes exist and what they serve), naming conventions, and what code gets the most defensive handling (comments, null-guards, retry logic, test coverage — a proxy for what the authors feared breaking). From this, state an initial telos tentatively. Then probe Material, Formal, and Efficient through that lens — not just "what patterns exist" but "which patterns are load-bearing for the inferred telos, and which are incidental?" After those three probes, revisit and refine the Final cause; evidence from the probe may sharpen or correct the initial inference. State confidence and evidence. Where evidence conflicts or is thin, say so.
 
 From the Final cause, derive **don't-contradict rules** — imperative constraints a coding agent must not violate. These are statements like "do not introduce X," "all Y must go through Z," "new entities require step A and step B." They are the telos translated into action constraints.
+
+**Material — what it's made of.** Languages, frameworks, data structures, schemas, key dependencies, state shape. Load-bearing parts only. Probe through the telos lens: which dependencies are load-bearing for what the software argues, and which are incidental choices? Test: if this material were swapped for an equivalent, would the software still make the same argument?
+
+**Formal — what pattern organizes it.** Layering, module boundaries, dominant design patterns, control flow, the shape of a typical change. Probe through the telos lens: a formal pattern only earns a spot in formal.md once you can say how it serves or contradicts the telos. Identify the actual pattern from what the code does, not what the README claims. Note where the pattern is inconsistently applied — those seams are where ports go wrong.
+
+**Efficient — what acts on it.** CI/CD pipeline, branching model, build tooling, how changes get deployed. Probe through the telos lens: which build constraints protect the telos's load-bearing paths? Most often missing from architecture docs; most likely to silently break a port.
 
 **Comprehensive feature map.** Attempt a comprehensive feature map — identify every user-facing feature in the repo, not just the ones tied to the current port. For each identified feature, create a stub in `.anima-lite/features/` at the deepest level the probe can confirm without over-claiming. "The feature exists and its entry point is X" is a valid `stub:1`. Do not require full-chain visibility before creating a stub; require only that every populated field was confirmed in code.
 
@@ -84,11 +90,11 @@ When in doubt, keep it out. Wrong in a contract costs one feature; wrong in the 
 
 ## Output
 
-Write four files to `.anima-lite/spine-<label>/`:
+Write four files to `.anima-lite/spine-<label>/`. Section numbers make spine findings citable by ari-argue and ari-port — cite the section, not just the file.
 
 ---
 
-**`telos.md`** — coding-agent entry point. Short. Imperative. This is what Cursor, Windsurf, Copilot, and Aider load first.
+**`telos.md`** — coding-agent entry point. Short. Imperative. This is what Cursor, Windsurf, Copilot, and Aider load first. Probed first tentatively (from entry points, naming, and defensive-handling signals), then refined after Material, Formal, and Efficient are probed.
 
 ```markdown
 # Telos: <repo-name> (<label>)
@@ -96,21 +102,21 @@ Commit: <short git hash of HEAD>
 Confidence: <high|medium|low>
 Refresh trigger: <the specific condition that should invalidate this spine>
 
-## Purpose
+## §1 Purpose
 <2-3 sentences: what this codebase exists to do, written as a decision constraint.
 Not a mission statement — a constraint. New work either serves this purpose or contradicts it.>
 
-## Don't contradict
+## §2 Don't contradict
 - <imperative rule — what new code must not do, derived from the telos>
 - <imperative rule>
 - <imperative rule — 3-5 rules total. Concrete and checkable, not vague principles.>
 
-## Cause files (reference depth)
+## §3 Cause files (reference depth)
 - [material.md](material.md) — tech stack and load-bearing dependencies
 - [formal.md](formal.md) — architecture patterns; new code follows these conventions
 - [efficient.md](efficient.md) — build/CI/deploy; how to verify a change works
 
-## Disclaimers
+## §4 Disclaimers
 Telos is inferred, not declared. Treat any claim here that materially affects
 a coding decision as worth a quick verification pass against the actual code.
 ```
@@ -123,6 +129,13 @@ a coding decision as worth a quick verification pass against the actual code.
 # Material: <repo-name> (<label>)
 (Reference depth — see telos.md for entry point and commit hash)
 
+## §1 Languages
+## §2 Backend frameworks
+## §3 Frontend libraries
+## §4 Key dependencies
+## §5 Data structures / schemas
+## §6 State shape
+
 <Languages, frameworks, data structures, schemas, key dependencies, state shape.
 Load-bearing parts only. Organized for lookup, not for narrative reading.
 
@@ -131,7 +144,12 @@ is detectable (package.json, pom.xml, build.gradle, lock file, vendor dir, CDN
 URL). Write "Bootstrap 4.x" not "Bootstrap". If version is genuinely undetectable,
 write "Bootstrap (version unknown)" — an absent version is a gap, not a default.
 Version strings matter at port time: syntax choices (e.g. data-toggle vs
-data-bs-toggle) are version-specific and a reviewer cannot verify them without this.>
+data-bs-toggle) are version-specific and a reviewer cannot verify them without this.
+Version pins (e.g. "Bootstrap 4.1.3", "jQuery 3.5.1") are stable spine facts —
+correct at probe time and relevant for syntax decisions. EOL status, advisory status,
+and security currency are timed facts: they expire at the source and must not be
+frozen into the spine. For these, record where to check (the project's dependency
+manifest, the upstream advisory feed) rather than a judgment that will silently go stale.>
 ```
 
 ---
@@ -141,6 +159,12 @@ data-bs-toggle) are version-specific and a reviewer cannot verify them without t
 ```markdown
 # Formal: <repo-name> (<label>)
 (Reference depth — see telos.md for entry point and commit hash)
+
+## §1 Layered architecture
+## §2 Module boundaries
+## §3 Dominant patterns
+## §4 Seam protocols
+## §5 Named findings
 
 <Architecture pattern, layering, module boundaries, dominant design patterns,
 the shape of a typical change. Named inconsistencies as findings.
@@ -179,6 +203,12 @@ each step against a known-good example rather than trusting an abstract list.>
 ```markdown
 # Efficient: <repo-name> (<label>)
 (Reference depth — see telos.md for entry point and commit hash)
+
+## §1 Build tooling
+## §2 Key targets
+## §3 CI/CD
+## §4 Branching model
+## §5 Deploy path
 
 <CI/CD pipeline, branching model, build tooling, how changes get deployed.
 How to verify a change works in this repo.>
