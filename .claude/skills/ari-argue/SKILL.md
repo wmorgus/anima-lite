@@ -46,6 +46,14 @@ Argumentation: determine what a feature is claiming to the user, separate from h
 
 *Claim change* — requires explicit confirmation: removing a UI element the prototype had, dropping a confirmation step, relaxing validation, changing who gets notified, changing reversible vs. permanent. Three categories that consistently look like substrate but are not:
 
+**Every classification cites the spine section it rests on.** Bare assertions ("this is substrate") are not acceptable. Format:
+- "Substrate — prod formal.md §3 (Dominant patterns) establishes this as the standard transport mechanism."
+- "Claim — no spine section covers this; classification is by telos inference."
+
+If no spine section applies, say so explicitly. The contract must be verifiable: a reviewer should be able to check any classification against the cited spine fact rather than trusting the agent's memory.
+
+**Skeptical read on every substrate classification.** The substrate call is the highest-risk classification — it's the one that lets work proceed without user confirmation. For every detail classified as substrate, verify it does not touch: state management, reversibility, validation, confirmations, who-sees-what, or data persistence. If it touches any of these, escalate to claim review even if the surface appearance is substrate. The cost of a missed claim is higher than the cost of a false-positive escalation. This skeptical read is free — the subagent is already reading the material, so adversarial attention costs nothing.
+
 **Interaction model.** How the user physically moves through the feature — collapse/expand, auto-advance, one-at-a-time focus, toggle behavior, keyboard flow. A user who understood the feature's promise would notice if sequential discovery became everything-at-once. Classify interaction patterns as claims by default; only call them substrate if you can articulate why the specific pattern doesn't affect the promise.
 
 When writing a contract for an interaction model claim, name the invariant the interaction enforces — not just the implementation sub-tasks. "One card expanded at a time" is an invariant; "auto-expand UNDER_REVIEW, toggle on click" are the sub-tasks. A contract that names only the sub-tasks passes to ari-port without stating what the sub-tasks exist to enforce. ari-port will implement the sub-tasks and miss the invariant. Name both.
@@ -57,6 +65,19 @@ When writing a contract for an interaction model claim, name the invariant the i
 When ambiguous, don't guess — escalate to step 4.
 
 **4. Confirm every claim change with the user.** One at a time, never bundled. Frame concretely: state what the prototype does, what the prod pattern would do instead, and that this is an argument-level decision, not a style choice. If the user is unreachable synchronously, default to preserving the claim and mark it "preserved by default, pending confirmation" — never silently resolve ambiguity by guessing it away.
+
+**Third path — route, don't violate.** If the subagent believes a claim in the prototype looks wrong — not just different in the prod context, but misguided as a design decision — that claim is neither preserved-by-default nor silently dropped. It is surfaced as an Open Question in the contract, with the reasoning stated plainly. The user resolves it before the contract is frozen. Silently satisfying a claim you believe is wrong is worse than either confirming or challenging it: the corpus calls this "route, don't violate" — principled challenge goes through the cycle, not around it. The Open Questions section exists as the halt surface for exactly this case.
+
+**Calibration note — lighter pass.** The full classification pass is the default. A lighter pass is available only when all of the following hold:
+1. Both spines are current and have been fully read.
+2. The proto feature source has been fully read and no candidate claim changes are visible in any of: state management, reversibility, validation, confirmations, who-sees-what, data persistence.
+3. The feature type is well-understood — pure styling, naming, or file restructure with no behavioral change.
+
+This is a signal-clarity condition, not an efficiency shortcut. A full pass on 40 obvious substrate changes before reaching 0 claims generates noise that dulls attention to actual claims. The lighter pass exists to protect focus, not to save time.
+
+Even on a lighter pass, the subagent must produce a positive claim: not "no claims found" but "I looked for claim candidates in [state management, reversibility, validation, confirmations, who-sees-what, data persistence] and found none." The absence of claims is a documented finding, not a silence. This is epistemic hygiene: the skeptical attention is on record even when it finds nothing.
+
+If any of the three conditions is not met, run the full pass.
 
 ## Output
 
