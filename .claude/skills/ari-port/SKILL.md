@@ -88,9 +88,10 @@ The execution subagent receives:
 
 The subagent's job: implement the plan, follow commit discipline below, write blips to `.anima-lite/blips/<branch-slug>.md`. Work through the plan using the contract as the filter for every decision:
 
-- **Substrate changes** — translate freely, using the prod spine's `formal.md` as the guide for idiom and structure.
+- **Substrate changes** — translate freely, using the prod spine's `formal.md` as the guide for idiom and structure. Every substrate translation decision must cite the spine section that grounds it (e.g. "Translating jQuery collapse to Bootstrap 4.1.3 data-toggle/data-target per spine-prod/material.md §2 (Bootstrap 4.1.3 confirmed)"). If no spine section covers the decision, say so explicitly in the blip or log line.
 - **Claim changes** — implement exactly per the contract's confirmed decision. Do not relitigate mid-execution.
 - **Anything not covered by the contract** — log as a blip immediately, make the conservative choice (preserve current behavior).
+- **Contract-clarity watch** — while implementing, flag anything in the contract that looks under-specified or potentially wrong in light of what the prototype source actually does. This is softer than CONTRACT-BREAK (which fires only when the contract is actively contradicted). Log these as `Severity: info`, `Type: contract-clarity` blips. They don't halt execution but give the main agent and reviewer a signal that the contract may need sharpening for future ports of similar features.
 
 If the contract is actively wrong — not incomplete, but contradicted by what the prototype code does — **halt**. Write the contradiction to blips as `CONTRACT-BREAK` and report execution paused pending a re-run of ari-argue.
 
@@ -273,7 +274,7 @@ Based on blip severity and claim complexity, the highest-attention areas are:
 <Dev server start command, login URL, feature URL. Then per-claim checks from the playwright: block — each check names the interaction and the exact expected outcome. Include what "not verifiable" means for stub-data checks so a reviewer knows it's expected, not skipped.>
 ```
 
-**Quality bar for the catch-up doc:** A reviewer with zero prior context should be able to open this doc, jump to any invariant via the file:line anchor, confirm the old-vs-new delta, and run the verify steps — without asking a follow-up question. If writing any section requires knowledge that isn't in the doc itself, add it.
+**Quality bar for the catch-up doc:** A reviewer with zero prior context should be able to open this doc, jump to any invariant via the file:line anchor, confirm the old-vs-new delta, and run the verify steps — without asking a follow-up question. If writing any section requires knowledge that isn't in the doc itself, add it. Each `file:line` anchor in "What to focus on in review" must include a clause that names the concrete failure mode if the line is wrong — not just what's there, but what breaks if it isn't.
 
 **4e(ii). Completeness critic pass.** After writing the catch-up doc, spawn a single completeness-critic subagent with clean context. The subagent receives **only the catch-up doc** — no contract, no spines, no blips. The isolation is the point: if the critic can't answer a reviewer question from the doc alone, a real reviewer can't either.
 
@@ -281,6 +282,8 @@ The critic's job: attempt to answer the questions a reviewer would ask from the 
 - What question it couldn't answer
 - Which section is missing the information
 - What specific content would resolve it
+
+Secondary task: scan the blips log for any `Contracting failure?: n/a` entries and check whether they describe something that a more rigorous ari-argue pass would have caught. If yes, note it — not as a blocking finding, but as a signal that the ari-argue step may have under-classified. This closes the feedback loop from execution back to argumentation.
 
 If the critic finds no gaps, proceed directly to 4f — no patch needed.
 
@@ -320,9 +323,9 @@ Append to `.anima-lite/blips/<branch-slug>.md` (same slug as the contract) throu
 ```markdown
 ## Blip: <short title>
 Severity: <info|review-suggested|CONTRACT-BREAK>
-Location: <file:line>
+Location: <file:line — one clause naming what's at that location and why it's load-bearing for the reviewer>
 What happened: <the decision>
-Why: <reasoning>
+Why: <reasoning — if this blip relates to or contradicts a spine observation, cite the spine section here (e.g. "see spine-prod/formal.md §3 — the actual pattern diverges from what the spine describes")>
 Downstream consequence: <what this means going forward>
 Contracting failure?: <what should have been in the contract to cover this — or "n/a" if genuinely unforeseeable>
 ```
