@@ -40,6 +40,20 @@ If none hold and a current spine directory exists, do not invoke — proceed dir
 4. For `material.md` library entries, grep package manifests, lock files, or vendor dirs for version strings — don't assert a version you haven't confirmed
 5. If `.anima-lite/features/` exists, read any ledger files relevant to the current probe before writing `formal.md` and `telos.md`. Treat as soft reference — explicitly softer than the spine. Source is port-generated, not independently probed. Use ledger entries as pointers to confirm, not as authority to copy. If the probe confirms a ledger observation, it may graduate into the spine; if the probe contradicts it, the spine wins and the ledger entry was stale — note it as a finding.
 
+**Parallel probe subagents (large repos).** After step 1 completes, assess scope: if the repo has >500 files or the probe would require reading >10 files per cause, spawn three parallel subagents — one per cause — rather than probing serially. For smaller repos, single-agent probe is fine.
+
+Each subagent receives:
+- The repo path
+- The probe steps for its cause only (steps 2–3 for formal, step 4 for material, build/CI configs for efficient)
+- This instruction: return structured findings with three fields — `confirmed` (what was verified in code), `unconfirmed` (what couldn't be pinned), `named_findings` (inconsistencies, gaps, or surprises worth carrying into the spine)
+
+Subagent assignments:
+- `probe:material` — grep manifests and lock files for versions; read package files; confirm dependency versions; return findings in the three-field format
+- `probe:formal` — read representative files per layer; grep for pattern claims; confirm seam protocols; return findings
+- `probe:efficient` — read build configs and CI workflow files; confirm targets and deploy paths; return findings
+
+The main agent waits for all three, synthesizes the findings, then writes the four spine files and feature ledger stubs. The initial `find` enumeration (step 1) stays with the main agent — it determines scope before fanning out.
+
 These steps don't need to be exhaustive. They need to be enough that each assertion in the output is code-derived, not plausible-from-memory.
 
 Probe the repo and answer all four causes. Don't skip one because it seems obvious — obvious causes go stale silently.

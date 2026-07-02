@@ -70,13 +70,29 @@ If a branch with that name already exists, check it out and verify it's at the s
 
 Do not make any commits on a long-lived branch. All port commits must land on the feature branch. The commit discipline below is meaningless if the commits end up on `dev` — there is no clean PR surface to review against.
 
-Work through the plan using the contract as the filter for every decision:
+**Execution subagent.** Spawn a single execution subagent with clean context. The clean-context isolation is the point: an agent that cannot fall back on upstream argumentation to fill gaps must blip anything the contract doesn't cover. This enforces contract-as-filter discipline — gaps that a context-carrying agent would silently paper over become visible blips.
+
+The execution subagent receives:
+- The contract (`.anima-lite/contracts/<branch-slug>.md`)
+- Both spine telos files (`spine-proto/telos.md` and `spine-prod/telos.md`) — for don't-contradict rules
+- The plan (`.anima-lite/plans/<branch-slug>.md`)
+- The prototype source files being translated
+- The prod repo path and current branch name
+
+The subagent's job: implement the plan, follow commit discipline below, write blips to `.anima-lite/blips/<branch-slug>.md`. Work through the plan using the contract as the filter for every decision:
 
 - **Substrate changes** — translate freely, using the prod spine's `formal.md` as the guide for idiom and structure.
 - **Claim changes** — implement exactly per the contract's confirmed decision. Do not relitigate mid-execution.
 - **Anything not covered by the contract** — log as a blip immediately, make the conservative choice (preserve current behavior).
 
 If the contract is actively wrong — not incomplete, but contradicted by what the prototype code does — **halt**. Write the contradiction to blips as `CONTRACT-BREAK` and report execution paused pending a re-run of ari-argue.
+
+The subagent returns a handoff to the main agent:
+- List of commits made (hash + claim mapping)
+- Summary of blips logged
+- `contract_break: true/false` — if true, execution is paused
+
+Main agent on `contract_break: true`: surface the CONTRACT-BREAK blip to the user and request an ari-argue re-run before proceeding. Do not advance to Step 3.
 
 **Commit discipline** — commit after each claim is fully implemented, before moving to the next. Do not accumulate all changes into a single working-tree blob. The commit message format:
 
@@ -243,6 +259,17 @@ Based on blip severity and claim complexity, the highest-attention areas are:
 ```
 
 **Quality bar for the catch-up doc:** A reviewer with zero prior context should be able to open this doc, jump to any invariant via the file:line anchor, confirm the old-vs-new delta, and run the verify steps — without asking a follow-up question. If writing any section requires knowledge that isn't in the doc itself, add it.
+
+**4e(ii). Completeness critic pass.** After writing the catch-up doc, spawn a single completeness-critic subagent with clean context. The subagent receives **only the catch-up doc** — no contract, no spines, no blips. The isolation is the point: if the critic can't answer a reviewer question from the doc alone, a real reviewer can't either.
+
+The critic's job: attempt to answer the questions a reviewer would ask from the doc alone. For each section where a question cannot be answered, return a specific gap:
+- What question it couldn't answer
+- Which section is missing the information
+- What specific content would resolve it
+
+If the critic finds no gaps, proceed directly to 4f — no patch needed.
+
+If the critic finds gaps, the main agent patches the catch-up doc to close them. The main agent may optionally run one additional critic pass to confirm the patches landed — cap at one re-run, do not loop.
 
 **4f. Present for approval.** Surface the PR description and the staged diff summary to the user. Do NOT run `gh pr create` without explicit user confirmation — PRs are social objects. Once approved, the user or agent runs `gh pr create --body "$(cat .anima-lite/pr-<branch-slug>.md)"`.
 
