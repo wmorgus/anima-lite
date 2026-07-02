@@ -5,6 +5,10 @@ description: Reads .anima-lite/spine.md and a target feature, classifies every i
 
 # ari-argue
 
+**This skill runs as a subagent spawned by the main pipeline agent — not as the main agent itself.** By the time ari-argue runs, the main agent carries ari-map probe context (spine reasoning, cause analysis). The classification loop and user back-and-forth are isolated here so the main agent's context stays clean.
+
+The spawning agent passes to this subagent: both spine directories (`spine-proto/` and `spine-prod/`, full contents), the proto feature source files being ported, and the current git branch name. On completion, this subagent returns a handoff summary to the main agent: contract path written, number of claim changes confirmed, and whether a telos conflict was found and how it was resolved.
+
 Argumentation: determine what a feature is claiming to the user, separate from how it happens to be implemented, and get the human to confirm anything that would change if the claim itself moved.
 
 ## Inputs
@@ -29,6 +33,10 @@ Argumentation: determine what a feature is claiming to the user, separate from h
 ## Process
 
 **1. Read both telos files.** Check the feature's argument against both purposes and don't-contradict rules — what the proto telos says this feature is for, and whether the prod telos leaves room for it. If a telos conflict is detected: present the conflict to the user, name whether it reads as a telos error (the spine's purpose is wrong) or scope creep (the feature is beyond what this repo is for), and wait for explicit confirmation before continuing. Do not write the contract until the user has acknowledged the conflict. Neither outcome is a silent continue. Note the proto telos's `Commit:` hash; the contract will pin to it.
+
+> **⛔ REQUIRED GATE — telos conflict**
+> If the feature conflicts with the prod telos, present the conflict explicitly and name whether it reads as telos error or scope creep. Do not write the contract until the user resolves it.
+> The pipeline halts here. Do not proceed until explicitly cleared.
 
 **2. Identify the argument.** What relationship or promise is this feature establishing with the user — not what it does mechanically. A confirmation dialog before a destructive action argues "you should not lose data by accident." A specific widget choice is usually just medium, unless the choice itself was load-bearing (a dropdown chosen specifically to hide a sensitive setting behind a click is making a claim, not just rendering one).
 

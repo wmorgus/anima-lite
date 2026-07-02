@@ -58,6 +58,13 @@ For each confirmed claim in the contract, in implementation order:
 
 Surface the plan before executing. If a blocker is found in planning, halt here — re-run ari-argue rather than proceeding with partial information.
 
+> **⛔ REQUIRED GATE — plan blockers**
+> If `## Blockers` in the plan is non-empty, surface each blocker to the user. Do not spawn the execution subagent until all blockers are explicitly cleared.
+> The pipeline halts here. Do not proceed until explicitly cleared.
+
+> **◎ OPTIONAL GATE — plan review**
+> After blockers are cleared (or if none exist), offer plan review. "Plan written — review before execution? (skip to proceed)."
+
 ### Step 2 — Execute
 
 **Feature branch first.** Before touching any code, check the current branch in the prod repo. If you are on a long-lived branch (`main`, `master`, `dev`, `develop`, `staging`, or any branch that appears to be an integration target), create and switch to a feature branch named after the contract slug:
@@ -93,6 +100,10 @@ The subagent returns a handoff to the main agent:
 - `contract_break: true/false` — if true, execution is paused
 
 Main agent on `contract_break: true`: surface the CONTRACT-BREAK blip to the user and request an ari-argue re-run before proceeding. Do not advance to Step 3.
+
+> **⛔ REQUIRED GATE — CONTRACT-BREAK**
+> If the execution subagent returns `contract_break: true`, surface the CONTRACT-BREAK blip to the user and halt. Re-run ari-argue with the new information before proceeding to Step 3.
+> The pipeline halts here. Do not proceed until explicitly cleared.
 
 **Commit discipline** — commit after each claim is fully implemented, before moving to the next. Do not accumulate all changes into a single working-tree blob. The commit message format:
 
@@ -133,6 +144,10 @@ Additional CONTRACT-BREAK trigger: any user-visible broken interaction is a CONT
 The validation agent returns one of:
 - **PASS** — all claims implemented; all blip classifications correct; no `review-suggested` blips pending acknowledgment
 - **PASS (pending review)** — claims and blip classifications correct, but `review-suggested` blips present; surface to user for acknowledgment, then PASS
+
+> **⛔ REQUIRED GATE — review-suggested blips**
+> If the validation agent returns PASS (pending review), surface each review-suggested blip to the user. The user must acknowledge each one before the pipeline proceeds to Step 4.
+> The pipeline halts here. Do not proceed until explicitly cleared.
 - **FAIL: <specific finding>** — a confirmed claim absent/partial/contradicted, or a blip misclassification caught
 
 On FAIL: loop back to Step 2, fix the specific finding, re-validate. Do not declare completion before the validation agent returns PASS or PASS (pending review) with acknowledged items.
@@ -271,7 +286,14 @@ If the critic finds no gaps, proceed directly to 4f — no patch needed.
 
 If the critic finds gaps, the main agent patches the catch-up doc to close them. The main agent may optionally run one additional critic pass to confirm the patches landed — cap at one re-run, do not loop.
 
-**4f. Present for approval.** Surface the PR description and the staged diff summary to the user. Do NOT run `gh pr create` without explicit user confirmation — PRs are social objects. Once approved, the user or agent runs `gh pr create --body "$(cat .anima-lite/pr-<branch-slug>.md)"`.
+> **◎ OPTIONAL GATE — catch-up doc review**
+> After the critic's patches are applied, offer the user a chance to review the catch-up doc before proceeding to 4f. "Catch-up doc written — review before PR creation? (skip to proceed)."
+
+**4f. Present for approval.** Surface the PR description and the staged diff summary to the user. Do NOT run `gh pr create` without explicit user confirmation — PRs are social objects.
+
+> **⛔ REQUIRED GATE — PR creation**
+> Surface the PR description and staged diff summary to the user before running `gh pr create`. Do not create the PR without explicit user confirmation.
+> The pipeline halts here. Do not proceed until explicitly cleared. Once approved, the user or agent runs `gh pr create --body "$(cat .anima-lite/pr-<branch-slug>.md)"`.
 
 The reconcile step is complete when: working tree is clean of unrelated changes, all port files are staged, and the PR description is written and surfaced.
 
