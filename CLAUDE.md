@@ -27,5 +27,8 @@ Artifacts land in `.anima-lite/` in this directory. Spines are committed. Contra
 - `/ari-map` — probe a repo, write a four-cause spine (material/formal/efficient/final)
 - `/ari-argue` — classify feature details as substrate or claim, confirm claim changes one at a time
 - `/ari-port` — translate substrate freely, implement confirmed claims exactly, log blips
+- `/ari-backlog` — capture and sweep the backlog (`.anima-lite/backlog.md`); run before every calibration run
+
+`.anima-lite/backlog.md` is committed durable state, not a scratch file — see `.claude/skills/ari-backlog/SKILL.md` for the pin format and sweep process.
 
 See `PHILOSOPHY.md` for the core commitments.
