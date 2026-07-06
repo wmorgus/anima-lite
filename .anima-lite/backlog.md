@@ -26,8 +26,8 @@ Shaping fields — `not traced` until stub advances past 0.
 
 ### PIN-2 — "Software as research programme" sensors
 captured: 2026-07-05
-stub: 1
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once the sensors sprint (PIN-2/3/4/5) actually ships a metrics/ directory with a first run row
 relates-to: none yet
@@ -39,15 +39,15 @@ Shaping fields — `not traced` until stub advances past 0.
 
 **Scope:** In — the five sensor categories named above, landing as committed files under `.anima-lite/metrics/`. Out — dashboarding, alerting, or any UI over the metrics; this is data collection only.
 **Batch:** sensors-sprint
-**Contract:** not traced
-**Resolution:**
+**Contract:** Promises that every calibration/production run produces a durable, committed measurement row — gate utilization, blip severity distribution, and validation result — rather than that information existing only in the session transcript and being lost once the session ends. This changes what "a run happened" means as a durable record: an operator can now audit gate behavior and blip trends across runs without re-reading old transcripts. Note: PIN-2's `goes-stale` condition references calibration-run structure — left as-is; it survives this resolution and will re-trigger only if the metrics/ directory or run-row shape changes materially.
+**Resolution:** `.claude/skills/ari-port/metrics-spec.md` created as the canonical spec (run row, backlog-health row, session-cost row, summary.md); ari-port SKILL.md gained Step 5.5 (Instrument) writing the run row at end of each port; `.anima-lite/metrics/summary.md` scaffolded with the three research questions and an empty table (rows begin at run4 — run1–3 predate instrumentation, see `archive/calibration-*`) — commit 1e349fa. Gate cleared in-session 2026-07-06.
 
 ---
 
 ### PIN-3 — Per-run token analysis as instrumentation
 captured: 2026-07-05
-stub: 1
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once token counts are flowing into `.anima-lite/metrics/` from at least one real run
 relates-to: none yet
@@ -59,8 +59,8 @@ Shaping fields — `not traced` until stub advances past 0.
 
 **Scope:** In — token counts per phase and per subagent invocation, logged alongside PIN-2's sensors. Out — cost-optimization decisions themselves; this pin only builds the measurement.
 **Batch:** sensors-sprint
-**Contract:** not traced
-**Resolution:**
+**Contract:** Promises two independent token-cost channels rather than one blended estimate: subagent tokens (per phase, self-reported at spawn/return, landing in the run row's phase table) and main-agent session cost (mechanically captured by a hook, landing in a session-cost row) — with an explicit `not traced` stub rather than a guessed number wherever a channel can't observe a figure. This is a stronger promise than "some token number gets logged": it commits to never fabricating a total across the two channels.
+**Resolution:** ari-port SKILL.md Step 5.5 instructs the main agent to record each subagent's returned usage and model tier as the pipeline runs, assembled into the run row's phase table per metrics-spec.md; `.claude/hooks/session-cost.py` built and registered as a `SessionEnd` hook in `.claude/settings.json`, mechanically summing transcript usage by model into `.anima-lite/metrics/sessions/<date>-<session>.md` — commits 1e349fa, 0dc5102. Gate cleared in-session 2026-07-06.
 
 ---
 
@@ -88,8 +88,8 @@ Shaping fields — `not traced` until stub advances past 0.
 
 ### PIN-5 — Model-intensity compute-substrate axis instrumentation (epistle-040)
 captured: 2026-07-05
-stub: 1
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once model-tier tracking is live in the sensor suite from at least one real run
 relates-to: /Users/wmorgus/Desktop/anima/anima-corps/epistles/epistle-040.md
@@ -101,8 +101,8 @@ Shaping fields — `not traced` until stub advances past 0.
 
 **Scope:** In — per-phase model tier logging and correlation with blip/FAIL rate, alongside PIN-3's token analysis. Out — any automated model-selection policy; this pin only measures.
 **Batch:** sensors-sprint
-**Contract:** not traced
-**Resolution:**
+**Contract:** Promises the run row's phase table always records the model tier used per subagent invocation, alongside its token/duration figures, so a future calibration diff can ask "did tier correlate with blip rate or FAIL rate" from committed data rather than from memory of which model was used when. `summary.md` names this correlation explicitly as research question (c) it exists to serve. This pin only measures; it builds no model-selection policy.
+**Resolution:** Model tier per invocation is one of the two operative Step 5.5 instructions in ari-port's SKILL.md (recorded alongside tokens/duration at spawn time into the phase table); `summary.md` states model-intensity correlation as standing research question (c). Session-cost rows additionally break down tokens by model, giving a second (main-agent) channel for tier-cost visibility — commits 1e349fa, 0dc5102. Gate cleared in-session 2026-07-06.
 
 ---
 
