@@ -28,6 +28,8 @@ Do not proceed on partial or mismatched context. This is the failure mode the wh
 
 **Ari face (self-policing).** Every blip carries a `Contracting failure?` field. This is not optional metadata — it is the self-policing obligation: each uncovered case is an occasion to ask whether the contract was incomplete, not just what to do now. A blip that skips this question exempts the contracting phase from the quality sweep.
 
+**Conservative default.** When the contract does not cover a decision, preserve current behavior and log a blip. Do not guess which bucket an uncovered case belongs in. Do not resolve ambiguity by choosing the option that makes the port simpler or faster. The conservative default is a mechanism: it makes gaps visible rather than hiding them behind a plausible-looking implementation. A blip saying "preserved by default, contract gap" is a correct artifact; a silently-resolved gap is a failure mode.
+
 ## Process
 
 ### Step 1 — Plan
@@ -101,6 +103,8 @@ The subagent returns a handoff to the main agent:
 - `contract_break: true/false` — if true, execution is paused
 
 Main agent on `contract_break: true`: surface the CONTRACT-BREAK blip to the user and request an ari-argue re-run before proceeding. Do not advance to Step 3.
+
+**Partial commit preservation.** Do not revert commits already made before the CONTRACT-BREAK was discovered. The commits represent completed work that the contract did cover — reverting them loses that work without benefit. Leave the branch as-is. When re-running ari-argue, provide the list of commits already made (from the execution subagent's handoff) so ari-argue can write a contract amendment rather than a full re-contract. The amendment covers only the uncovered case; previously confirmed and implemented claims are settled.
 
 > **⛔ REQUIRED GATE — CONTRACT-BREAK**
 > If the execution subagent returns `contract_break: true`, surface the CONTRACT-BREAK blip to the user and halt. Re-run ari-argue with the new information before proceeding to Step 3.

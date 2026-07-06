@@ -26,8 +26,15 @@ Optional (user can inspect or skip): spine review · plan review · catch-up doc
 - Citation discipline: substrate translations and blips cite the spine §-section grounding them
 
 ## §5 Named findings
-- FINDING-1 (code-derived): label system in SKILL.md preconditions only recognizes `proto` and `prod` — the `anima-lite` label used in this self-spine is formally unsupported, creating a gap between the documented labels and what the system needs to map itself
-- FINDING-2 (code-derived): conservative default is stated in PHILOSOPHY.md and ari-lite.md but absent from SKILL.md files — a session using skills directly without the ari-lite agent face has no conservative default instruction; the philosophy is unoperationalized at the skill level
-- FINDING-3 (code-derived): lite face authority is documented in ari-lite.md but not referenced in any SKILL.md — the three-face orientation (ari/builder/lite) is only active when ari-lite agent is invoked; direct skill invocation loses the lite face entirely
-- FINDING-4 (code-derived): CONTRACT-BREAK recovery path is underspecified — SKILL.md says halt and re-run ari-argue, but does not address whether partial execution commits should be reverted, preserved, or cherry-picked before the re-run
-- FINDING-5 (code-derived): deployment targets (Cursor .mdc files, Windsurf .md files, Copilot instructions) have no documented sync mechanism with the SKILL.md sources — they can silently drift; no version field in any deployment target file
+
+### Resolved
+- FINDING-1 (code-derived): label system in SKILL.md preconditions only recognized `proto` and `prod` — **FIXED**: ari-map Inputs now accepts arbitrary labels; `proto`/`prod` documented as conventional, not required.
+- FINDING-2 (code-derived): conservative default absent from SKILL.md as a top-level orientation — **FIXED**: added as explicit Active Orientation in ari-port SKILL.md; no longer requires ari-lite agent face to be active.
+- FINDING-4 (code-derived): CONTRACT-BREAK recovery path for partial commits unspecified — **FIXED**: ari-port SKILL.md now specifies preserve-and-amend over revert-and-redo.
+
+### Tabled (backlog formalization needed — track separately)
+- FINDING-3 (code-derived): lite face authority only active via ari-lite agent invocation; direct skill invocation loses it. Likely by design — tabled pending decision on whether skills should self-declare face requirements.
+- FINDING-5 (code-derived): deployment targets (Cursor/Windsurf/Copilot) have no sync mechanism with SKILL.md sources. Tabled — needs a concrete sync mechanism design before it can be addressed.
+- Versioning fields (efficient cause gap): no version field in SKILL.md files, contracts, or blips. Tabled — low immediate impact, medium future impact as harness versions accumulate.
+
+Note: backlog formalization for tabled items is itself a gap — there is no `.anima-lite/backlog.md` or equivalent. These items are tracked here by name only.

@@ -9,7 +9,7 @@ Spine-finding: probe a repo's material, formal, efficient, and final causes and 
 
 ## Inputs
 
-- Repo path and label (`proto` or `prod` — determines output directory name).
+- Repo path and label (any slug — determines output directory name; `proto` and `prod` are conventional for port pairs, but arbitrary labels like `anima-lite` are valid).
 - The corresponding telos file if it already exists (`.anima-lite/spine-<label>/telos.md`) — read the `Commit:` field to determine refresh-vs-create.
 
 ## Preconditions
@@ -304,6 +304,6 @@ Field ownership:
 
 Each spine directory is shared, repo-level state. Commit the full directory rather than gitignoring it. Merge conflicts on spine files are a legitimate signal that two sessions' mental models diverged — resolve by re-probing fresh, not by picking a side.
 
-Both `spine-proto/` and `spine-prod/` must be current before ari-argue can run. ari-argue's contracts pin to the `Commit:` hash in `spine-proto/telos.md`.
+Both the proto and prod spine directories must be current before ari-argue can run. ari-argue's contracts pin to the `Commit:` hash in `spine-proto/telos.md` (or whatever label is used for the prototype repo).
 
 On refresh, re-probe fully rather than patching — and note what changed versus the previous version.
