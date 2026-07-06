@@ -79,6 +79,22 @@ Even on a lighter pass, the subagent must produce a positive claim: not "no clai
 
 If any of the three conditions is not met, run the full pass.
 
+## Proto visual reference (if server reachable)
+
+Before writing the contract, attempt to capture visual ground truth from the running prototype. This step runs after all claim changes are confirmed but before the contract is written — the screenshots inform the `expect` clauses in the playwright verification block.
+
+1. **Find the dev server URL.** Check `vite.config.js` (or equivalent) in the proto repo for the dev server port. If unclear, ask the user for the URL before attempting to reach it.
+
+2. **Attempt connection.** Try to navigate to the feature in the proto. If the server is not reachable, note `playwright: proto-server-not-reached` in the contract and fall back to source-only reading — do not block the pipeline.
+
+3. **If reachable: take screenshots per section.** Navigate to the feature. For each major section (header, each content block, any gated or locked UI state), take a screenshot and describe what renders in prose — element count, text content, button labels, badge text, image presence. These are prose descriptions, not binary data; the contract remains a markdown file.
+
+4. **Add a `## Proto visual reference` block to the contract** listing each section and what it renders. Example:
+   - "Training cards: 4 cards, each shows title, category badge, duration, Start button with image"
+   - "Locked gate state: section renders with lock icon and 'Complete your review to unlock' label"
+
+5. **Use these descriptions to write specific `expect` clauses** in the playwright verification block (see Output below). An expect clause derived from a screenshot must name the specific elements observed, not just "the section is visible."
+
 ## Output
 
 Write `.anima-lite/contracts/<branch-slug>.md`, where `<branch-slug>` is the current git branch (sanitized: lowercase, slashes to dashes) or a feature-name slug if not in git:
@@ -101,7 +117,25 @@ Status: FROZEN FOR SESSION — do not modify without re-running ari-argue
 
 ## Open questions
 <anything not yet confirmed; ari-port must halt and escalate if it hits these>
+
+## Proto visual reference
+<one line per major section describing what the proto renders — derived from screenshots if server was reachable, from source reading if not>
+playwright: proto-server-not-reached  ← include only when server was unreachable
+
+## Playwright verification
+login_url: <proto or prod login URL>
+feature_url: <URL for this feature in the target environment>
+checks:
+  - claim: "<Claim N — name>"
+    steps: "<human-readable interaction steps>"
+    expect: "<specific content elements that must be present — title, badge, button label, count, etc.>"
 ```
+
+**Rules for the `expect` field:**
+- Name the specific UI elements that must be present — title, duration, badge, action button, character count, whatever the proto shows for that claim.
+- Bare existence checks ("the section is visible") are not sufficient for content-bearing sections. The expect clause must be specific enough to catch content quality failures.
+- If the port explicitly stubs content (a review-suggested blip exists for that section), the expect clause must describe what the stub renders — not what a full implementation would render. This documents the known limitation rather than failing on it. Example: if the blip says "training recommendations stub," the expect clause says "section renders one card with text 'Training recommendations coming soon'" — not "4 training cards with title, badge, and Start button."
+- Every confirmed claim that has a visible UI behavior must have at least one check. Claims with no visible UI behavior (e.g. pure server-side logic) may be omitted from the playwright block with a comment explaining why.
 
 ## Escalation / Notes
 

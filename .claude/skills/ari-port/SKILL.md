@@ -142,6 +142,17 @@ The validation agent checks three things independently, reading changed files di
 
 Additional CONTRACT-BREAK trigger: any user-visible broken interaction is a CONTRACT-BREAK regardless of invariant letter. "The feature works" is always an implicit invariant. Specifically: if a user action results in a silent failure or no-op (a control is enabled but the triggered operation fails with no feedback), that is CONTRACT-BREAK — not `review-suggested`. This cannot be waved through to human review. Functional correctness of implemented claims is non-negotiable; the stated invariant text is a floor, not a ceiling.
 
+**E. Visual audit for review-suggested blips with UI implications.** After the static checks in A–C pass, for each `review-suggested` blip that describes a visible UI state (placeholder content, stub section, missing expected content, partially-implemented UI), the validation agent runs a playwright step:
+
+1. Navigate to the feature URL (from the contract's `playwright.feature_url`, or from the prod dev server if the contract does not yet have a playwright block).
+2. Screenshot the specific section the blip describes.
+3. Describe what renders: text content, element count, any placeholder indicators, button states.
+4. Append this description to the blip as a `Visual audit:` field — a single sentence describing the actual rendered state.
+
+This is not a PASS/FAIL gate. It is documentation: the validation agent surfaces the actual rendered state for human review alongside the blip. A blip that says "training recommendations stub" should become "training recommendations stub — Visual audit: section renders one card with text 'Training recommendations coming soon'" so the reviewer knows exactly what they are approving, not just that something is deferred.
+
+If the dev server is not running, note it per blip as `Visual audit: skipped — dev server not reachable` and proceed. Do not block PASS on a missing dev server; the visual audit is documentation, not a verification gate.
+
 The validation agent returns one of:
 - **PASS** — all claims implemented; all blip classifications correct; no `review-suggested` blips pending acknowledgment
 - **PASS (pending review)** — claims and blip classifications correct, but `review-suggested` blips present; surface to user for acknowledgment, then PASS
