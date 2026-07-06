@@ -37,6 +37,7 @@ SessionItem, TutorAiInsightItem, TutorAiInsightFeedbackItem
 - All user session state in HTTP session (key: cmu.edu.pl2.item.PL2UserItem)
 - No client-side state management — page re-renders reset all state
 - Multi-tenancy via InstitutionItem; advisor-student relationships explicit in DB
+- Monthly-report review state (LOCKED/UNDER_REVIEW/REVIEWED) persisted in TutorAiInsightItem.status — loaded from server on every page load, never initialised client-side
 
 ## Build artifact
 - Exploded WAR via `ant deploy` / packaged WAR via `ant war.vm`
