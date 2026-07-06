@@ -228,8 +228,8 @@ Shaping fields — `not traced` until stub advances past 0.
 
 ### PIN-12 — Gate registry: single HARNESS.md at repo root
 captured: 2026-07-06
-stub: 1
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once HARNESS.md exists and lists all current required/optional gates by ID; goes stale again if a skill adds or removes a gate without updating the registry
 relates-to: none yet
@@ -242,14 +242,14 @@ Shaping fields — `not traced` until stub advances past 0.
 **Scope:** In — a new root-level HARNESS.md, plus adding an ID reference to each existing gate callout in the four skill files. Out — changing any gate's actual behavior; this is a registry, not a redesign.
 **Batch:** structural
 **Contract:** n/a — mechanical, no argument to preserve
-**Resolution:**
+**Resolution:** HARNESS.md added at repo root with a 10-row gate registry (GATE-TELOS, GATE-HASH, GATE-BLOCKERS, GATE-BREAK, GATE-BLIPS, GATE-PR, GATE-SPINE-REVIEW, GATE-PLAN-REVIEW, GATE-CATCHUP-REVIEW, GATE-PIN-CLAIM), a spec ownership map, and enforcement-level tags; every inline gate callout across the four skill files now carries its ID — commit 176b84d.
 
 ---
 
 ### PIN-13 — Spec ownership consolidation
 captured: 2026-07-06
-stub: 1
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once the feature-ledger spec and the playwright verification block each have one canonical home with other files referencing rather than restating
 relates-to: none yet
@@ -262,14 +262,14 @@ Shaping fields — `not traced` until stub advances past 0.
 **Scope:** In — the feature-ledger template and playwright verification block specifically. Out — auditing every other possibly-duplicated spec in the harness; that's a separate future pass if this one finds more instances.
 **Batch:** structural
 **Contract:** n/a — mechanical, no argument to preserve
-**Resolution:**
+**Resolution:** Feature-ledger spec moved to `.claude/skills/ari-map/ledger-spec.md` (ari-map keeps a short pointer paragraph; ari-port Step 5 points to the same file). Playwright verification block spec moved to `.claude/skills/ari-argue/playwright-spec.md` (ari-argue's Output section and ari-port's validation D both point to it instead of restating the schema/example) — commit cb2b461.
 
 ---
 
 ### PIN-14 — Enforcement-level tags: mechanical vs judgment
 captured: 2026-07-06
-stub: 1
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once harness rules carry enforcement-level tags and at least the commit-shape check is hooked
 relates-to: none yet
@@ -282,14 +282,14 @@ Shaping fields — `not traced` until stub advances past 0.
 **Scope:** In — tagging existing rules across the four SKILL.md files as mechanical or judgment, and building the first hook for commit-shape. Out — building hooks for every mechanical-tagged rule; that's future work this pin only scopes.
 **Batch:** structural
 **Contract:** n/a — mechanical, no argument to preserve
-**Resolution:**
+**Resolution:** HARNESS.md Section 3 tags each harness discipline mechanical or judgment; commit-shape discipline is named the first hook candidate, with PIN-1's run3 failure cited as evidence. No hook was built — hook implementation is noted explicitly as future pin work — commit 176b84d.
 
 ---
 
 ### PIN-15 — Artifact layout cleanup
 captured: 2026-07-06
-stub: 1
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once root residue is relocated and the gitignore-vs-archive contradiction is resolved
 relates-to: none yet
@@ -302,7 +302,7 @@ Shaping fields — `not traced` until stub advances past 0.
 **Scope:** In — relocating catchup-*.md and pr-*.md into structured subdirectories, and deciding (and documenting) whether archived copies of gitignored artifacts are intentional policy. Out — changing what gets gitignored during an active run; only the post-run archive state is in scope.
 **Batch:** structural
 **Contract:** Clarifies what "gitignored" means once a run is archived — currently a session artifact that's supposed to be ephemeral (contract, blip) can end up permanently committed via the archive path, which is a different retention promise than the .gitignore implies on its face.
-**Resolution:**
+**Resolution:** Root residue relocated: `.anima-lite/` restructured to per-slug `ports/<slug>/{contract,blips,plan,catchup,pr}.md` (slugs: main, monthly-report, monthly-report-v1, weekly-report); `catchup-monthly-report-v1.md` deleted as a superseded draft. Gitignore-vs-archive contradiction resolved by policy: everything under `.anima-lite/` is now committed durable state — `.gitignore`'s contracts/blips/plans/pr-*/catchup-* rules removed; `archive/` remains calibration-snapshot-only, not a backup channel — commit cb2b461. Gate cleared in-session: user approved commit-everything policy + per-slug layout 2026-07-06.
 
 ---
 
