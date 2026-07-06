@@ -15,6 +15,7 @@ Four steps: plan → execute → validate → reconcile. The hard epistemic work
 - Pull `material.md` or `efficient.md` from either spine directory if a specific translation decision requires it.
 - `.anima-lite/ports/<branch-slug>/contract.md` for the current branch and feature.
 - The prototype code being translated.
+- `.claude/skills/ari-port/metrics-spec.md` — canonical spec for the run row written at Step 5.5.
 
 ## Preconditions
 
@@ -327,6 +328,17 @@ If nothing qualifies for the ledger, write no file and note that in the session 
 
 Commit the ledger file alongside the spine — it persists across sessions.
 
+### Step 5.5 — Instrument
+
+After the ledger harvest, the main agent writes the run row: `.anima-lite/metrics/run-<date>-<slug>.md`, per `.claude/skills/ari-port/metrics-spec.md` (canonical spec — this step points to it, not restated here).
+
+Two operative instructions:
+
+1. **Track usage as the pipeline runs, not retroactively.** Throughout the pipeline (ari-map, ari-argue, and every ari-port subagent spawn — plan, execute, validate, critic), record each subagent's returned usage (tokens, duration) and the model tier it was spawned at. The run row's phase table is assembled from these running notes at Step 5.5, not reconstructed from memory after the fact. If a subagent's return didn't include usage data, its row gets `not traced` — never a guessed figure.
+2. **Fill the gate table exhaustively from the registry.** Every gate ID in `HARNESS.md` Section 1 gets a row in the run row's gate table, whether or not it fired this run. No gate is omitted because it seemed irrelevant to this feature — an omitted row is indistinguishable from an unconsidered gate, which defeats the point of the table.
+
+Also append the run row to `.anima-lite/metrics/summary.md`'s table per metrics-spec.md.
+
 ## Output
 
 Write `.anima-lite/ports/<branch-slug>/plan.md` before execution (Step 1 output).
@@ -353,6 +365,7 @@ At session end (after reconcile complete):
 3. Surface the PR description, catch-up summary, and staged diff for user approval.
 4. Leave the spine directories, contract, plan, blips, PR draft, and catch-up summary in place — don't delete `.anima-lite/`.
 5. If Step 5 produced a ledger file, state its slug and stub level. If it did not, state that no durable feature knowledge qualified for harvest.
+6. State that the run row was written (path: `.anima-lite/metrics/run-<date>-<slug>.md`) per Step 5.5.
 
 ## Escalation / Notes
 

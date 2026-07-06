@@ -11,6 +11,7 @@ Backlog items are pins, not tickets. A pin exists so an observation made mid-ses
 
 - `.anima-lite/backlog.md` — the single source of truth. Committed, durable state.
 - `.anima-lite/archive/backlog/done-<year>.md` — archived done pins, full block intact.
+- `.claude/skills/ari-port/metrics-spec.md` — canonical spec for the backlog-health row written at sweep step 7.
 - Whatever surfaced the pin: a spine finding, an epistle, a session observation, a tabled decision.
 
 ## Preconditions
@@ -70,6 +71,7 @@ Run at every ari-backlog sweep invocation, in order:
 
 5. **Archive done pins.** Move the full block (decision record intact) to `.anima-lite/archive/backlog/done-<year>.md`. Replace it in `backlog.md` with a one-line pointer: `### PIN-n — <title> → done, archived: archive/backlog/done-<year>.md`.
 6. **Flag un-exported elsewhere pins.** Any pin with `status: elsewhere` and no export confirmation resurfaces every sweep — do not let it go quiet. It stops resurfacing only when either (a) exported: status becomes `superseded`, Resolution reads `exported to <path>`, or (b) re-dated with a new `captured:` line noting why it's still here.
+7. **Write the backlog-health row.** `.anima-lite/metrics/backlog-health-<date>.md`, per `.claude/skills/ari-port/metrics-spec.md` (canonical spec — this step points to it, not restated here). Fields: open pin count by stub level, count by status, age of oldest open pin, capture-to-done latency for pins closed since this sweep (from each closed pin's `captured:` line vs. the git commit date that added its `Resolution:` line), and the un-exported elsewhere count from step 6.
 
 ## Cross-repo handling
 
@@ -87,4 +89,4 @@ Precondition, not a schedule: invoke before every calibration run, or on user re
 
 **No priority ranks.** Batches plus status are the only ordering the backlog itself asserts. Intra-batch order is decided by whoever picks up the batch in a working session — the backlog records what's queued and how it's grouped, not what order to do it in.
 
-**Self-application (future).** Backlog health — capture-to-done latency, age distribution by stub level, how often elsewhere pins go un-exported — belongs in the metrics/ system once it exists (see `.anima-lite/backlog.md` PIN-2/3 for the sensors sprint this depends on). Do not build metrics tracking here; note the intent and move on.
+**Self-application (implemented).** Backlog health — capture-to-done latency, age distribution by stub level, how often elsewhere pins go un-exported — now feeds the metrics/ system via sweep step 7 above, per `.claude/skills/ari-port/metrics-spec.md`'s backlog-health row spec (PIN-2/3, sensors sprint).
