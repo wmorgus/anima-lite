@@ -36,6 +36,7 @@ Every required and optional gate currently defined across the four skill files, 
 | Pin format | `.claude/skills/ari-backlog/SKILL.md` (Pin format section) | ari-backlog | none — self-contained |
 | Gate registry | `HARNESS.md` (this file, Section 1) | HARNESS.md | ari-map, ari-argue, ari-port, ari-backlog (all cite gate IDs inline) |
 | Spine file formats | `.claude/skills/ari-map/SKILL.md` (Output section) | ari-map | ari-argue (Inputs), ari-port (Inputs) |
+| Metrics artifact spec (run row, backlog-health row, session-cost row, summary.md) | `.claude/skills/ari-port/metrics-spec.md` | ari-port | ari-backlog (backlog-health row), SessionEnd hook (session-cost row), calibration diffs |
 
 ---
 
@@ -52,5 +53,6 @@ Tags each harness discipline as `mechanical` (checkable by a hook or script, in 
 | Substrate/claim classification | ari-argue | judgment | Whether a detail is substrate or claim is the core epistemic judgment the harness exists to protect — there is no pattern-match substitute for "would a user notice a different promise." |
 | Conservative default | ari-port / ari-backlog | judgment | Recognizing an uncovered case and choosing to preserve rather than guess is a judgment call in the moment; a hook can't detect an omission it doesn't know to look for. |
 | Spine probe depth | ari-map | judgment | Whether the probe was deep enough (2+ representative files per pattern claim, grep-confirmed versions, etc.) is a completeness judgment, not a structural check. |
+| Session-cost capture (main-agent token totals by model, per session) | ari-port (metrics-spec.md owns the shape) | **mechanical (IMPLEMENTED — `.claude/hooks/session-cost.py`)** | The first mechanical hook actually built, not just tagged as a candidate. A `SessionEnd` hook parses the session transcript and writes `.anima-lite/metrics/sessions/<date>-<session>.md`, distinct from the discipline hooks above (commit-shape, blip-citation, hash-pinning) which remain tagged-but-unbuilt. |
 
-Hook implementation = future pin. Nothing in this section is built; this table only tags candidates so future hook work has a prioritized starting list instead of starting from scratch.
+Hook implementation = future pin, except session-cost capture (above), which is implemented. Nothing else in this section is built; the remaining rows only tag candidates so future hook work has a prioritized starting list instead of starting from scratch.
