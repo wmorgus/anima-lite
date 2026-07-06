@@ -52,6 +52,32 @@ Implementation: subagents return token counts in handoff; main agent logs to `.a
 - FINDING-5: deployment target sync (Cursor/Windsurf/Copilot) — needs concrete sync mechanism design
 - Versioning fields in contracts/blips — low immediate impact, medium future impact
 
+---
+
+## PIN-4 — Agentic reasoning measurements from epistles 051 + 053
+
+Epistle-051 (whole thing) + epistle-053 (phronesis, hamartia) contain frameworks for measuring agentic reasoning quality. Integrate into Anima-proper's measurement infrastructure:
+- Phronesis (practical wisdom): is the agent making contextually appropriate judgment calls, not just rule-following?
+- Hamartia (error pattern): what class of mistake is the agent making — hubris, ignorance, misjudgment of scope?
+- These are qualitative measurement axes that complement quantitative sensor data (PIN-2/3)
+
+**When to address:** Sensors sprint (alongside PIN-2/3), before next calibration run.
+**Source:** `/Users/wmorgus/Desktop/anima/anima-corps/epistles/epistle-051.md`, `epistle-053.md`
+
+---
+
+## PIN-5 — Model-intensity compute-substrate axis instrumentation (epistle-040)
+
+Epistle-040 describes a model-intensity / compute-substrate axis. Add this to the research programme sensor suite:
+- Track which pipeline phases use which model tier (Opus vs Sonnet vs Haiku)
+- Measure whether model choice correlates with output quality (blip rate, validation FAIL rate)
+- The "compute-substrate axis" may inform harness decisions about where to spend model budget
+
+**When to address:** Alongside PIN-3 (token analysis), sensors sprint.
+**Source:** `/Users/wmorgus/Desktop/anima/anima-corps/epistles/epistle-040.md`
+
+---
+
 ## Needs formalization
 
 This backlog file itself is informal. Need: a lightweight process for moving items from here into contracts (ari-argue pass) and tracking their status. The absence of this process is the problem the self-spine named.
