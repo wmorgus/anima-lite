@@ -308,8 +308,8 @@ Shaping fields — `not traced` until stub advances past 0.
 
 ### PIN-16 — Bidirectional audit orientation
 captured: 2026-07-06
-stub: 1
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once all three skills (ari-map, ari-argue, ari-port) state the bidirectional-audit orientation explicitly rather than it being implicit in how skeptical reads currently work
 relates-to: none yet
@@ -322,7 +322,7 @@ Shaping fields — `not traced` until stub advances past 0.
 **Scope:** In — adding a bidirectional-audit orientation statement to ari-map, ari-argue, and ari-port's Active Orientations sections. Out — building any automated drift-detection tooling; this is a reading discipline, not a mechanism.
 **Batch:** audit-orientation
 **Contract:** Promises that reading an upstream artifact (spine, contract, ledger) is never a passive trust operation in this harness — every read carries an obligation to flag contradictions found, even ones the reading skill didn't set out to look for. This is a stronger promise than "skeptical reads happen where currently specified."
-**Resolution:**
+**Resolution:** Added a Bidirectional audit paragraph to ari-map, ari-argue, and ari-port's Active Orientations sections, generalizing ari-map's ledger-vs-spine check (step 5) and ari-argue's substrate skeptical read into a standing orientation; ari-port's execution and validation agent input lists each got a one-line pointer. Drift flows through existing channels only (named findings, Open Questions, blips) — no new gates or fields — commit 226bed8. Gate cleared in-session: user approved batch 2026-07-06.
 
 ---
 
