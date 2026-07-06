@@ -20,7 +20,7 @@ Run Claude Code from this directory — the skills are in `.claude/skills/`.
 /ari-port
 ```
 
-Artifacts land in `.anima-lite/` in this directory. Spines are committed. Contracts and blips are gitignored (session artifacts).
+Artifacts land in `.anima-lite/` in this directory. Everything under `.anima-lite/` is committed durable state — spines, and per-slug port artifacts (`ports/<slug>/{contract,blips,plan,catchup,pr}.md`). `archive/` is a calibration-snapshot channel only, not a backup channel — it holds point-in-time copies of runs, it does not substitute for committing the live artifacts.
 
 ## Skills
 

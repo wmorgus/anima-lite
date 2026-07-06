@@ -99,7 +99,7 @@ Before writing the contract, attempt to capture visual ground truth from the run
 
 ## Output
 
-Write `.anima-lite/contracts/<branch-slug>.md`, where `<branch-slug>` is the current git branch (sanitized: lowercase, slashes to dashes) or a feature-name slug if not in git:
+Write `.anima-lite/ports/<branch-slug>/contract.md`, where `<branch-slug>` is the current git branch (sanitized: lowercase, slashes to dashes) or a feature-name slug if not in git:
 
 ```markdown
 # Contract: <feature-name>
@@ -134,11 +134,7 @@ checks:
     expect: "<specific content elements that must be present — title, badge, button label, count, etc.>"
 ```
 
-**Rules for the `expect` field:**
-- Name the specific UI elements that must be present — title, duration, badge, action button, character count, whatever the proto shows for that claim.
-- Bare existence checks ("the section is visible") are not sufficient for content-bearing sections. The expect clause must be specific enough to catch content quality failures.
-- If the port explicitly stubs content (a review-suggested blip exists for that section), the expect clause must describe what the stub renders — not what a full implementation would render. This documents the known limitation rather than failing on it. Example: if the blip says "training recommendations stub," the expect clause says "section renders one card with text 'Training recommendations coming soon'" — not "4 training cards with title, badge, and Start button."
-- Every confirmed claim that has a visible UI behavior must have at least one check. Claims with no visible UI behavior (e.g. pure server-side logic) may be omitted from the playwright block with a comment explaining why.
+Block schema, the `expect`-field rules, and a worked example: see `playwright-spec.md` in this skill's directory — the canonical spec, referenced rather than restated here.
 
 ## Escalation / Notes
 
