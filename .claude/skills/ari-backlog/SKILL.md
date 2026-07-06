@@ -65,7 +65,7 @@ Run at every ari-backlog sweep invocation, in order:
 3. **Advance stubs where scope is now clear.** A `stub:0` pin with an obvious scope becomes `stub:1` — fill Scope and Batch. A `stub:1` pin ready to schedule becomes `stub:2` — fill Contract.
 4. **Classify Contract as claim or substrate** for any pin crossing to `stub:2`. Substrate-shaped (mechanical fixes, plumbing): `Contract: n/a — mechanical, no argument to preserve`. Claim-shaped (changes what the harness promises its operator — gate semantics, stub-depth meaning, conservative-default behavior, required fields): write the one-paragraph Contract stating what the change promises differently.
 
-   > **◎ OPTIONAL GATE — claim-shaped pin**
+   > **◎ OPTIONAL GATE — GATE-PIN-CLAIM (claim-shaped pin)**
    > Claim-shaped pin scheduled — review contract paragraph? (skip to proceed)
 
 5. **Archive done pins.** Move the full block (decision record intact) to `.anima-lite/archive/backlog/done-<year>.md`. Replace it in `backlog.md` with a one-line pointer: `### PIN-n — <title> → done, archived: archive/backlog/done-<year>.md`.

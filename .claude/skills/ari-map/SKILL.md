@@ -297,7 +297,7 @@ Field ownership:
 - **ari-map** populates at probe time: all header fields, Identity, Entry points, Primary data structure, and status markers (`not traced` on all unconfirmed fields)
 - **ari-port** enriches after a port run: Full data flow, Client-side wiring, State machine, Feature gates, Seam-specific protocols, Known quirks, Port provenance — and updates `stub:`, `source:`, and `prod-commit:` to reflect the enrichment
 
-> **◎ OPTIONAL GATE — spine review**
+> **◎ OPTIONAL GATE — GATE-SPINE-REVIEW (spine review)**
 > Spine written — review before ari-argue runs? (skip to proceed). Especially recommended on first-time repos where probe depth is uncertain.
 
 ## Escalation / Notes

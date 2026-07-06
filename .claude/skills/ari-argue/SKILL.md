@@ -34,7 +34,7 @@ Argumentation: determine what a feature is claiming to the user, separate from h
 
 **1. Read both telos files.** Check the feature's argument against both purposes and don't-contradict rules — what the proto telos says this feature is for, and whether the prod telos leaves room for it. If a telos conflict is detected: present the conflict to the user, name whether it reads as a telos error (the spine's purpose is wrong) or scope creep (the feature is beyond what this repo is for), and wait for explicit confirmation before continuing. Do not write the contract until the user has acknowledged the conflict. Neither outcome is a silent continue. Note the proto telos's `Commit:` hash; the contract will pin to it.
 
-> **⛔ REQUIRED GATE — telos conflict**
+> **⛔ REQUIRED GATE — GATE-TELOS (telos conflict)**
 > If the feature conflicts with the prod telos, present the conflict explicitly and name whether it reads as telos error or scope creep. Do not write the contract until the user resolves it.
 > The pipeline halts here. Do not proceed until explicitly cleared.
 

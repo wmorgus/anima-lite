@@ -60,11 +60,11 @@ For each confirmed claim in the contract, in implementation order:
 
 Surface the plan before executing. If a blocker is found in planning, halt here — re-run ari-argue rather than proceeding with partial information.
 
-> **⛔ REQUIRED GATE — plan blockers**
+> **⛔ REQUIRED GATE — GATE-BLOCKERS (plan blockers)**
 > If `## Blockers` in the plan is non-empty, surface each blocker to the user. Do not spawn the execution subagent until all blockers are explicitly cleared.
 > The pipeline halts here. Do not proceed until explicitly cleared.
 
-> **◎ OPTIONAL GATE — plan review**
+> **◎ OPTIONAL GATE — GATE-PLAN-REVIEW (plan review)**
 > After blockers are cleared (or if none exist), offer plan review. "Plan written — review before execution? (skip to proceed)."
 
 ### Step 2 — Execute
@@ -106,7 +106,7 @@ Main agent on `contract_break: true`: surface the CONTRACT-BREAK blip to the use
 
 **Partial commit preservation.** Do not revert commits already made before the CONTRACT-BREAK was discovered. The commits represent completed work that the contract did cover — reverting them loses that work without benefit. Leave the branch as-is. When re-running ari-argue, provide the list of commits already made (from the execution subagent's handoff) so ari-argue can write a contract amendment rather than a full re-contract. The amendment covers only the uncovered case; previously confirmed and implemented claims are settled.
 
-> **⛔ REQUIRED GATE — CONTRACT-BREAK**
+> **⛔ REQUIRED GATE — GATE-BREAK (CONTRACT-BREAK)**
 > If the execution subagent returns `contract_break: true`, surface the CONTRACT-BREAK blip to the user and halt. Re-run ari-argue with the new information before proceeding to Step 3.
 > The pipeline halts here. Do not proceed until explicitly cleared.
 
@@ -165,7 +165,7 @@ The validation agent returns one of:
 - **PASS** — all claims implemented; all blip classifications correct; no `review-suggested` blips pending acknowledgment
 - **PASS (pending review)** — claims and blip classifications correct, but `review-suggested` blips present; surface to user for acknowledgment, then PASS
 
-> **⛔ REQUIRED GATE — review-suggested blips**
+> **⛔ REQUIRED GATE — GATE-BLIPS (review-suggested blips)**
 > If the validation agent returns PASS (pending review), surface each review-suggested blip to the user. The user must acknowledge each one before the pipeline proceeds to Step 4.
 > The pipeline halts here. Do not proceed until explicitly cleared.
 - **FAIL: <specific finding>** — a confirmed claim absent/partial/contradicted, or a blip misclassification caught
@@ -308,12 +308,12 @@ If the critic finds no gaps, proceed directly to 4f — no patch needed.
 
 If the critic finds gaps, the main agent patches the catch-up doc to close them. The main agent may optionally run one additional critic pass to confirm the patches landed — cap at one re-run, do not loop.
 
-> **◎ OPTIONAL GATE — catch-up doc review**
+> **◎ OPTIONAL GATE — GATE-CATCHUP-REVIEW (catch-up doc review)**
 > After the critic's patches are applied, offer the user a chance to review the catch-up doc before proceeding to 4f. "Catch-up doc written — review before PR creation? (skip to proceed)."
 
 **4f. Present for approval.** Surface the PR description and the staged diff summary to the user. Do NOT run `gh pr create` without explicit user confirmation — PRs are social objects.
 
-> **⛔ REQUIRED GATE — PR creation**
+> **⛔ REQUIRED GATE — GATE-PR (PR creation)**
 > Surface the PR description and staged diff summary to the user before running `gh pr create`. Do not create the PR without explicit user confirmation.
 > The pipeline halts here. Do not proceed until explicitly cleared. Once approved, the user or agent runs `gh pr create --body "$(cat .anima-lite/pr-<branch-slug>.md)"`.
 
