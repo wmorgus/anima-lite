@@ -168,8 +168,8 @@ Shaping fields — `not traced` until stub advances past 0.
 
 ### PIN-9 — Hygiene: blip Why must cite spine §
 captured: 2026-07-06
-stub: 1
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once ari-port's blip format requires and enforces a spine-section citation in the Why field
 relates-to: none yet
@@ -182,14 +182,14 @@ Shaping fields — `not traced` until stub advances past 0.
 **Scope:** In — the blip format's Why field in ari-port's SKILL.md output section. Out — retroactively rewriting existing archived blips.
 **Batch:** hygiene
 **Contract:** n/a — mechanical, no argument to preserve
-**Resolution:**
+**Resolution:** Blip `Why:` field now requires a spine-section citation or an explicit "no spine section applies" statement, mirrored from ari-argue's classification-citation rule — commit 64fa1c7.
 
 ---
 
 ### PIN-10 — Hygiene: commit discipline enforcement
 captured: 2026-07-06
-stub: 1
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once a run demonstrates claim logic correctly held out of the substrate commit under the new instruction
 relates-to: PIN-1
@@ -202,14 +202,14 @@ Shaping fields — `not traced` until stub advances past 0.
 **Scope:** In — ari-port's execution step instructions around commit sequencing. Out — retroactively fixing prior runs' commit history.
 **Batch:** hygiene
 **Contract:** Promises that ari-port's substrate commits will never silently carry claim behavior — an operator inspecting the substrate commit alone can rely on it containing no argument-bearing logic, only scaffolding. This changes what "substrate commit" means as a guarantee, not just as a style preference.
-**Resolution:**
+**Resolution:** Commit discipline block now requires substrate commits to stub claim behavior, bans empty claim commits as a discipline failure, and adds a pre-substrate-commit self-check — commit 64fa1c7.
 
 ---
 
 ### PIN-11 — Hygiene: source-of-truth declaration in ari-argue
 captured: 2026-07-06
-stub: 1
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once ari-argue's contract format requires a source-of-truth declaration whenever multiple proto components exist
 relates-to: none yet
@@ -222,7 +222,7 @@ Shaping fields — `not traced` until stub advances past 0.
 **Scope:** In — ari-argue's process/output sections, for the multi-component case only. Out — resolving disagreements between components; this pin only requires declaring which one wins.
 **Batch:** hygiene
 **Contract:** n/a — mechanical, no argument to preserve
-**Resolution:**
+**Resolution:** Added step 1a (source-of-truth check, confirmed with user) and a Source of truth contract header line, required whenever multiple candidates existed — commit 64fa1c7.
 
 ---
 
