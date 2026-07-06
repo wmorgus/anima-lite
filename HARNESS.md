@@ -1,6 +1,8 @@
 # HARNESS.md — gate registry, spec ownership, enforcement levels
 
-**Governing rule: operative text lives in the skill files where it fires; HARNESS.md holds metadata — inventory, ownership, enforcement level. Never duplicate behavioral prose here.** If a gate's body text or a spec's shape needs to change, edit it at the skill file (or support file) that owns it, then update this index if the ID, owner, or trigger changed. This file never becomes the second place a reader has to check to know what a gate does.
+**Governing rule: operative text lives in the skill files where it fires; HARNESS.md holds metadata — inventory, ownership, enforcement level. Never duplicate behavioral prose here.** If a gate's body text or a spec's shape needs to change, edit it at the skill file (or support file) that owns it, then update this index if the ID, owner, or trigger changed. This file never becomes the second place a reader has to check to know what a gate does. This applies to human-facing docs too, not just skill specs — README.md, CLAUDE.md, and PHILOSOPHY.md each own facts nobody else restates; see §4.
+
+**Bidirectional audit for docs.** Any skill or agent that reads README.md, CLAUDE.md, or HARNESS.md in the course of work and finds it disagrees with observed disk state fires a fast-lane backlog pin immediately — zero ceremony, per ari-backlog stub:0. Doc drift is a finding, not a distraction from the task at hand.
 
 ---
 
@@ -54,5 +56,22 @@ Tags each harness discipline as `mechanical` (checkable by a hook or script, in 
 | Conservative default | ari-port / ari-backlog | judgment | Recognizing an uncovered case and choosing to preserve rather than guess is a judgment call in the moment; a hook can't detect an omission it doesn't know to look for. |
 | Spine probe depth | ari-map | judgment | Whether the probe was deep enough (2+ representative files per pattern claim, grep-confirmed versions, etc.) is a completeness judgment, not a structural check. |
 | Session-cost capture (main-agent token totals by model, per session) | ari-port (metrics-spec.md owns the shape) | **mechanical (IMPLEMENTED — `.claude/hooks/session-cost.py`)** | The first mechanical hook actually built, not just tagged as a candidate. A `SessionEnd` hook parses the session transcript and writes `.anima-lite/metrics/sessions/<date>-<session>.md`, distinct from the discipline hooks above (commit-shape, blip-citation, hash-pinning) which remain tagged-but-unbuilt. |
+| Doc-drift check (README/CLAUDE.md layout-path strings match real `ports/<slug>/` pattern on disk; committed deployment configs match fresh generator output) | none (cross-cutting, human-facing docs) | **mechanical, UNBUILT** | Intended home is ari-backlog's slow-lane sweep (periodic), not a per-session hook: (a) checks that layout-path strings in README.md/CLAUDE.md match the real `ports/<slug>/{contract,blips,plan,catchup,pr}.md` pattern on disk; (b) checks committed deployment configs against fresh generator output — the generator itself is a separate pinned task, pending (see backlog PIN for deployment-config generator). Same status as the commit-shape/blip-citation/hash-pinning candidate rows above — not implemented. |
 
 Hook implementation = future pin, except session-cost capture (above), which is implemented. Nothing else in this section is built; the remaining rows only tag candidates so future hook work has a prioritized starting list instead of starting from scratch.
+
+---
+
+## Section 4 — Human-facing doc ownership map
+
+Metadata only, same discipline as Sections 1–3: each fact below has exactly one canonical home. Everyone else points to that home rather than restating the fact. If you find a doc carrying a second copy of a fact listed here, that's doc drift — see the bidirectional-audit rule above.
+
+| Fact | Canonical home | What others do |
+|---|---|---|
+| Artifact layout `ports/<slug>/{contract,blips,plan,catchup,pr}.md` | Skill files (spine/contract/blip formats), indexed by HARNESS.md §2 | README.md points to HARNESS.md §2 instead of drawing the tree |
+| Skill roster (4 skills) | README.md (narrative one-liners) + CLAUDE.md (command list) | Everyone else links to `.claude/skills/<name>/SKILL.md` rather than restating what a skill does |
+| Gate registry (count + IDs) | HARNESS.md §1 | README.md states no count — points to "see HARNESS.md §1" |
+| Gitignore/commit policy | CLAUDE.md + `.gitignore` itself | Nothing else states this fact |
+| Target-repo paths | CLAUDE.md | Nothing else states paths |
+| Run procedure/workflow narrative | README.md (prose + mermaid) | CLAUDE.md keeps a condensed command subset only |
+| Four-causes lens | PHILOSOPHY.md (canonical narrative) | README.md and any deployment-config docs point to PHILOSOPHY.md rather than carrying independent condensed copies. Exception: ari-map/SKILL.md's copy is operative (it fires there) and is exempt from this rule. |

@@ -78,23 +78,27 @@ Shaping fields — `not traced` until stub advances past 0.
 
 ---
 
-### PIN-7 — Deployment target sync (Cursor/Windsurf/Copilot)
+### PIN-7 — Deployment-config generator (Cursor/Windsurf/Copilot sync)
 captured: 2026-07-06
-stub: 0
+stub: 1
 status: open
 home: anima-lite
-goes-stale: superseded once a concrete sync mechanism is designed and either implemented or explicitly deferred with reasoning
-relates-to: spine-anima-lite/formal.md §5, FINDING-5
+goes-stale: superseded once the generator ships and all three configs are regenerated with a generated-banner, or once explicitly deferred with new reasoning
+relates-to: spine-anima-lite/formal.md §5, FINDING-5, HARNESS.md §3 (doc-drift check row), HARNESS.md §4, PIN-18
 
-Deployment targets (Cursor, Windsurf, Copilot) have no sync mechanism with SKILL.md sources — if a skill file changes, nothing propagates that change to the equivalent config for other coding agents. Tabled pending a concrete sync mechanism design; no design has been attempted yet.
+Deployment targets (Cursor `.cursor/rules/*.mdc`, Windsurf `.windsurf/rules/*`, Copilot `.github/copilot-instructions.md`) restate skill/doc content for other coding tools and have drifted badly (doc audit 2026-07-06 found single-file spine descriptions, old flat layout, no backlog/gates — worse than README's drift). Design decided (docs-strategy proposal, approved 2026-07-06): **generate, don't hand-sync.** Hand-sync is exactly the mechanism that already failed here. A generator converts this from HARNESS §3's "judgment" column to "mechanical."
+
+Design: build `scripts/gen-deployment-configs.py` that stitches one shared markdown fragment (the facts meant to be identical across all four surfaces per HARNESS §4 — four-causes lens, skill roster, commitments) into each target's own template wrapper (Cursor `.mdc` frontmatter, Windsurf `trigger: always_on` frontmatter, Copilot plain markdown). Mark every generated file with `<!-- GENERATED — do not edit by hand; source: scripts/gen-deployment-configs.py -->`. Honest boundary: only kills drift for facts meant to be identical; genuinely tool-specific content (e.g. Copilot's extra claim-trap examples) stays hand-authored and can still drift — that's the right boundary, not full automation.
 
 ---
 Shaping fields — `not traced` until stub advances past 0.
 
-**Scope:** not traced
-**Batch:** unbatched
-**Contract:** not traced
+**Scope:** In — the generator script, a shared fact-fragment source, regenerating all three configs with generated-banners. Out — the mechanical drift *check* that diffs committed-vs-regenerated (that's PIN-18, ari-backlog sweep step 8); and any tool-specific hand-authored content, which the generator deliberately leaves alone.
+**Batch:** docs-strategy
+**Contract:** n/a — mechanical, no argument to preserve
 **Resolution:**
+
+**Spike-first (blocker before stub:2):** unverified whether `.cursor/*.mdc` frontmatter and Windsurf `trigger: always_on` have quirks (length limits, required per-file ordering) that make a shared-fragment generator harder than it looks. Short spike on the two frontmatter formats before committing to the generator's exact interface. This is why the pin sits at stub:1, not stub:2 — scope is named but the interface isn't nailed.
 
 ---
 
@@ -155,3 +159,25 @@ Shaping fields — `not traced` until stub advances past 0.
 **Batch:** unbatched
 **Contract:** not traced
 **Resolution:** not traced
+
+---
+
+### PIN-18 — Doc-drift check as ari-backlog sweep step 8
+captured: 2026-07-06
+stub: 1
+status: open
+home: anima-lite
+goes-stale: superseded once the check is built and ari-backlog's sweep runs it; or if PIN-7's generator is dropped (then half the check has nothing to diff against)
+relates-to: HARNESS.md §3 (doc-drift check row, tagged mechanical/UNBUILT 2026-07-06), HARNESS.md §4, PIN-7
+
+HARNESS.md §3 now tags a doc-drift check as mechanical/unbuilt. Build it, homed in ari-backlog's **slow-lane sweep as step 8** (periodic housekeeping cadence — NOT a per-session hook like session-cost.py; doc drift is sweep-cadence, not session-cadence). The check: (a) grep README.md/CLAUDE.md for layout-path strings and confirm they match the real `ports/<slug>/` pattern on disk rather than a hardcoded stale pattern; (b) diff committed deployment configs against fresh generator output (depends on PIN-7's generator existing — until then, part (b) is a no-op stub). Distinct from session-cost (metrics hook) and from the commit-shape discipline hook (PIN-17): this guards documentation legibility, the inward-facing version of the legibility the harness demands outward.
+
+This is the drift-prevention half of the docs-strategy proposal (approved 2026-07-06); the doc-layer content fixes already landed, this makes re-drift mechanically catchable instead of relying on the next reader noticing.
+
+---
+Shaping fields — `not traced` until stub advances past 0.
+
+**Scope:** In — the check script (or inline sweep logic) + adding step 8 to ari-backlog/SKILL.md's slow-lane sweep. Out — the generator itself (PIN-7); building doc-drift checks for docs beyond README/CLAUDE/configs (start with the ones in HARNESS §4's ownership map).
+**Batch:** docs-strategy
+**Contract:** n/a — mechanical, no argument to preserve
+**Resolution:**

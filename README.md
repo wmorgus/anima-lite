@@ -8,6 +8,19 @@ See `PHILOSOPHY.md` for the core commitments.
 
 ---
 
+## Map
+
+Facts about this toolkit each live in exactly one place. If you're looking for:
+
+- **Gate registry, spec-ownership map, enforcement levels, doc-ownership map** → `HARNESS.md`
+- **Run procedure, commit policy, target-repo paths** → `CLAUDE.md`
+- **Core commitments (substrate/claim cut, four causes, conservative default)** → `PHILOSOPHY.md`
+- **What each skill does, its inputs/preconditions/output format** → `.claude/skills/<name>/SKILL.md`
+
+This README carries the workflow narrative and diagram below; it doesn't restate facts that live in those files.
+
+---
+
 ## The key distinction
 
 **Substrate** — the medium. Library swap, rename, file restructure, styling system. None of these change what the software promises. Translate freely.
@@ -18,7 +31,7 @@ When unsure: ask whether a user who understood the feature's promise would notic
 
 ---
 
-## Three skills
+## Four skills
 
 **`/ari-map`** — probe a repo and write a four-cause spine (material, formal, efficient, final). Run once for each repo in the port pair. Must be current before anything else runs.
 
@@ -26,29 +39,26 @@ When unsure: ask whether a user who understood the feature's promise would notic
 
 **`/ari-port`** — four steps: plan → execute → validate → reconcile (+ harvest). Translates substrate freely, implements confirmed claims exactly, logs everything else as a blip. Halts back to ari-argue if the contract is actively contradicted by the real code.
 
+**`/ari-backlog`** — capture and sweep `.anima-lite/backlog.md`, a two-speed pin system for captured-but-not-yet-scheduled work. Runs before every calibration run. This is orthogonal to the per-port flow below, not a step inside it — it doesn't sit between ari-map/ari-argue/ari-port, it brackets the whole pipeline.
+
+Full detail on each — inputs, preconditions, output format — lives in that skill's `SKILL.md`, not here.
+
 ---
 
 ## Why four causes?
 
-The four causes aren't four independent probes concatenated into a spine. They're a progressively sharper understanding of the same system — each cause presupposes the previous and is made legible by what follows.
-
-Material tells you what the system is made of. Necessary but not sufficient: you can enumerate every library and still not understand why the code makes the choices it does.
-
-Formal tells you how the material is organized — the pattern that made those choices cohere. But patterns serve something; the pattern alone doesn't tell you whether it's doing its job.
-
-Efficient tells you what acts on the system — how it changes, who deploys, what the feedback loop is. This surfaces constraints the formal pattern can't express, because they live outside the codebase itself.
-
-Final is what all three are *for*. It's not a summary appended at the end; it's the frame that retrospectively explains why the material, formal, and efficient causes are what they are. A formal pattern is only a finding once you know whether it serves or contradicts the telos.
-
-For agentic coding specifically: most architecture docs give you material and maybe formal, leaving telos implicit. Every agent working in the codebase then re-derives it independently — and inconsistently. Making the telos explicit and senior gives every downstream decision a shared anchor. When the probe subagents find that a helper class is monolithic and violates strict layering, the telos tells you whether that's technical debt to fix or an established pattern to follow. Without it, both answers are defensible and agents will diverge.
+The four causes aren't four independent probes concatenated into a spine — they're a progressively sharper understanding of the same system, each presupposing the previous. The full narrative (what each cause tells you, and why final cause is the frame that makes the other three legible) is canonical in `PHILOSOPHY.md`. The short version: without knowing the telos, you can't sort substrate from claim, because you don't know what a change would be relative to.
 
 ---
 
 ## Execution flow
 
+`ari-backlog` isn't drawn into the pipeline below — it runs orthogonally, swept before every calibration run rather than as a step between map/argue/port.
+
 ```mermaid
 flowchart TD
     USER(["👤 User"]) --> ARIMAP
+    USER -.->|"before every calibration run"| BACKLOG(["🗂️ ari-backlog\nsweep — orthogonal to this flow"])
 
     subgraph ARIMAP["ari-map  ·  main agent"]
         AM1["enumerate repo"]
@@ -111,12 +121,14 @@ flowchart TD
     classDef user  fill:#f5f0ff,stroke:#8b6bbf,color:#3a1a6a
     classDef req   fill:#fdecea,stroke:#c0392b,color:#7b1a13
     classDef opt   fill:#fef9e7,stroke:#d4ac0d,color:#6b4c00
+    classDef orth  fill:#f0f0f0,stroke:#999,color:#444,stroke-dasharray: 5 5
 
     class AM2,AM3,AM4,AA,AP2,AP3,AP6 sub
     class AM1,AM5,AP1,AP4,AP5,AP7,AP8 main
     class USER,GH user
     class TELOS,HASHCHECK,BLOCKER,BREAK,BLIPS,PRGATE req
     class OPT1,OPT2,OPT3 opt
+    class BACKLOG orth
 ```
 
 | Shape | Meaning |
@@ -125,35 +137,18 @@ flowchart TD
 | Blue rounded | Subagent (clean context, isolated) |
 | Red diamond `⛔` | Required human gate — pipeline halts |
 | Yellow diamond `◎` | Optional human gate — user can inspect or skip |
+| Dashed grey | Orthogonal — runs on its own cadence, not a pipeline step |
 | Purple | User action |
 
-**Required gates (6):** telos conflict · spine hash mismatch · plan blockers · CONTRACT-BREAK · review-suggested blips · PR creation
-
-**Optional gates (3):** spine review (first-time repos) · plan review · catch-up doc review
+Full gate registry (IDs, owning skill, trigger, what clears it) and enforcement-level tagging — see `HARNESS.md` §1 and §3.
 
 ---
 
 ## Artifacts
 
-```
-.anima-lite/
-  spine-proto/              # four-cause spine of the prototype repo
-    telos.md                # coding-agent entry point; commit-pinned
-    material.md             # tech stack + dependencies
-    formal.md               # architecture patterns + seam protocols
-    efficient.md            # build/CI/deploy
-  spine-prod/               # four-cause spine of the production repo
-    (same structure)
-  features/                 # feature ledger — stubs created by ari-map, enriched by ari-port
-    <slug>.md               # stub:0–3; not traced on unconfirmed fields
-  contracts/<branch>.md     # feature contract; frozen for session; branch-scoped
-  plans/<branch>.md         # execution plan; written before any code moves
-  blips/<branch>.md         # translation log with contracting-failure self-audit
-  pr-<branch>.md            # PR description draft
-  catchup-<branch>.md       # catch-up briefing for reviewer or review agent
-```
+Per-slug port artifacts live at `.anima-lite/ports/<slug>/{contract,blips,plan,catchup,pr}.md`. Spine directories live at `.anima-lite/spine-<label>/{telos,material,formal,efficient}.md`. The exact file formats are owned by the skill that writes them (spine format: ari-map; contract format: ari-argue; blip format: ari-port) and indexed in `HARNESS.md` §2 — not restated here.
 
-Spines and feature ledger are committed — shared repo-level state. Contracts, blips, plans, PR drafts, and catch-up docs are gitignored — session artifacts.
+The metrics system under `.anima-lite/metrics/` (run rows, backlog-health rows, session-cost rows, `summary.md`) and the `SessionEnd` cost hook (`.claude/hooks/session-cost.py`) also exist — spec owned by `.claude/skills/ari-port/metrics-spec.md`.
 
 Spine refresh collisions across branches surface as merge conflicts. That's intentional: two diverging mental models of the same repo should conflict explicitly.
 
@@ -169,3 +164,5 @@ Spine refresh collisions across branches surface as merge conflicts. That's inte
 ```
 
 Invoke from the anima-lite root. Both target repos must be on disk. Spines must be current (commit hash in `telos.md` matches HEAD of the target repo) before ari-argue runs.
+
+Run `/ari-backlog` before every calibration run — see `CLAUDE.md` and `.claude/skills/ari-backlog/SKILL.md`.

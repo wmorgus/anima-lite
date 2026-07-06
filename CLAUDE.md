@@ -31,4 +31,10 @@ Artifacts land in `.anima-lite/` in this directory. Everything under `.anima-lit
 
 `.anima-lite/backlog.md` is committed durable state, not a scratch file — see `.claude/skills/ari-backlog/SKILL.md` for the pin format and sweep process.
 
+Canonical specs aren't limited to the four `SKILL.md` files above — three support files are canonical specs in their own right: `.claude/skills/ari-map/ledger-spec.md` (feature-ledger format), `.claude/skills/ari-argue/playwright-spec.md` (Playwright verification), and `.claude/skills/ari-port/metrics-spec.md` (metrics artifact shapes). See `HARNESS.md` §2 for the full spec-ownership map.
+
+The metrics system under `.anima-lite/metrics/` (run rows, backlog-health rows, session-cost rows, `summary.md`) and the `SessionEnd` cost hook (`.claude/hooks/session-cost.py`) are already live — spec owned by `.claude/skills/ari-port/metrics-spec.md`.
+
+See `HARNESS.md` for the gate registry, spec-ownership map, enforcement-level table, and doc-ownership map. This file (CLAUDE.md) is canonical for run procedure, commit policy, and target-repo paths; nothing else states those facts.
+
 See `PHILOSOPHY.md` for the core commitments.
