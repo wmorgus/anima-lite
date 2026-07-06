@@ -38,6 +38,8 @@ Argumentation: determine what a feature is claiming to the user, separate from h
 > If the feature conflicts with the prod telos, present the conflict explicitly and name whether it reads as telos error or scope creep. Do not write the contract until the user resolves it.
 > The pipeline halts here. Do not proceed until explicitly cleared.
 
+**1a. Source-of-truth check.** Before identifying the argument, check whether the proto feature has multiple candidate components, variants, or demo wrappers that could each be "the feature" (e.g. two components that both partially implement overlapping behavior, or a demo page wrapping a component that also exists standalone). If more than one candidate exists: identify them, determine which is canonical — most complete, most recently evolved, or referenced by the demo entry point — and confirm the choice with the user before classification begins. Do not classify against an arbitrarily-picked candidate; a contract built on the wrong one silently misrepresents the feature. If only one candidate exists, note "single source" and proceed.
+
 **2. Identify the argument.** What relationship or promise is this feature establishing with the user — not what it does mechanically. A confirmation dialog before a destructive action argues "you should not lose data by accident." A specific widget choice is usually just medium, unless the choice itself was load-bearing (a dropdown chosen specifically to hide a sensitive setting behind a click is making a claim, not just rendering one).
 
 **3. Classify every implementation detail.**
@@ -104,6 +106,7 @@ Write `.anima-lite/contracts/<branch-slug>.md`, where `<branch-slug>` is the cur
 Branch: <branch-slug>
 Generated: <date>
 Spine commit: <the Commit: hash from spine-proto/telos.md at time of writing>
+Source of truth: <component/file confirmed canonical in step 1a — required whenever multiple candidates existed; "n/a — single source" otherwise>
 Status: FROZEN FOR SESSION — do not modify without re-running ari-argue
 
 ## The argument

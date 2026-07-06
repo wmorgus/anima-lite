@@ -90,8 +90,8 @@ The execution subagent receives:
 
 The subagent's job: implement the plan, follow commit discipline below, write blips to `.anima-lite/blips/<branch-slug>.md`. Work through the plan using the contract as the filter for every decision:
 
-- **Substrate changes** — translate freely, using the prod spine's `formal.md` as the guide for idiom and structure. Every substrate translation decision must cite the spine section that grounds it (e.g. "Translating jQuery collapse to Bootstrap 4.1.3 data-toggle/data-target per spine-prod/material.md §2 (Bootstrap 4.1.3 confirmed)"). If no spine section covers the decision, say so explicitly in the blip or log line.
-- **Claim changes** — implement exactly per the contract's confirmed decision. Do not relitigate mid-execution.
+- **Substrate changes** — translate freely, using the prod spine's `formal.md` as the guide for idiom and structure. Every substrate translation decision must cite the spine section that grounds it (e.g. "Translating jQuery collapse to Bootstrap 4.1.3 data-toggle/data-target per spine-prod/material.md §2 (Bootstrap 4.1.3 confirmed)"). If no spine section covers the decision, say so explicitly in the blip or log line. This is the same discipline the blip format's `Why:` field enforces below — one citation rule, not two: every reasoning trail in this skill either names the spine section it rests on or says explicitly that none applies.
+- **Claim changes** — implement exactly per the contract's confirmed decision, in that claim's own commit — never inside the substrate commit. See commit discipline below: substrate files touched by a future claim get a stub, not the claim's real behavior. Do not relitigate mid-execution.
 - **Anything not covered by the contract** — log as a blip immediately, make the conservative choice (preserve current behavior).
 - **Contract-clarity watch** — while implementing, flag anything in the contract that looks under-specified or potentially wrong in light of what the prototype source actually does. This is softer than CONTRACT-BREAK (which fires only when the contract is actively contradicted). Log these as `Severity: info`, `Type: contract-clarity` blips. They don't halt execution but give the main agent and reviewer a signal that the contract may need sharpening for future ports of similar features.
 
@@ -123,11 +123,15 @@ Example: `port(monthly-report): isLowData empty state — show limited-data aler
 
 Rules:
 - Substrate-only changes (no claim) may be batched into a single `port(<feature>): substrate — <description>` commit at the start.
-- Each confirmed claim change gets its own commit. If a claim spans multiple files (e.g. Java DTO + JS), they commit together — the claim is the unit, not the file.
+- The substrate commit contains scaffolding only. Where a file will later carry claim behavior, the substrate version stubs it — the claim's behavior is visibly absent (not yet wired) or a no-op at substrate commit time. Do NOT write claim logic into substrate files; stub them, then fill the stub in that claim's own commit.
+- Each confirmed claim change gets its own commit, and that commit's diff IS the claim's implementation — it fills the stub left by the substrate commit. An empty claim commit (message with no corresponding behavioral diff) is a discipline failure, never correct; if a claim commit would be empty, the behavior was left in the substrate commit and must be pulled back out.
+- If a claim spans multiple files (e.g. Java DTO + JS), they commit together — the claim is the unit, not the file.
 - Never commit dev-only config changes (e.g. `hbm2ddl.auto=none`, dummy secret files). These are working-tree scaffolding, not part of the port.
 - New files must be explicitly `git add`ed — don't assume they'll be picked up.
 
-Clean commit history is load-bearing for Step 4 (reconcile). A reviewer reading the git log should be able to map each commit to a contract claim without opening the code.
+**Self-check before the substrate commit:** does this diff contain behavior belonging to any confirmed claim? If yes, pull it out and stub it before committing.
+
+Clean commit history is load-bearing for Step 4 (reconcile): the per-claim diff is the reviewable unit that maps commit → contract claim. A monolithic substrate commit that carries claim behavior destroys that mapping — a reviewer reading the git log should be able to map each commit to a contract claim without opening the code.
 
 ### Step 3 — Validate
 
@@ -340,10 +344,12 @@ Append to `.anima-lite/blips/<branch-slug>.md` (same slug as the contract) throu
 Severity: <info|review-suggested|CONTRACT-BREAK>
 Location: <file:line — one clause naming what's at that location and why it's load-bearing for the reviewer>
 What happened: <the decision>
-Why: <reasoning — if this blip relates to or contradicts a spine observation, cite the spine section here (e.g. "see spine-prod/formal.md §3 — the actual pattern diverges from what the spine describes")>
+Why: <reasoning — cite the spine section this rests on (e.g. "spine-prod/formal.md §3 — the actual pattern diverges from what the spine describes") or state explicitly "no spine section applies; reasoning is by telos inference.">
 Downstream consequence: <what this means going forward>
 Contracting failure?: <what should have been in the contract to cover this — or "n/a" if genuinely unforeseeable>
 ```
+
+**Every blip's `Why:` field cites the spine section it rests on.** Bare reasoning ("this seemed right," "kept the existing behavior") is not acceptable, the same discipline ari-argue applies to substrate/claim classifications. If no spine section applies, the blip must say so explicitly rather than omitting the question — a blip that skips the citation is as unverifiable as a bare classification.
 
 A blip is logged whenever: a substrate change has a non-obvious downstream consequence; something uncovered by the contract came up and got a conservative default; a prod-repo convention conflicts with the prototype's approach and one was chosen; or anything a user skimming the PR would likely miss but want to know.
 
