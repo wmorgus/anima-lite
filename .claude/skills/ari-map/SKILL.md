@@ -30,6 +30,8 @@ If none hold and a current spine directory exists, do not invoke — proceed dir
 
 **Scope fence.** This spine maps one repo only. Do not reference the other repo in the port pair, compare to the proto, or anticipate what ari-argue will find. Cross-repo comparison is ari-argue's job. Name what this repo does; leave what it means for the port to ari-argue.
 
+**Bidirectional audit.** Reading a prior spine (the refresh case) or a feature-ledger entry (during a probe) is also an audit of that artifact, not just a source to build on. Drift runs both directions: the artifact may be stale (reality moved since it was written) or it may have been wrong at write time (a probe or classification error that predates any code change). Never silently correct drift into the new spine — name it as a finding with the direction stated, e.g. "formal.md previously claimed X; code now shows Y (stale)" versus "formal.md claimed X; grep shows this was never true (wrong at write time)." Process step 5's ledger rule ("if the probe contradicts it, the spine wins and the ledger entry was stale — note it as a finding") is one instance of this orientation, applied to the spine/ledger pair; this generalizes it to any upstream artifact a probe touches.
+
 ## Process
 
 **Minimum probe before writing.** Spine files look authoritative regardless of probe depth — a shallow probe misleads ari-port's substrate decisions just as confidently as a deep one. Before writing any cause file, run these steps:

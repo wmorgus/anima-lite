@@ -30,6 +30,8 @@ Do not proceed on partial or mismatched context. This is the failure mode the wh
 
 **Conservative default.** When the contract does not cover a decision, preserve current behavior and log a blip. Do not guess which bucket an uncovered case belongs in. Do not resolve ambiguity by choosing the option that makes the port simpler or faster. The conservative default is a mechanism: it makes gaps visible rather than hiding them behind a plausible-looking implementation. A blip saying "preserved by default, contract gap" is a correct artifact; a silently-resolved gap is a failure mode.
 
+**Bidirectional audit.** The execution and validation agents read the contract, plan, spines, and ledger as binding context — and are the first readers who check those artifacts against the full prod codebase rather than against each other. Drift found in any direction (spine vs. code, contract vs. proto source, ledger vs. the current chain) is blip material, with the direction named in the `Why:` field, citing the spine § or artifact section that drifted (consistent with the mandatory-citation rule below). The CONTRACT-BREAK and contract-clarity mechanisms already below are instances of this orientation pointed specifically at the contract; this extends the same attention to every artifact these agents read, not only the contract.
+
 ## Process
 
 ### Step 1 — Plan
@@ -88,6 +90,8 @@ The execution subagent receives:
 - The prototype source files being translated
 - The prod repo path and current branch name
 
+Reading these inputs against the real prod code is also an audit of them — see Bidirectional audit above; flag drift as a blip rather than silently working around it.
+
 The subagent's job: implement the plan, follow commit discipline below, write blips to `.anima-lite/ports/<branch-slug>/blips.md`. Work through the plan using the contract as the filter for every decision:
 
 - **Substrate changes** — translate freely, using the prod spine's `formal.md` as the guide for idiom and structure. Every substrate translation decision must cite the spine section that grounds it (e.g. "Translating jQuery collapse to Bootstrap 4.1.3 data-toggle/data-target per spine-prod/material.md §2 (Bootstrap 4.1.3 confirmed)"). If no spine section covers the decision, say so explicitly in the blip or log line. This is the same discipline the blip format's `Why:` field enforces below — one citation rule, not two: every reasoning trail in this skill either names the spine section it rests on or says explicitly that none applies.
@@ -139,6 +143,8 @@ After execution, spawn a **validation agent** with clean context. The validation
 - The frozen contract (`.anima-lite/ports/<branch-slug>/contract.md`)
 - The blips log (`.anima-lite/ports/<branch-slug>/blips.md`)
 - The list of files changed and their content
+
+Reading the contract and blips against the changed files is also an audit of those artifacts — see Bidirectional audit above; a contract or blip that doesn't hold up against the real diff is a finding, not just a validation input.
 
 The validation agent checks three things independently, reading changed files directly — not relying on the execution agent's summary:
 
