@@ -327,3 +327,21 @@ Shaping fields — `not traced` until stub advances past 0.
 ---
 
 Formalization of this backlog's own process resolved via the ari-backlog skill (`.claude/skills/ari-backlog/SKILL.md`) — see commit introducing that skill.
+
+### PIN-17 — Commit-shape discipline hook (first discipline hook)
+captured: 2026-07-06
+stub: 0
+status: open
+home: anima-lite
+goes-stale: if run4 shows the prompt-level stub discipline (PIN-10) holds on its own, urgency drops; if commit-shape fails again, this escalates
+relates-to: HARNESS.md §3 (first hook candidate), PIN-1, PIN-10
+
+HARNESS.md Section 3 tags commit-shape discipline as mechanical and names it the first hook candidate, with run3's empty-claim-commit failure as evidence that prompt-only enforcement was insufficient. Build the actual check: a script (pre-commit hook in the prod repo, or a validation-agent step) that verifies the substrate commit contains no behavior belonging to a confirmed claim and that no claim commit is empty. Distinct from the session-cost hook (metrics); this is the first *discipline* hook — it blocks rather than records. Wait for run4 evidence before building: if PIN-10's stub discipline holds, this may be unnecessary ceremony.
+
+---
+Shaping fields — `not traced` until stub advances past 0.
+
+**Scope:** not traced
+**Batch:** unbatched
+**Contract:** not traced
+**Resolution:** not traced
