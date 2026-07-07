@@ -13,14 +13,14 @@ Four steps: plan → execute → validate → reconcile. The hard epistemic work
 - `.anima-lite/spine-prod/formal.md` — primary reference for substrate translation. This is the guide for idiom and structure: new code must follow the prod repo's architectural patterns, not copy the proto's.
 - `.anima-lite/spine-prod/telos.md` — for the don't-contradict rules; substrate translations must not violate them.
 - Pull `material.md` or `efficient.md` from either spine directory if a specific translation decision requires it.
-- `.anima-lite/ports/<branch-slug>/contract.md` for the current branch and feature.
+- `.anima-lite/work/<branch-slug>/contract.md` for the current branch and feature.
 - The prototype code being translated.
 - `.claude/skills/ari-port/metrics-spec.md` — canonical spec for the run row written at Step 5.5.
 
 ## Preconditions
 
 1. The spine(s) relevant to this work item's comparison exist and `telos.md` in each is current — two spines for a port, one for single-repo debt work (the repo's own spine), zero additional spines for a pure world-drift check. Port is the only work-type fully specified today: both `spine-proto/` and `spine-prod/` must exist and be current. Single-repo debt work and pure world-drift checks are ratified direction, not yet built — this skill does not yet run them end to end. If a required spine is stale or missing: halt, request ari-map for the affected repo.
-2. `ports/<branch-slug>/contract.md` exists for the current branch and feature, status is not "DRAFT," and has no unconfirmed items in Open Questions. If any fail: halt, request ari-argue.
+2. `work/<branch-slug>/contract.md` exists for the current branch and feature, status is not "DRAFT," and has no unconfirmed items in Open Questions. If any fail: halt, request ari-argue.
 3. The contract's `Spine commit:` hash matches `spine-proto/telos.md`'s current `Commit:`. If mismatched — another branch refreshed the spine since this contract was confirmed — don't auto-fail or proceed silently. Summarize what changed and ask the user whether the contract still holds or needs a quick re-pass through ari-argue.
 
 Do not proceed on partial or mismatched context. This is the failure mode the whole pipeline exists to prevent: code moved without its meaning, or moved against terrain that already shifted underneath it.
@@ -39,11 +39,11 @@ Do not proceed on partial or mismatched context. This is the failure mode the wh
 
 Before touching any code, write an execution plan and surface it. The plan maps every contract item to specific files and specifies the order of operations. No code moves until the plan is written.
 
-Write `.anima-lite/ports/<branch-slug>/plan.md`:
+Write `.anima-lite/work/<branch-slug>/plan.md`:
 
 ```markdown
 # Execution Plan: <feature-name>
-Contract: .anima-lite/ports/<branch-slug>/contract.md
+Contract: .anima-lite/work/<branch-slug>/contract.md
 Generated: <date>
 
 ## Claim changes
@@ -85,15 +85,15 @@ Do not make any commits on a long-lived branch. All port commits must land on th
 **Execution subagent.** Spawn a single execution subagent with clean context. The clean-context isolation is the point: an agent that cannot fall back on upstream argumentation to fill gaps must blip anything the contract doesn't cover. This enforces contract-as-filter discipline — gaps that a context-carrying agent would silently paper over become visible blips.
 
 The execution subagent receives:
-- The contract (`.anima-lite/ports/<branch-slug>/contract.md`)
+- The contract (`.anima-lite/work/<branch-slug>/contract.md`)
 - Both spine telos files (`spine-proto/telos.md` and `spine-prod/telos.md`) — for don't-contradict rules
-- The plan (`.anima-lite/ports/<branch-slug>/plan.md`)
+- The plan (`.anima-lite/work/<branch-slug>/plan.md`)
 - The prototype source files being translated
 - The prod repo path and current branch name
 
 Reading these inputs against the real prod code is also an audit of them — see Bidirectional audit above; flag drift as a blip rather than silently working around it.
 
-The subagent's job: implement the plan, follow commit discipline below, write blips to `.anima-lite/ports/<branch-slug>/blips.md`. Work through the plan using the contract as the filter for every decision:
+The subagent's job: implement the plan, follow commit discipline below, write blips to `.anima-lite/work/<branch-slug>/blips.md`. Work through the plan using the contract as the filter for every decision:
 
 - **Substrate changes** — translate freely, using the prod spine's `formal.md` as the guide for idiom and structure. Every substrate translation decision must cite the spine section that grounds it (e.g. "Translating jQuery collapse to Bootstrap 4.1.3 data-toggle/data-target per spine-prod/material.md §2 (Bootstrap 4.1.3 confirmed)"). If no spine section covers the decision, say so explicitly in the blip or log line. This is the same discipline the blip format's `Why:` field enforces below — one citation rule, not two: every reasoning trail in this skill either names the spine section it rests on or says explicitly that none applies.
 - **Claim changes** — implement exactly per the contract's confirmed decision, in that claim's own commit — never inside the substrate commit. See commit discipline below: substrate files touched by a future claim get a stub, not the claim's real behavior. Do not relitigate mid-execution.
@@ -124,7 +124,7 @@ Main agent on `contract_break: true`: surface the CONTRACT-BREAK blip to the use
 ```
 port(<feature>): <claim name> — <one-line summary>
 
-Contract: .anima-lite/ports/<branch-slug>/contract.md
+Contract: .anima-lite/work/<branch-slug>/contract.md
 Claim: <Claim N>
 ```
 
@@ -145,8 +145,8 @@ Clean commit history is load-bearing for Step 4 (reconcile): the per-claim diff 
 ### Step 3 — Validate
 
 After execution, spawn a **validation agent** with clean context. The validation agent receives:
-- The frozen contract (`.anima-lite/ports/<branch-slug>/contract.md`)
-- The blips log (`.anima-lite/ports/<branch-slug>/blips.md`)
+- The frozen contract (`.anima-lite/work/<branch-slug>/contract.md`)
+- The blips log (`.anima-lite/work/<branch-slug>/blips.md`)
 - The list of files changed and their content
 
 Reading the contract and blips against the changed files is also an audit of those artifacts — see Bidirectional audit above; a contract or blip that doesn't hold up against the real diff is a finding, not just a validation input.
@@ -194,11 +194,11 @@ If `playwright:` is present in the contract, the validation agent:
 
 The Playwright pass does not replace the static check — both must pass. If the dev server is not running, skip D and note it as an info blip: `Severity: info — Playwright pass skipped: dev server not reachable at <url>`.
 
-**Screenshot capture (rides the same D/E browser pass).** While the browser session from D/E is live and `feature_url` is reachable, the validation agent also captures screenshots for human review — one per Playwright `check` and one per `## Proto visual reference` section, saved under `.anima-lite/ports/<branch-slug>/screenshots/` with a prose manifest at `.anima-lite/ports/<branch-slug>/screenshots.md`. Full capture procedure, save path, naming convention, and manifest format: see `.claude/skills/ari-argue/playwright-spec.md` — canonical, referenced rather than restated here.
+**Screenshot capture (rides the same D/E browser pass).** While the browser session from D/E is live and `feature_url` is reachable, the validation agent also captures screenshots for human review — one per Playwright `check` and one per `## Proto visual reference` section, saved under `.anima-lite/work/<branch-slug>/screenshots/` with a prose manifest at `.anima-lite/work/<branch-slug>/screenshots.md`. Full capture procedure, save path, naming convention, and manifest format: see `.claude/skills/ari-argue/playwright-spec.md` — canonical, referenced rather than restated here.
 
 This is reachability-gated with the same graceful fallback as D/E and the proto visual reference step: if `feature_url` is not reachable, do not attempt capture — write `screenshots: target-not-reachable — static review only` to `screenshots.md` and proceed. An unreachable target degrades validation to static review; it is never a validation FAIL, and it never blocks PASS or PASS (pending review).
 
-**Surface screenshots in the human-review path.** When screenshots were captured, the end-of-session summary and `catchup.md`'s "How to verify" section must point the reviewer at `.anima-lite/ports/<branch-slug>/screenshots/` and `screenshots.md` — so review has a visual, not just PASS/FAIL and prose blips. When capture was skipped (target unreachable), state that plainly in the same places ("screenshots: target-not-reachable — static review only") so the reviewer knows to expect a static-only review rather than assuming the step was forgotten.
+**Surface screenshots in the human-review path.** When screenshots were captured, the end-of-session summary and `catchup.md`'s "How to verify" section must point the reviewer at `.anima-lite/work/<branch-slug>/screenshots/` and `screenshots.md` — so review has a visual, not just PASS/FAIL and prose blips. When capture was skipped (target unreachable), state that plainly in the same places ("screenshots: target-not-reachable — static review only") so the reviewer knows to expect a static-only review rather than assuming the step was forgotten.
 
 Contract `playwright:` block format and the worked example: see `.claude/skills/ari-argue/playwright-spec.md` — the canonical spec, referenced rather than restated here.
 
@@ -222,7 +222,7 @@ For each unrelated change: revert it from the working tree (`git checkout HEAD -
 - No dev-only changes are staged
 - No unintended files are staged
 
-**4d. Draft the PR description.** Write `.anima-lite/ports/<branch-slug>/pr.md`:
+**4d. Draft the PR description.** Write `.anima-lite/work/<branch-slug>/pr.md`:
 
 ```markdown
 ## Summary
@@ -249,7 +249,7 @@ Deferred:
 [paste blip log summary — info blips only; CONTRACT-BREAKs would have blocked this PR]
 ```
 
-**4e. Write the catch-up summary.** Write `.anima-lite/ports/<branch-slug>/catchup.md` — a self-contained briefing document designed to be fed directly to a review agent (or a senior engineer doing an AI-assisted review). It must give the reviewer everything they need to understand not just what changed but why, without requiring access to the conversation or prior context.
+**4e. Write the catch-up summary.** Write `.anima-lite/work/<branch-slug>/catchup.md` — a self-contained briefing document designed to be fed directly to a review agent (or a senior engineer doing an AI-assisted review). It must give the reviewer everything they need to understand not just what changed but why, without requiring access to the conversation or prior context.
 
 Structure:
 
@@ -318,7 +318,7 @@ If the critic finds gaps, the main agent patches the catch-up doc to close them.
 
 > **⛔ REQUIRED GATE — GATE-PR (PR creation)**
 > Surface the PR description and staged diff summary to the user before running `gh pr create`. Do not create the PR without explicit user confirmation.
-> The pipeline halts here. Do not proceed until explicitly cleared. Once approved, the user or agent runs `gh pr create --body "$(cat .anima-lite/ports/<branch-slug>/pr.md)"`.
+> The pipeline halts here. Do not proceed until explicitly cleared. Once approved, the user or agent runs `gh pr create --body "$(cat .anima-lite/work/<branch-slug>/pr.md)"`.
 
 The reconcile step is complete when: working tree is clean of unrelated changes, all port files are staged, and the PR description is written and surfaced.
 
@@ -351,9 +351,9 @@ Also append the run row to `.anima-lite/metrics/summary.md`'s table per metrics-
 
 ## Output
 
-Write `.anima-lite/ports/<branch-slug>/plan.md` before execution (Step 1 output).
+Write `.anima-lite/work/<branch-slug>/plan.md` before execution (Step 1 output).
 
-Append to `.anima-lite/ports/<branch-slug>/blips.md` (same slug as the contract) throughout the session:
+Append to `.anima-lite/work/<branch-slug>/blips.md` (same slug as the contract) throughout the session:
 
 ```markdown
 ## Blip: <short title>

@@ -146,7 +146,7 @@ Full gate registry (IDs, owning skill, trigger, what clears it) and enforcement-
 
 ## Artifacts
 
-Per-slug port artifacts live at `.anima-lite/ports/<slug>/{contract,blips,plan,catchup,pr}.md`. Spine directories live at `.anima-lite/spine-<label>/{telos,material,formal,efficient}.md`. The exact file formats are owned by the skill that writes them (spine format: ari-map; contract format: ari-argue; blip format: ari-port) and indexed in `HARNESS.md` §2 — not restated here. (Directory-noun rename status for `ports/<slug>/`: see `HARNESS.md` §4.)
+Per-slug port artifacts live at `.anima-lite/work/<slug>/{contract,blips,plan,catchup,pr}.md`. Spine directories live at `.anima-lite/spine-<label>/{telos,material,formal,efficient}.md`. The exact file formats are owned by the skill that writes them (spine format: ari-map; contract format: ari-argue; blip format: ari-port) and indexed in `HARNESS.md` §2 — not restated here. (Directory-noun rename: `ports/<slug>/` became `work/<slug>/` 2026-07-07 per vocab decision 2b; see `HARNESS.md` §4.)
 
 The metrics system under `.anima-lite/metrics/` (run rows, backlog-health rows, session-cost rows, `summary.md`) and the `SessionEnd` cost hook (`.claude/hooks/session-cost.py`) also exist — spec owned by `.claude/skills/ari-port/metrics-spec.md`.
 

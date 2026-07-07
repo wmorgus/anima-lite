@@ -119,7 +119,7 @@ Arguments against (pressure): a reader who knows the corpus (Will, and any futur
 
 Numbered for Will to ratify one at a time. Each names the CLAIM-SHAPED question, the options, and the recommendation from above.
 
-**RATIFIED 2026-07-07 (Will, one at a time via decision prompt): 1(a), 2(b), 3(b), 4(b), 5(a) — all recommendations accepted.** Vocabulary is settled; propagation (PIN-25 item b) is unblocked. Note for propagation sequencing: the `ports/` → `work/` git mv (decision 2) should not run while run5's staged renames are in flight — sequence it after run5 state is committed or resolved.
+**RATIFIED 2026-07-07 (Will, one at a time via decision prompt): 1(a), 2(b), 3(b), 4(b), 5(a) — all recommendations accepted.** Vocabulary is settled; propagation (PIN-25 item b) is unblocked. Note for propagation sequencing: the `ports/` → `work/` git mv (decision 2) should not run while run5's staged renames are in flight — sequence it after run5 state is committed or resolved. **`ports/`→`work/` git mv executed 2026-07-07** (run5 suspended, tree clear per PIN-30).
 
 **Decision 1 — substrate/claim collision with corpus §8.4.**
 Options: (a) keep anima-lite's substrate/claim as-is, import corpus's fourth primitive as "world-drift" [recommended — already stated in identity.md, this ratifies it against pressure-testing]; (b) rename anima-lite's substrate to something collision-free (cost: every committed contract/plan/blip/spine on disk, both IDE mirrors, all four skill files, PHILOSOPHY/README/CLAUDE/HARNESS).

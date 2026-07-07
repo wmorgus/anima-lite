@@ -67,7 +67,7 @@ Result: PASS | PASS-pending (<n> review-suggested acknowledged) | FAIL (<n> loop
 Main-agent context cost: not traced (see metrics/sessions/) — never estimated.
 
 ## Sources
-Distilled from: <ports/<slug>/{contract,blips,plan,catchup}.md paths>, session <date/id if known>
+Distilled from: <work/<slug>/{contract,blips,plan,catchup}.md paths>, session <date/id if known>
 ```
 
 ---

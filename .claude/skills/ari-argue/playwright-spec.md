@@ -52,12 +52,12 @@ Mirrors the `## Proto visual reference (if server reachable)` step in `ari-argue
 
 The goal is 1:1 coverage between what the proto reference documented and what the prod screenshots show — a reviewer should be able to open the two side by side and compare claim-by-claim.
 
-**WHERE to save.** `.anima-lite/ports/<slug>/screenshots/`, one PNG per shot. Naming convention: `<claim-or-section-slug>-<state>.png`, where `<claim-or-section-slug>` is the check's claim name or the proto-reference section name, lowercased with spaces/punctuation converted to dashes, and `<state>` is a short descriptor of what's shown when a section has more than one state worth distinguishing (e.g. `default`, `expanded`, `locked`, `after-submit`). Use `default` when there's only one state. Examples:
+**WHERE to save.** `.anima-lite/work/<slug>/screenshots/`, one PNG per shot. Naming convention: `<claim-or-section-slug>-<state>.png`, where `<claim-or-section-slug>` is the check's claim name or the proto-reference section name, lowercased with spaces/punctuation converted to dashes, and `<state>` is a short descriptor of what's shown when a section has more than one state worth distinguishing (e.g. `default`, `expanded`, `locked`, `after-submit`). Use `default` when there's only one state. Examples:
 - `claim-4-feedback-text-minimum-after-submit.png`
 - `training-accordion-expanded.png`
 - `locked-gate-state-default.png`
 
-**Manifest (required, PNGs are not enough on their own).** PNGs are binary and would bloat the repo with no diffable content, so every capture pass also writes (or appends to) a markdown manifest — `.anima-lite/ports/<slug>/screenshots.md` — with one prose line per screenshot:
+**Manifest (required, PNGs are not enough on their own).** PNGs are binary and would bloat the repo with no diffable content, so every capture pass also writes (or appends to) a markdown manifest — `.anima-lite/work/<slug>/screenshots.md` — with one prose line per screenshot:
 
 ```markdown
 # Screenshots: <feature-name>
@@ -69,7 +69,7 @@ Captured: <date>, validation Step 3
 
 The prose line is the reviewable record (diffable in a PR, greppable, survives even if the PNG is never committed); the PNG is the human's eyeball aid layered on top. Write the same level of specificity the `expect` field rules above require: element counts, labels, badge text, button state — not "the section renders correctly."
 
-**Gitignore note (flag for the driver, do not act on it here).** PNGs under `.anima-lite/ports/<slug>/screenshots/` should be gitignored — they're regenerable review artifacts, not durable state, and binary diffs are useless in review. `screenshots.md` should be committed — it's the durable, diffable record. This spec does not edit `.gitignore`; the validation agent or the ari-port driver should treat "add `.anima-lite/ports/*/screenshots/*.png` to `.gitignore`" as a follow-up action, not something to silently skip past.
+**Gitignore note (flag for the driver, do not act on it here).** PNGs under `.anima-lite/work/<slug>/screenshots/` should be gitignored — they're regenerable review artifacts, not durable state, and binary diffs are useless in review. `screenshots.md` should be committed — it's the durable, diffable record. This spec does not edit `.gitignore`; the validation agent or the ari-port driver should treat "add `.anima-lite/work/*/screenshots/*.png` to `.gitignore`" as a follow-up action, not something to silently skip past.
 
 **Reachability gating and fallback.** Same discipline as `ari-argue/SKILL.md`'s proto visual reference step — this is a fallback, never a failure:
 1. Attempt to navigate to `feature_url` (already required for checks D/E). If it renders, proceed with capture as above.

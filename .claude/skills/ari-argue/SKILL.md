@@ -107,7 +107,7 @@ Before writing the contract, attempt to capture visual ground truth from the run
 
 ## Output
 
-Write `.anima-lite/ports/<branch-slug>/contract.md`, where `<branch-slug>` is the current git branch (sanitized: lowercase, slashes to dashes) or a feature-name slug if not in git:
+Write `.anima-lite/work/<branch-slug>/contract.md`, where `<branch-slug>` is the current git branch (sanitized: lowercase, slashes to dashes) or a feature-name slug if not in git:
 
 ```markdown
 # Contract: <feature-name>

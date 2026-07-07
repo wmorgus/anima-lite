@@ -1,6 +1,6 @@
 # Reorientation — anima-lite identity expansion
 
-Captured: 2026-07-07. Status: **doc propagation done — git mv pending run5.** Vocab review complete and ratified 2026-07-07 (see `vocab.md` in this directory: decisions 1a/2b/3b/4b/5a). Propagation into PHILOSOPHY.md, README.md, CLAUDE.md, HARNESS.md, ari-argue/SKILL.md, and ari-port/SKILL.md landed 2026-07-07 (PIN-25 item b). The `ports/`→`work/` directory rename (decision 2b) has NOT been executed — it stays sequenced after run5's staged git state resolves; disk remains `ports/<slug>/`, noted as ratified-pending-run5 at HARNESS.md §4's doc-ownership map. Incremental spine-maintenance design (PIN-25 item c) is still open.
+Captured: 2026-07-07. Status: **doc propagation done — git mv executed 2026-07-07.** Vocab review complete and ratified 2026-07-07 (see `vocab.md` in this directory: decisions 1a/2b/3b/4b/5a). Propagation into PHILOSOPHY.md, README.md, CLAUDE.md, HARNESS.md, ari-argue/SKILL.md, and ari-port/SKILL.md landed 2026-07-07 (PIN-25 item b). The `ports/`→`work/` directory rename (decision 2b) was executed 2026-07-07 once run5's staged git state resolved; disk is now `work/<slug>/`, noted as done at HARNESS.md §4's doc-ownership map. Incremental spine-maintenance design (PIN-25 item c) is still open.
 
 Context: team feedback — greenfield/translation work alone isn't a compelling product; tech-debt solvency is. This doc records the identity shift that answers it, and the rulings that bound it.
 
