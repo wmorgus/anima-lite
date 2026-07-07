@@ -10,6 +10,7 @@ One line per run row, appended when a run row is written (.anima-lite/metrics/ru
 
 | Run ID | Gates fired | Blips (info/review/BREAK) | Validation | Total subagent tokens |
 |---|---|---|---|---|
+| run-2026-07-07-recommend-sessions | 5 | 2/1/1 | PASS-pending | ~658,667 |
 
 Rows begin at run4 — run1-3 predate instrumentation; see archive/calibration-* for their artifacts. No fabricated backfill rows.
 

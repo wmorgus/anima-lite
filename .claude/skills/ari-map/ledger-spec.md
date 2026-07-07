@@ -14,6 +14,8 @@ Future mechanism (not required now): hash-controlled versioned copies per repo, 
 
 ari-map creates a comprehensive feature map — every feature it can identify in the repo, stubbed as deep as it can decisively assert, no more. The failure mode is not the shallow stub. It is the dishonest stub: fields filled with assertions the agent cannot confirm. A shallow honest stub is a correct artifact; a deep dishonest one is a trap that reads as authority.
 
+For domain-central features — those built on entities that recur across the repo (sessions, students, institutions, and similar) — ari-map should reach `stub:2` at probe time, not stop at `stub:1`. Field-depth deferred to ari-port's enrichment pass (`stub:3`) arrives after ari-argue has already frozen the contract; a claim built on a nonexistent field detonates late instead of getting caught at contract-time. `stub:2` at map-time puts the field-level truth in front of ari-argue while there's still time to act on it. This is required only where the probe can actually confirm the fields — the honest-stub rule is not relaxed by this: a dishonest `stub:2` (fields the probe didn't confirm) is worse than an honest `stub:1`. For features not built on a recurring entity, `stub:1` remains a fine stopping point at map-time.
+
 Stub levels (use these exact labels in the file header):
 - `stub:0` — feature identified, existence confirmed, nothing else
 - `stub:1` — entry point confirmed (URL mapping → servlet or equivalent)
@@ -79,5 +81,5 @@ At stub:0–2, all fields below are `not traced`.
 
 ### Field ownership
 
-- **ari-map** populates at probe time: all header fields, Identity, Entry points, Primary data structure, and status markers (`not traced` on all unconfirmed fields)
-- **ari-port** enriches after a port run: Full data flow, Client-side wiring, State machine, Feature gates, Seam-specific protocols, Known quirks, Port provenance — and updates `stub:`, `source:`, and `prod-commit:` to reflect the enrichment
+- **ari-map** populates at probe time: all header fields, Identity, Entry points, Primary data structure, and status markers (`not traced` on all unconfirmed fields). For domain-central features, `Primary data structure` is expected to be populated (confirmed key fields, not `not traced`) — that's what `stub:2` at map-time means; ari-map does not get to defer this field to ari-port just because it's more convenient to confirm later.
+- **ari-port** enriches after a port run: Full data flow, Client-side wiring, State machine, Feature gates, Seam-specific protocols, Known quirks, Port provenance — and updates `stub:`, `source:`, and `prod-commit:` to reflect the enrichment. For non-domain-central features left at `stub:1` by ari-map, ari-port's enrichment pass is still the first point `Primary data structure` gets confirmed — the split narrows, it doesn't disappear.

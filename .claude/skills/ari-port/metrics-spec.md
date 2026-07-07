@@ -23,6 +23,7 @@ Calibration run: <run number, e.g. "calibration-run-4"> | production run
 | Gate ID | Status | Outcome |
 |---|---|---|
 | GATE-TELOS | fired\|skipped\|n/a | <one line> |
+| GATE-SCHEMA | fired\|skipped\|n/a | <one line> |
 | GATE-HASH | fired\|skipped\|n/a | <one line> |
 | GATE-BLOCKERS | fired\|skipped\|n/a | <one line> |
 | GATE-BREAK | fired\|skipped\|n/a | <one line> |
@@ -51,15 +52,17 @@ Result: PASS | PASS-pending (<n> review-suggested acknowledged) | FAIL (<n> loop
 - Commit discipline: substrate commits: <count>, claim commits: <count>, empty claim commits: <count> (0 expected)
 
 ## Phase table
-| Phase | Subagent invocations | Model tier(s) | Subagent tokens | Duration |
-|---|---|---|---|---|
-| ari-map | <n> | <tier per invocation> | <from task-result usage, or "not traced"> | <or "not traced"> |
-| ari-argue | <n> | ... | ... | ... |
-| plan (ari-port Step 1) | <n> | ... | ... | ... |
-| execute (ari-port Step 2) | <n> | ... | ... | ... |
-| validate (ari-port Step 3) | <n> | ... | ... | ... |
-| critic (ari-port Step 4e(ii)) | <n> | ... | ... | ... |
-| reconcile (ari-port Step 4) | <n> | ... | ... | ... |
+| Phase | Subagent invocations | Model tier(s) | Reasoning/effort setting | Subagent tokens | Duration |
+|---|---|---|---|---|---|
+| ari-map | <n> | <tier per invocation> | <thinking/effort setting per invocation, or "ambient — not traced"> | <from task-result usage, or "not traced"> | <or "not traced"> |
+| ari-argue | <n> | ... | ... | ... | ... |
+| plan (ari-port Step 1) | <n> | ... | ... | ... | ... |
+| execute (ari-port Step 2) | <n> | ... | ... | ... | ... |
+| validate (ari-port Step 3) | <n> | ... | ... | ... | ... |
+| critic (ari-port Step 4e(ii)) | <n> | ... | ... | ... | ... |
+| reconcile (ari-port Step 4) | <n> | ... | ... | ... | ... |
+
+**Reasoning/effort column:** thinking is a model-intensity variable (research question (c)), recorded here — not enforced by any gate. The harness does not mandate a thinking budget; it leaves that to the ambient model/ecosystem and records what was observed. Where the setting is ambient and not readable per-invocation, write `ambient — not traced` (honest-stub rule). This column exists so calibration diffs can hold thinking constant across an A/B (or deliberately vary it) rather than confounding it silently.
 
 Main-agent context cost: not traced (see metrics/sessions/) — never estimated.
 

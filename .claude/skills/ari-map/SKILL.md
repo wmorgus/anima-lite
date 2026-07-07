@@ -30,7 +30,7 @@ If none hold and a current spine directory exists, do not invoke — proceed dir
 
 **Scope fence.** This spine maps one repo only. Do not reference the other repo in the port pair, compare to the proto, or anticipate what ari-argue will find. Cross-repo comparison is ari-argue's job. Name what this repo does; leave what it means for the port to ari-argue.
 
-**Bidirectional audit.** Reading a prior spine (the refresh case) or a feature-ledger entry (during a probe) is also an audit of that artifact, not just a source to build on. Drift runs both directions: the artifact may be stale (reality moved since it was written) or it may have been wrong at write time (a probe or classification error that predates any code change). Never silently correct drift into the new spine — name it as a finding with the direction stated, e.g. "formal.md previously claimed X; code now shows Y (stale)" versus "formal.md claimed X; grep shows this was never true (wrong at write time)." Process step 5's ledger rule ("if the probe contradicts it, the spine wins and the ledger entry was stale — note it as a finding") is one instance of this orientation, applied to the spine/ledger pair; this generalizes it to any upstream artifact a probe touches.
+**Bidirectional audit.** Reading a prior spine (the refresh case) or a feature-ledger entry (during a probe) is also an audit of that artifact, not just a source to build on. Drift runs both directions: the artifact may be stale (reality moved since it was written) or it may have been wrong at write time (a probe or classification error that predates any code change). Never silently correct drift into the new spine — name it as a finding with the direction stated, e.g. "formal.md previously claimed X; code now shows Y (stale)" versus "formal.md claimed X; grep shows this was never true (wrong at write time)." Process step 6's ledger rule ("if the probe contradicts it, the spine wins and the ledger entry was stale — note it as a finding") is one instance of this orientation, applied to the spine/ledger pair; this generalizes it to any upstream artifact a probe touches.
 
 ## Process
 
@@ -40,19 +40,20 @@ If none hold and a current spine directory exists, do not invoke — proceed dir
 2. Per layer in the formal cause, read at least 2 representative files to confirm the pattern holds, not just the most prominent one
 3. For any pattern claim in `formal.md`, grep to confirm it before asserting — e.g., if claiming "all servlets extend AbstractServlet," grep for `extends AbstractServlet` and count; if there are exceptions, name them as findings
 4. For `material.md` library entries, grep package manifests, lock files, or vendor dirs for version strings — don't assert a version you haven't confirmed
-5. If `.anima-lite/features/` exists, read any ledger files relevant to the current probe before writing `formal.md` and `telos.md`. Treat as soft reference — explicitly softer than the spine. Source is port-generated, not independently probed. Use ledger entries as pointers to confirm, not as authority to copy. If the probe confirms a ledger observation, it may graduate into the spine; if the probe contradicts it, the spine wins and the ledger entry was stale — note it as a finding.
+5. For entities in the neighborhood of identified features (not all entities in the repo), enumerate fields and FKs by reading the entity/mapping pairs (e.g. `*Item.java` / `*.hbm.xml`) — this is what populates material.md §7's inventory table. Also enumerate the enums directory (e.g. `enums/`) as domain vocabulary for §9 — an enum class is a closed, code-derived list of what a noun can be, and belongs in the glossary rather than being re-derived per port.
+6. If `.anima-lite/features/` exists, read any ledger files relevant to the current probe before writing `formal.md` and `telos.md`. Treat as soft reference — explicitly softer than the spine. Source is port-generated, not independently probed. Use ledger entries as pointers to confirm, not as authority to copy. If the probe confirms a ledger observation, it may graduate into the spine; if the probe contradicts it, the spine wins and the ledger entry was stale — note it as a finding.
 
 **Parallel probe subagents (large repos).** After step 1 completes, assess scope: if the repo has >500 files or the probe would require reading >10 files per cause, spawn three parallel subagents — one per cause — rather than probing serially. For smaller repos, single-agent probe is fine.
 
 Each subagent receives:
 - The repo path
-- The probe steps for its cause only (steps 2–3 for formal, step 4 for material, build/CI configs for efficient)
+- The probe steps for its cause only (steps 2–3 for formal, steps 4–5 for material, build/CI configs for efficient)
 - The tentative telos inferred by the main agent before fanning out
 - This instruction: return structured findings with four fields — `confirmed` (what was verified in code), `unconfirmed` (what couldn't be pinned), `named_findings` (inconsistencies, gaps, or surprises worth carrying into the spine), `skeptical_findings` (things that looked off while doing the primary probe — see below)
 
 Subagent assignments:
 
-- `probe:material` — grep manifests and lock files for versions; read package files; confirm dependency versions; return findings in the four-field format. **Skeptical read (secondary):** flag any version entry that looks like a timed fact rather than a stable syntax pin — EOL claims, security advisory status, and deprecation judgments expire at the source and must not be frozen into the spine. Flag any dependency that appears in the code but not in the manifest, or vice versa. The skeptical read is free because the subagent is already reading.
+- `probe:material` — grep manifests and lock files for versions; read package files; confirm dependency versions; for entities in the neighborhood of identified features, read entity/mapping pairs to populate the §7 field/FK inventory and enumerate the enums directory for the §9 vocabulary glossary; return findings in the four-field format. **Skeptical read (secondary):** flag any version entry that looks like a timed fact rather than a stable syntax pin — EOL claims, security advisory status, and deprecation judgments expire at the source and must not be frozen into the spine. Flag any dependency that appears in the code but not in the manifest, or vice versa. The skeptical read is free because the subagent is already reading.
 
 - `probe:formal` — read representative files per layer; grep for pattern claims; confirm seam protocols; return findings. **Skeptical read (secondary):** flag any place where the actual code contradicts what the spine currently says (if a prior spine exists), or any internal inconsistency in the patterns found (e.g., "9 servlets extend AbstractServlet, 27 extend HttpServlet directly" — the inconsistency itself is a finding, not just the count). The skeptical read is free because the subagent is already reading.
 
@@ -77,6 +78,8 @@ From the Final cause, derive **don't-contradict rules** — imperative constrain
 **Efficient — what acts on it.** CI/CD pipeline, branching model, build tooling, how changes get deployed. Probe through the telos lens: which build constraints protect the telos's load-bearing paths? Most often missing from architecture docs; most likely to silently break a port.
 
 **Comprehensive feature map.** Attempt a comprehensive feature map — identify every user-facing feature in the repo, not just the ones tied to the current port. For each identified feature, create a stub in `.anima-lite/features/` at the deepest level the probe can confirm without over-claiming. "The feature exists and its entry point is X" is a valid `stub:1`. Do not require full-chain visibility before creating a stub; require only that every populated field was confirmed in code.
+
+**Domain-central features go to stub:2 at map-time.** For features built on domain-central entities — recurring nouns that show up across the repo (sessions, students, institutions, and similar) — probe to `stub:2` (entry point + primary data structure + key fields, per ledger-spec.md), not `stub:1`. Stopping at stub:1 for these defers field-depth to ari-port, which runs after the contract freezes — too late for ari-argue to catch a claim built on a field that doesn't exist. The ledger is uncapped and per-feature, so it absorbs this field-level volume without pressuring the cause-file cap. This does not relax the honest-stub rule: populate `Primary data structure` at stub:2 only with fields the probe actually confirmed — a dishonest stub:2 is worse than an honest stub:1.
 
 How to identify features: trace entry points (servlet URL mappings, route configs, JSP file inventory) and group them by user-facing function. A feature is a user-facing capability — not a utility, not a shared service. When in doubt whether something is a feature or infrastructure, ask: does a human user interact with this directly? If yes, it is a feature.
 
@@ -152,6 +155,40 @@ correct at probe time and relevant for syntax decisions. EOL status, advisory st
 and security currency are timed facts: they expire at the source and must not be
 frozen into the spine. For these, record where to check (the project's dependency
 manifest, the upstream advisory feed) rather than a judgment that will silently go stale.>
+
+## §7 Entity/field inventory
+
+| entity | backing table | key fields | FKs | notes |
+|---|---|---|---|---|
+| <EntityName> | <table_name> | <field: type, field: type, ...> | <fk → target> | <gap/caveat, or blank> |
+
+<One row per load-bearing entity reachable from a confirmed feature entry point —
+not every entity in the repo, only those in the neighborhood of identified features.
+This is a lookup appendix, not narrative: a required table makes a missing field a
+visible blank instead of a silent omission. This is the section that catches "field
+X doesn't exist" at contract-time, before a claim gets written against a noun the
+spine never confirmed or denied. Populate fields from the same probe that grounds
+§5, not from inference — a field you didn't read is a field you don't have.>
+
+## §8 Capabilities prod does NOT have
+
+<Bounded negative-space list. Record an absence only if (a) it's adjacent to a
+confirmed domain noun AND (b) a naive port would plausibly assume it exists —
+e.g. student-side capacity, a notification channel, a subject/course taxonomy.
+This is not an invitation to enumerate everything the repo lacks; an unbounded
+absence list is as useless as no list. Absences that pass this test are repo-wide
+by definition, so they automatically pass the different-feature test below.
+
+- <domain noun> does NOT have <capability a naive port would assume> — <one-line evidence: grep/read that confirms absence, e.g. "no `subject` column on SessionItem or its .hbm.xml; grepped `item/` and `enums/` for `Subject`, zero hits">
+- <domain noun> does NOT have <capability> — <evidence>>
+
+## §9 Domain vocabulary
+
+<Glossary of real domain nouns and their backing, so downstream skills use real
+nouns instead of rediscovering them. One line per noun.
+
+- <noun> = <what it actually is, e.g. "enrollment = row in StudentSessionItem">
+- <noun> = <what it actually is, e.g. "capacity = tutor-staffing only, not student-side">>
 ```
 
 ---
@@ -165,11 +202,38 @@ manifest, the upstream advisory feed) rather than a judgment that will silently 
 ## §1 Layered architecture
 ## §2 Module boundaries
 ## §3 Dominant patterns
+### Backend
+### Frontend
+### Data flow
 ## §4 Seam protocols
 ## §5 Named findings
 
 <Architecture pattern, layering, module boundaries, dominant design patterns,
 the shape of a typical change. Named inconsistencies as findings.
+
+§3 is per-stratum, not a flat list: state the dominant pattern separately for
+Backend, Frontend, and Data flow, because these are the substrates ari-port
+translates independently — "what to translate this layer INTO" is the question
+each subsection answers. This per-layer idiom map is the canonical source
+ari-argue's substrate-changes classification is derived from; without it, each
+port hand-derives the same layer-by-layer mapping (React→JSP, useState→
+round-trips, PLUS DS→Bootstrap) from scratch instead of reading it off the spine.
+
+Each of Backend / Frontend / Data flow must end with a required line:
+
+`Seams: <where this layer's own pattern is inconsistently applied — the class of
+finding like "most servlets extend AbstractServlet, but ReflectionServlet extends
+HttpServlet directly">` — or the literal `Seams: none found`.
+
+A required line makes an omission visible instead of silent — same trick as the
+material.md §7 inventory table. Do not skip the line because nothing came up in
+probe; write `none found` and mean it.
+
+This per-layer `Seams:` line is WITHIN-layer pattern-consistency (does Backend
+follow its own stated pattern everywhere?) — distinct from §4 Seam protocols
+below, which is CROSS-layer: the shape of data as it crosses a boundary between
+layers. Don't collapse them: a backend that's 100% consistent internally can
+still have an unconfirmed or broken cross-layer protocol, and vice versa.
 
 Provenance rule: tag each finding as (code-derived) or (README-stated).
 - (code-derived): you grepped or read files and the pattern is confirmed in actual code
@@ -218,7 +282,9 @@ How to verify a change works in this repo.>
 
 ---
 
-Cap each cause file at ~50 lines. If you're exceeding that, you're over-promising precision. Cut to load-bearing facts.
+Cap each cause file's narrative sections at ~50 lines. If you're exceeding that, you're over-promising precision. Cut to load-bearing facts.
+
+**Cap exemption.** The narrative sections — material.md §1–§6, formal.md §1–§5 — must stay ≤~50 lines combined per file. material.md's §7 entity/field inventory, §8 capabilities-NOT-present, and §9 domain vocabulary are lookup APPENDICES, not narrative, and are EXEMPT from the cap: a table row is a confirmed fact, not prose that can bloat. The cap and the required tables do not contradict each other — the cap bounds how much gets asserted in flowing text; the tables absorb the field-level volume that used to either get crammed into narrative (blowing the cap) or dropped (causing silent incompleteness). The feature ledger (uncapped, per-feature) absorbs anything more granular than repo-wide — see "Domain-central features go to stub:2 at map-time" above.
 
 ## Feature Ledger
 

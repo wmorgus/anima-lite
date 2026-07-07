@@ -102,6 +102,10 @@ The subagent's job: implement the plan, follow commit discipline below, write bl
 
 If the contract is actively wrong — not incomplete, but contradicted by what the prototype code does — **halt**. Write the contradiction to blips as `CONTRACT-BREAK` and report execution paused pending a re-run of ari-argue.
 
+**Halt means halt — do not self-resolve.** On a CONTRACT-BREAK, stop and return the delta to the driver. Do not narrow the claim, drop it, or otherwise work around the contradiction to keep executing — that is the driver's call to make with the user, not yours. Logging the break loudly is necessary but not a substitute for halting; a loudly-logged CONTRACT-BREAK that the subagent then resolved on its own is still a bypassed gate.
+
+This is a different situation from the conservative default above, and the two must not be conflated: the conservative default governs cases the contract did not *cover* (silence — preserve current behavior, log a blip, keep going). CONTRACT-BREAK is reality *contradicting* a claim the contract already confirmed. Narrowing a confirmed claim to route around contradicted-by-reality data is itself a CONTRACT-BREAK — not a conservative narrowing — because it silently substitutes the subagent's judgment for the user's on a claim that was already settled.
+
 The subagent returns a handoff to the main agent:
 - List of commits made (hash + claim mapping)
 - Summary of blips logged
@@ -368,6 +372,8 @@ At session end (after reconcile complete):
 6. State that the run row was written (path: `.anima-lite/metrics/run-<date>-<slug>.md`) per Step 5.5.
 
 ## Escalation / Notes
+
+**Driver's independent break-scan is not optional.** Before trusting the execution subagent's handoff, the main agent independently scans the committed diff itself for un-surfaced CONTRACT-BREAKs — do not proceed on the subagent's summary that it "handled" everything. GATE-BREAK is a judgment gate (HARNESS.md §3) and cannot be mechanized: no hook can decide whether reality contradicts a claim, so the main-agent review layer is the only reliable enforcement. A self-policing executor is not sufficient on its own.
 
 One agent session, one feature. A second feature on the same branch needs its own ari-argue pass and its own contract file, even if the spine is reused.
 

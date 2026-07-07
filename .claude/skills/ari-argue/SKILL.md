@@ -83,6 +83,12 @@ Even on a lighter pass, the subagent must produce a positive claim: not "no clai
 
 If any of the three conditions is not met, run the full pass.
 
+**4c. Schema-dependency check (pre-freeze).** For every claim's declared `Schema deps:`, verify each named entity/field/enum actually exists in prod before the contract is written. Check the prod spine's entity/field inventory first, if present (`spine-prod/material.md`, per PIN-21's spine-completeness work) — a current, complete spine often settles this by inspection alone. When the spine doesn't cover the dependency, or is silent rather than confirming absence, grep the prod repo directly (path from this project's `CLAUDE.md`, Target repos table) under its schema-bearing directories — `item/`, `dto/`, `enums/` — for the named entity/field/enum. A declared dependency that resolves to zero prod classes or fields is a contract-time break, not a wording detail to smooth over: HALT, surface it to the user for resolution — drop the claim, amend it, or confirm the field exists under a different name — before freezing the contract. This is a backstop, not the primary defense: the spine's entity/field inventory and negative-space list are meant to catch this by the time ari-argue reads them; this check exists for when the spine is still incomplete — a fresh probe, an unusual noun, or drift since the last map. Declaring a `Schema deps:` value is not the same as confirming it resolves — do not skip this step by trusting the claim author's own list.
+
+> **⛔ REQUIRED GATE — GATE-SCHEMA (schema dependency)**
+> If a claim's declared `Schema deps:` entry resolves to zero prod classes or fields, halt and surface it to the user for resolution — drop the claim, amend it, or confirm the field exists under another name. Do not freeze the contract until the user resolves it.
+> The pipeline halts here. Do not proceed until explicitly cleared.
+
 ## Proto visual reference (if server reachable)
 
 Before writing the contract, attempt to capture visual ground truth from the running prototype. This step runs after all claim changes are confirmed but before the contract is written — the screenshots inform the `expect` clauses in the playwright verification block.
@@ -119,6 +125,7 @@ Status: FROZEN FOR SESSION — do not modify without re-running ari-argue
 
 ## Claim changes (confirmed with user)
 - <detail> — Decision: <preserve|change-to-X> — Confirmed: <yes/default-preserve, with date>
+  Schema deps: <prod entities/fields/enums this claim's rule logic relies on, e.g. "SessionItem.sessionStart, StudentSessionItem, InstitutionItem" — or "none" if the claim relies on no prod schema (pure UI/interaction)>
 
 ## Open questions
 <anything not yet confirmed; ari-port must halt and escalate if it hits these>
@@ -137,6 +144,8 @@ checks:
 ```
 
 Block schema, the `expect`-field rules, and a worked example: see `playwright-spec.md` in this skill's directory — the canonical spec, referenced rather than restated here.
+
+**`Schema deps:` is what GATE-SCHEMA verifies before freeze (step 4c).** Every claim entry names the prod entities/fields/enums its rule logic depends on — not a guess about implementation, a declared assumption about what data prod actually has. A claim built on a field that doesn't exist is a break the pipeline must catch at contract-time, not at execution-time: two run4 breaks (a `subject` field and an "open-slots" concept) were both invented by the prototype's mock UI, backed nothing in prod, and rode unverified into a frozen contract — detonating late, once at plan-time and once mid-execution as a CONTRACT-BREAK. Declaring the dependency here makes it checkable before that happens.
 
 ## Escalation / Notes
 

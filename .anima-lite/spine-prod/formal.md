@@ -1,60 +1,54 @@
 # Formal: plus web-app (prod)
-(Reference depth — see telos.md for entry point and commit hash)
+(Reference depth — see telos.md for entry point and commit hash — HEAD: 29d41e50)
 
 ## Layered architecture (code-derived: package enumeration + file counts)
 1. servlet/ — *Servlet.java; handles doGet/doPost, session auth, forwards to JSP
-2. service/ + service/impl/ — 204 files; Spring-managed transactions; interface+impl split
-3. dao/ + dao/hibernate/ — 219 files; AbstractDao interface + *DaoHibernate implementations
-4. item/ — 131 files; Hibernate-mapped domain entities (*Item.java + *.hbm.xml pairs)
+2. service/ + service/impl/ — Spring-managed transactions; interface+impl split
+3. dao/ + dao/hibernate/ — AbstractDao interface + *DaoHibernate implementations
+4. item/ — Hibernate-mapped domain entities (*Item.java + *.hbm.xml pairs)
 5. dto/ — data transfer objects assembled by *DtoHelper classes
-6. helper/ — cross-cutting concerns (email, plot, servlet utilities, demo mode)
+6. helper/ — cross-cutting concerns (email, plot, servlet utilities, demo mode, Slack webhooks)
 
 ## Module boundaries (code-derived: package enumeration)
 - edu.cmu.pl2.* — tutor/advisor interface (primary application)
 - edu.cmu.pl2.student.* — student portal; separate servlet hierarchy, separate session
 - No shared DTOs between the two interfaces
 
-## Servlet hierarchy (code-derived: grep-confirmed)
-- 10 servlets extend AbstractServlet (session-user helper); 27 extend HttpServlet directly
-- AbstractServlet subclasses: MonthlyReportServlet, TutorReviewServlet, ResearchDashboardServlet, StudentsServlet, auth servlets (Login/Logout/DemoLogin + student Login/Logout), AuthServlet
-- Most tutor-side servlets (TrendsServlet, LessonServlet, AdminServlet, TutorScheduleServlet, etc.) extend HttpServlet directly and implement their own session checks
-- FINDING-1 (code-derived): The prior spine's claim "all protected endpoints extend AbstractServlet" is not the actual pattern. The AbstractServlet count is now 10 (was 9). New advisor-side servlets (like MonthlyReportServlet) do extend AbstractServlet — this is the correct pattern for new advisor-side work. Verify base class before adding a new servlet.
+## Servlet hierarchy (code-derived: grep-confirmed at 29d41e50)
+- 9 servlets extend AbstractServlet (session-user helper); the rest extend HttpServlet directly and implement their own session checks
+- FINDING-1 (code-derived): AbstractServlet is not a hard boundary rule. `ReflectionServlet` — the native reflection-form servlet, and the one most relevant to the upcoming port — extends `HttpServlet` directly (`public class ReflectionServlet extends HttpServlet`), not AbstractServlet. Do not assume a new reflection-adjacent servlet must extend AbstractServlet; follow ReflectionServlet's own base class if extending that subsystem.
 
-## Servlet URL inventory (code-derived: web.xml)
-Two URL patterns map to a single MonthlyReportServlet instance:
-- `/PLUS/MonthlyReports` — list view (historical reports)
-- `/PLUS/MonthlyReport`  — detail view (single month report)
-Both patterns registered in web.xml alongside TutorReview, auth servlets, etc.
+## Servlet URL inventory — reflection subsystem (code-derived: web.xml)
+- `/PLUS/Reflection` → `ReflectionServlet` — single URL pattern, action-dispatched internally (not split into separate list/detail servlets)
 
 ## Dominant patterns (code-derived: grep-confirmed)
-- ServiceFactory used 117+ times across source layer; zero @Autowired/@Inject at call sites (code-derived)
-- AJAX response: success = raw JSONObject/JSONArray via `ServletHelper.writeJSON(resp, json)`; error = `{"status":"error","message":"..."}` — no consistent success wrapper envelope
-  - Exception: `submitInsightFeedback` returns `{"status":"ok","rating":"...","insightId":...,"statusChanged":...}` — success with an explicit `status` field. This is a per-method choice, not a new global pattern.
-- JSP fragments (.jspf): pl2_head.jspf, topbar.jspf, pl2_content_start/end.jspf for shared layout
-- ES modules: feature-level JS loaded as `type="module"` scripts; plus_components/ provides shared exports; schedule/ subdirectory uses export functions
+- ServiceFactory used pervasively across the source layer; zero @Autowired/@Inject at call sites
+- AJAX response: success = raw JSONObject/JSONArray via `ServletHelper.writeJSON(resp, json)`; error = `{"status":"error","message":"..."}`. ReflectionServlet follows this exactly — multiple call sites build `AbstractServlet.json("status", "error", "message", ...)` and pass to `ServletHelper.writeJSON`.
+- JSP fragments (.jspf): pl2_head.jspf, topbar.jspf, pl2_content_start/end.jspf for shared layout; reflection subsystem contributes its own fragments: `post/mentor_reflection_post.jspf` (activity-feed card) and `student_dashboard/weekly_reflections.jspf` (student-dashboard summary of a mentor's weekly reflections)
+- ES modules: feature-level JS loaded as `type="module"` scripts; `reflection.js` is a plain (non-module) script served alongside `reflection.jsp` — confirm module vs global-scope status before treating it as a template for new JS
 
-## Shape of a typical feature change (code-derived: TutorReviewServlet traced)
-Servlet receives POST → ServiceFactory.get*Service() → Service.get*() → DAO → Hibernate →
-DtoHelper assembles DTO → servlet serializes to JSON → `ServletHelper.writeJSON()` → JS render fn updates DOM
+## Shape of a typical feature change (code-derived: ReflectionServlet traced)
+Servlet action param dispatches to a private method (e.g. `saveOrUpdateReflection`) → ServiceFactory.get*Service() → Service → DAO → Hibernate →
+entity persisted/read → DtoHelper (where used) assembles DTO → servlet serializes to JSON via `ServletHelper.writeJSON()` → `reflection.js` updates DOM
 
 ## Seam protocols (code-derived)
-- Servlet→JS: `application/json` content-type; success response = unwrapped DTO fields; error response = `{"status":"error","message":"<string>"}`. JS checks for `response.status === "error"` on AJAX callbacks.
-- JSP→browser: static assets served via `/v/<staticVersion>/javascript/pl2/...` path (version-busting); type="module" scripts are async
+- Servlet→JS: `application/json` content-type; success response = unwrapped DTO/JSON fields; error response = `{"status":"error","message":"<string>"}`. JS checks `response.status === "error"` on AJAX callbacks.
+- JSP→browser: static assets served via `/v/<staticVersion>/javascript/pl2/...` path (version-busting)
 - Servlet→JSP: attributes set via `req.setAttribute()` before `req.getRequestDispatcher().forward()`; JSP reads via `${requestScope.*}` or `<c:out>`
-- Monthly-report JS routing: single `monthly_report.js` module serves both list and detail pages; branches on `window.location.pathname.includes("MonthlyReports")` in an IIFE at module load time
+- ReflectionServlet handles file uploads via `jakarta.servlet.http.Part` (multipart), including zip-file extraction (`extractZipFile`) — a seam not present in most other servlets; relevant if the ported feature includes attachments
 
 ## Named findings
-- FINDING-1 (code-derived): The AbstractServlet subclass count increased from 9 to 10 with the addition of MonthlyReportServlet. MonthlyReportServlet follows the correct pattern for new advisor-side servlets — extend AbstractServlet, use `ServletHelper.getAuthenticatedUser()` for auth, forward to JSP on page load and dispatch to private methods on AJAX calls.
-- FINDING-2 (code-derived): DtoHelper.java (~132KB) and AdminDtoHelper.java (~59KB) are monolithic — business logic migrated into helper classes. New features should match the *DtoHelper pattern despite violating strict layering.
+- FINDING-1 (code-derived): see Servlet hierarchy above — ReflectionServlet extends HttpServlet, not AbstractServlet; the "advisor-side servlets extend AbstractServlet" convention from the prior spine does not hold for the reflection subsystem.
+- FINDING-2 (code-derived): DtoHelper.java and AdminDtoHelper.java are monolithic — business logic migrated into helper classes. New features should match the *DtoHelper pattern despite violating strict layering.
 - FINDING-3 (code-derived): No automated compile/deploy CI — only schema validation on PR. All functional verification is manual (ant deploy + browser).
-- FINDING-4 (code-derived): ES modules are the dominant pattern for feature-level JS (students.js, strategy.js, schedule/, tutor_review/, plus_components/, monthly_report.js all use import/export). Global jQuery scope remains only in legacy shared utilities (pl2Banners.js, pl2EffortGraph.js, pl2Feed.js). New feature JS should use ES module format.
-- FINDING-5 (code-derived): Bootstrap 4.1.3 collapse requires `data-toggle`/`data-target`. Confirmed in bootstrap.js header. Do not use `data-bs-*` — Bootstrap 5 syntax.
-- FINDING-6 (code-derived): MonthlyReportServlet handles two URL patterns in one class, branching on `req.getRequestURI().contains("MonthlyReports")`. This is a new pattern in the servlet layer — prior servlets are 1:1 URL-to-class. Acceptable for tightly coupled list/detail views; document if reused.
+- FINDING-4 (code-derived): ES modules are the dominant pattern for feature-level JS in most newer features, but `reflection.js` itself does not use `type="module"` — an inconsistency between the stated dominant pattern and the actual reflection subsystem. Verify module-vs-global scope per file before assuming the ES-module convention applies inside the reflection feature.
+- FINDING-5 (code-derived): Bootstrap 4.1.3 collapse requires `data-toggle`/`data-target`. Do not use `data-bs-*` — Bootstrap 5 syntax.
+- FINDING-6 (code-derived): The reflection subsystem carries two parallel-but-distinct data models — `ReflectionItem` (older, feed/dashboard-facing) and `SessionReflectionItem`/`StudentReflectionItem` (current, written by ReflectionServlet's save path, actively developed through 2026). A port touching "reflections" must confirm which model it targets; they are not interchangeable and are not kept in sync automatically.
 
 ## Concrete example: new entity wiring (TutorAiInsightItem traced)
 1. `item/TutorAiInsightItem.java` — entity POJO
-2. `item/TutorAiInsightItem.hbm.xml` — Hibernate mapping
-3. `applicationContext.xml` — bean registration
+2. `item/TutorAiInsight.hbm.xml` — Hibernate mapping
+3. `applicationContext.xml` — bean registration (dao + service beans + hbm mapping list)
 4. `dao/TutorAiInsightDao.java` + `dao/hibernate/TutorAiInsightDaoHibernate.java` — DAO pair
 5. `service/TutorAiInsightService.java` + `service/impl/TutorAiInsightServiceImpl.java` — service pair
-6. `helper/DtoHelper.java` — assembles into DTO fields used by servlets
+6. `helper/DtoHelper.java` — assembles into DTO fields used by servlets (here, `TutorReviewServlet`)
