@@ -462,8 +462,8 @@ Shaping fields.
 
 ### PIN-33 — the resolution: one-sentence sovereign description above the telos doc
 captured: 2026-07-07
-stub: 0
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once a resolution artifact exists with a defined home, a divergence-check mechanism (drift-vs-growth adjudication), and anima-lite's own resolution ratified — or if the concept is folded into an existing artifact (telos.md) instead
 relates-to: .anima-lite/reorient/identity.md, .anima-lite/reorient/four-causes.md, spine-anima-lite/telos.md, PIN-26 (ripple — resolution as apex candidate), PIN-25 (reorient parent)
@@ -473,10 +473,10 @@ Will's proposal (2026-07-07): every software repo should carry a **resolution** 
 ---
 Shaping fields — `not traced` until stub advances past 0.
 
-**Scope:** not traced
+**Scope:** in: RESOLUTION.md at repo root (sentence + ratification line), GATE-TELOS apex layer in ari-intake (+ argue backstop extension), constitutional drift-vs-growth adjudication, design record, PHILOSOPHY capture of the generalization claim. out: target repos getting their own RESOLUTION.md (ari-map emission — future work), any generalization machinery (capture-only), ripple-apex wiring (PIN-26's job).
 **Batch:** unbatched
-**Contract:** not traced
-**Resolution:**
+**Contract:** claim-shaped — the harness now promises a sovereign authority layer above telos.md: every intake checks the change against the resolution sentence (GATE-TELOS apex layer), and the sentence itself may only change by constitutional growth (own workstream, separate commit, operator ratification on the record — never bundled with the provoking change, never silently edited to match drifted code). Ratified in the 2026-07-07 design round (home/text/mechanism/adjudication, all four operator-confirmed).
+**Resolution:** done 2026-07-07. All four ratified decisions built and dogfooded through own pipeline (`work/resolution/intent.md`, first intake with the apex-layer wrinkle recorded). RESOLUTION.md ratified: "agentic harness using aristotelean decomposition to build software that admits change only as argument." Apex layer live in ari-intake GATE-TELOS + argue backstop; HARNESS §1/§2/§4 rows updated; design record `.anima-lite/reorient/resolution.md`; PHILOSOPHY.md carries authority inversion + capture-only generalization claim. goes-stale condition satisfied in full. Work-type enum gap hit again (2nd instance) — PIN-32 tracks; PIN-34 (ground-control mode) names resolution-divergence adjudication as its natural first consumer.
 
 ---
 

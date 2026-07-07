@@ -19,6 +19,8 @@ Facts about this toolkit each live in exactly one place. If you're looking for:
 
 This README carries the workflow narrative and diagram below; it doesn't restate facts that live in those files.
 
+anima-lite also carries its own `RESOLUTION.md` at repo root — a one-sentence sovereign description of the repo, above `telos.md` in authority. It's checked at every intake as GATE-TELOS's apex layer (see `.claude/skills/ari-intake/SKILL.md`); this README cites the file rather than restating the sentence.
+
 ---
 
 ## The key distinction
@@ -70,7 +72,7 @@ flowchart TD
         AI1 --> AI2 --> AI3 --> AI4
     end
 
-    ITELOS{{"⛔ GATE-TELOS (intake)"}}
+    ITELOS{{"⛔ GATE-TELOS (intake)\n(resolution + telos)"}}
     AI2 --> ITELOS
     ITELOS -- none --> AI3
     ITELOS -- conflict --> USER

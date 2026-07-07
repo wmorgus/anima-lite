@@ -46,6 +46,10 @@ The same lens applies one level up: the skill pipeline is the four-cause decompo
 
 ---
 
+**The resolution — one sentence, sovereign.** Above the telos doc in authority sits `RESOLUTION.md`: a one-sentence sovereign description of the repo, ratified by the operator (PIN-33). The authority runs in one direction only — the sentence is ground truth, the code is fallible embodiment, `telos.md` is fallible commentary. "Live" here means continuously-checked accuracy, not frequent edits: the resolution is maximally ember, changing only by constitutional growth, and its accuracy is re-verified at every intake rather than assumed. A divergence at this layer is adjudicated, never smoothed over: **drift** names the work item or code as wrong (fix it, ordinary custodial work); **growth** names the sentence itself as needing to change, and growth is never bundled with the change that provoked it — a resolution edit is its own workstream, separate intake, separate commit, explicit operator ratification recorded in `RESOLUTION.md`'s own ratification line, with the provoking change blocked until the question resolves. The guard this exists to hold: never quietly edit the resolution to match code that drifted — that would launder drift as growth. Mechanically this lives as GATE-TELOS's apex layer (`.claude/skills/ari-intake/SKILL.md`), checked before the telos layer, one gate, two authority levels. anima-lite is the only repo with a `RESOLUTION.md` today; target repos getting their own is ratified direction, not yet built. The concept also generalizes beyond this repo — every repo could carry a one-sentence sovereign description above its own telos doc, a teleological-software claim in its own right — captured here as a paper-shaped direction, not built.
+
+---
+
 **The operator role: the claim court.** The engineer is the claim court — yes, no, here's why. The agent does everything that isn't judgment.
 
 ---

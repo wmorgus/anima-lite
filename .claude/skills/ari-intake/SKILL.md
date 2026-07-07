@@ -14,6 +14,7 @@ Intake is the final-cause skill: it establishes what the work item is *for*, bef
 ## Inputs
 
 - The raw intent source(s) for this work item — proto feature source (port), meeting notes/tickets/specs/an operator's own translation of a runaround email (ripple), or a diagnosed divergence (debt-work — see posture note below).
+- The target repo's `RESOLUTION.md` (the one-sentence sovereign description) — for self-changes to anima-lite, that's this repo's own `RESOLUTION.md` at repo root. Read this before the spine's `telos.md`; it is GATE-TELOS's apex layer. If the target repo has none, note it absent — do not fabricate one.
 - The target spine(s), especially `telos.md` — `.anima-lite/spine-<label>/telos.md` for whichever repo(s) this work item touches. Read before sharpening the change's own telos; GATE-TELOS checks the two against each other.
 - `.anima-lite/backlog.md`, if this work item originates from a pin — read the pin's body and Contract field (if shaped past stub:0) as a candidate source, not as a substitute for gathering the actual sources it points to.
 
@@ -44,13 +45,19 @@ Intake is upstream of argue for every work-type, but the amount of work intake d
 
 **2. Gather sources.** Collect every source this work item draws on: proto feature source files (port), tickets/meeting notes/specs/the operator's own translation (ripple), or the diagnosed divergence record (debt-work, once built). Read them fully before sharpening telos — a telos sharpened against a partial read is a telos sharpened against a partial understanding of what's being asked for.
 
-**3. Sharpen the telos.** State what this work item is *for* — its change-telos — in one or two sentences, the same register as a spine's `telos.md` §1 Purpose: a decision constraint, not a mission statement. Read the target spine's `telos.md` §1 and §2 (Purpose, Don't contradict) and check the change-telos against it.
+**3. Sharpen the telos.** State what this work item is *for* — its change-telos — in one or two sentences, the same register as a spine's `telos.md` §1 Purpose: a decision constraint, not a mission statement. First check it against the target repo's `RESOLUTION.md`, if one exists — does the repo this change produces still answer to the resolution? Then read the target spine's `telos.md` §1 and §2 (Purpose, Don't contradict) and check the change-telos against that.
 
-**4. Run GATE-TELOS.**
+**4. Run GATE-TELOS.** One gate, two authority layers, checked in order:
 
 > **⛔ REQUIRED GATE — GATE-TELOS (telos conflict)**
-> If the work item's change-telos conflicts with the target repo's telos or don't-contradict rules, present the conflict explicitly and name whether it reads as telos error (the spine's purpose is wrong) or scope creep (the work item is beyond what this repo is for). Do not write `intent.md` until the user resolves it.
-> The pipeline halts here. Do not proceed until explicitly cleared.
+> **Apex layer — RESOLUTION.md.** Does the repo this change produces still answer to the target repo's resolution sentence? If the target repo has no `RESOLUTION.md`, record the apex layer as *absent* in `intent.md`'s telos statement — do not fabricate one, and this absence does not block the gate. If a `RESOLUTION.md` exists and the change conflicts with it, the conflict is named constitutionally, not as telos-error/scope-creep:
+> - **drift** — the work item or the target code is wrong relative to the resolution. Fix it; this is the custodian's normal work, and the pipeline may proceed once fixed.
+> - **growth** — the resolution sentence itself must change. This is never bundled: halt, and the resolution edit becomes its own workstream (separate intake, separate commit, explicit operator ratification recorded in `RESOLUTION.md`'s ratification line). This work item stays **blocked** until that workstream resolves — do not write `intent.md` for the original item in the meantime.
+> Asymmetry: `telos.md` is fallible commentary (staleness is a known, hash-tracked state); `RESOLUTION.md` is sovereign and presumed correct. A mismatch against it indicts the change, never the sentence — quietly editing the resolution to match drifted code is exactly the failure this layer guards against.
+>
+> **Telos layer — spine `telos.md`.** If the work item's change-telos conflicts with the target repo's telos or don't-contradict rules (§1/§2), present the conflict explicitly and name whether it reads as telos error (the spine's purpose is wrong) or scope creep (the work item is beyond what this repo is for). Do not write `intent.md` until the user resolves it.
+>
+> The pipeline halts here on either layer. Do not proceed until explicitly cleared.
 
 **5. Enumerate claims, each with provenance.** List every distinct thing this work item is asking for. For each, write an `argued-by:` line:
 - `argued-by: prototype <path>` — the claim is read directly off working prototype code at that path.
@@ -77,7 +84,9 @@ Target telos commit: <the Commit: hash from the target spine's telos.md at time 
 ## Telos statement
 <1-2 sentences: what this work item is for, checked against the target spine's §1 Purpose
 and §2 Don't-contradict rules. State the check's outcome — clean, or GATE-TELOS resolution
-summary if a conflict was raised and cleared.>
+summary if a conflict was raised and cleared. Also state the apex layer's outcome — clean,
+conflict-resolved (drift fixed or growth workstream ratified), or absent (target repo has
+no RESOLUTION.md).>
 
 ## Sources
 - <source 1 — proto path, ticket ID, meeting date + attendees, spec section, or named operator translation>

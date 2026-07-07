@@ -12,7 +12,7 @@ Every required and optional gate currently defined across the five skill files, 
 
 | ID | Name | Required/Optional | Owning skill | Trigger | Cleared by |
 |---|---|---|---|---|---|
-| GATE-TELOS | Telos conflict | Required | ari-intake (primary fire), ari-argue (conditional backstop) | Fires in ari-intake when the work item's change-telos conflicts with the target repo's telos or don't-contradict rules, before any contracting (intake step 4). Re-fires in ari-argue ONLY if contracting surfaces a claim contradicting the intent artifact's recorded telos (step 1) — not unconditionally | User acknowledges the conflict, names it telos-error or scope-creep, and explicitly authorizes continuing |
+| GATE-TELOS | Telos conflict | Required | ari-intake (primary fire), ari-argue (conditional backstop) | Two authority layers, checked in order in ari-intake step 4, before any contracting: **apex** — does the change still answer to the target repo's `RESOLUTION.md`? (absent-if-none, never fabricated); **telos** — does the change-telos conflict with the target repo's spine `telos.md` §1/§2? Re-fires in ari-argue ONLY if contracting surfaces a claim contradicting the intent artifact's recorded telos or the resolution — not unconditionally | Telos layer: user acknowledges the conflict, names it telos-error or scope-creep, and explicitly authorizes continuing. Apex layer: user names the conflict drift (fix the work item, proceed) or growth (halt — resolution edit becomes its own workstream: separate intake, separate commit, operator ratification recorded in `RESOLUTION.md`; this work item stays blocked until that resolves) |
 | GATE-SCHEMA | Schema dependency | Required | ari-argue | A claim's declared `Schema deps:` resolves to zero prod classes/fields, checked before the contract is frozen (step 4c) | User resolves — drops the claim, amends it, or confirms the field exists under another name |
 | GATE-HASH | Spine-hash mismatch | Required (inline precondition, no callout box) | ari-port | The contract's `Spine commit:` hash doesn't match the current `Commit:` of the spine(s) relevant to this work item's comparison — two for a port (`spine-proto/telos.md`), one for single-repo debt work (the repo's own spine), zero additional for a pure world-drift check (precondition 3) | User confirms the contract still holds, or a quick re-pass through ari-argue is run |
 | GATE-BLOCKERS | Plan blockers | Required | ari-port | Execution plan's `## Blockers` section is non-empty (Step 1) | Every listed blocker is explicitly cleared with the user before the execution subagent is spawned |
@@ -41,6 +41,7 @@ Every required and optional gate currently defined across the five skill files, 
 | Gate registry | `HARNESS.md` (this file, Section 1) | HARNESS.md | ari-intake, ari-map, ari-argue, ari-port, ari-backlog (all cite gate IDs inline) |
 | Spine file formats | `.claude/skills/ari-map/SKILL.md` (Output section) | ari-map | ari-argue (Inputs), ari-port (Inputs) |
 | Metrics artifact spec (run row, backlog-health row, session-cost row, summary.md) | `.claude/skills/ari-port/metrics-spec.md` | ari-port | ari-backlog (backlog-health row), SessionEnd hook (session-cost row), calibration diffs |
+| Resolution artifact (`RESOLUTION.md` format + adjudication procedure) | `RESOLUTION.md` (the sentence + ratification line); operative adjudication procedure in `.claude/skills/ari-intake/SKILL.md` (GATE-TELOS apex layer) | ari-intake | ari-argue (conditional backstop), every doc that cites the sentence |
 
 ---
 
@@ -78,3 +79,4 @@ Metadata only, same discipline as Sections 1–3: each fact below has exactly on
 | Target-repo paths | CLAUDE.md | Nothing else states paths |
 | Run procedure/workflow narrative | README.md (prose + mermaid) | CLAUDE.md keeps a condensed command subset only |
 | Four-causes lens | PHILOSOPHY.md (canonical narrative) | README.md and any deployment-config docs point to PHILOSOPHY.md rather than carrying independent condensed copies. Exception: ari-map/SKILL.md's copy is operative (it fires there) and is exempt from this rule. |
+| The resolution sentence | `RESOLUTION.md` | Everyone else cites the file, never restates the sentence |
