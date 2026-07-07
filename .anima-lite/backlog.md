@@ -477,3 +477,23 @@ Shaping fields — `not traced` until stub advances past 0.
 **Batch:** unbatched
 **Contract:** not traced
 **Resolution:**
+
+---
+
+### PIN-34 — ari-intake only exists in vibe-engineer mode; needs ground-control mode too
+captured: 2026-07-07
+stub: 0
+status: open
+home: anima-lite
+goes-stale: superseded once intake (or a sibling doorway) defines a reading-register entry — a work-type or mode whose output is validation/drift-finding rather than a change contract
+relates-to: PIN-27 (intake build), PIN-32 (work-type enum gap — adjacent), PIN-33 (resolution divergence adjudication — natural first consumer), .claude/skills/ari-intake/SKILL.md, anima-corps corpora/anima/logic.md §11.6–11.7 (vibe engineering / ground control registers)
+
+Will's observation (2026-07-07): ari-intake — the new major upstream, everything enters through it — only exists in vibe-engineer mode (anima vocab, logic.md §11.6: the acting/writing register). All three work-types (port, ripple, debt-work) are intents to *change* a repo; the pipeline's only output shape is a contract that leads to code. There is no ground-control mode (§11.7: the reading/validating register — watching at the scale of the whole, validating that actions are going somewhere, distinguishing structural compliance from substantive ratification, noticing drift). Work items like "check whether prod still honors what run4 ported," "adjudicate resolution divergence — drift or growth?" (PIN-33), or "audit spine currency against reality" have no doorway: they'd either be forced into a change-shaped intent.md or bounce. For a custodian of promise/artifact alignment this is half an identity — the reading half is the custody; the writing half is its consequence. Shape question deferred to slow lane: a fourth work-type inside ari-intake vs. a distinct entry skill; and what the reading register's terminal artifact is (a finding/verdict, not a contract).
+
+---
+Shaping fields — `not traced` until stub advances past 0.
+
+**Scope:** not traced
+**Batch:** unbatched
+**Contract:** not traced
+**Resolution:**
