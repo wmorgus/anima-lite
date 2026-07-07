@@ -335,7 +335,7 @@ Shaping fields.
 **Scope:** In — (a) vocab review per the table in reorient/identity.md (substrate collision, port/proto/prod generalization, new-terms canonization); (b) propagation of the settled vocabulary + identity into README/PHILOSOPHY/CLAUDE/HARNESS and skill files; (c) incremental spine-maintenance design (ari-map gains update-on-change). Out — run5 (proceeds under current identity); any import of corpus agent-role routing; building the diagnosis layer itself (separate contract once vocab lands).
 **Batch:** reorient
 **Contract:** claim-shaped — the harness's promise to its operator widens from "ports preserve the argument" to "all divergence between promise and artifact is detected, decomposed, and ratified before any fix lands." Vocabulary ratified 2026-07-07 (vocab.md decisions 1a/2b/3b/4b/5a): substrate/claim kept + world-drift imported; `ports/`→`work/` directory rename (skill name stays); preconditions generalize to comparison-count per work-type; spine promoted precondition→product in docs; "divergence" canonized. Item (a) DONE; remaining scope = (b) propagation (sequence the git mv after run5 state resolves) + (c) incremental spine-maintenance design.
-**Resolution:** item (b) doc propagation landed 2026-07-07 — PHILOSOPHY.md (identity, divergence, diagnosis-layer-as-ratified-direction, claim-court operator role, substrate/world-drift disambiguation), README.md (custodian opening + port-as-first-work-type, spine-as-product note), CLAUDE.md (one-line identity + spine-product note), HARNESS.md (bidirectional-audit intro promoted to spine-custody framing, GATE-HASH row generalized to comparison-count per work-type, §4 doc-ownership map carries the single ratified-pending-run5 note for the `ports/`→`work/` rename), `.claude/skills/ari-argue/SKILL.md` (precondition generalized to comparison-count per work-type + contract template "feature"→"work item"), `.claude/skills/ari-port/SKILL.md` (precondition 1 generalized to comparison-count per work-type). `git mv` of `ports/`→`work/` NOT executed — still pending run5's staged git state resolving, per decision 2b's sequencing. Item (c) incremental spine-maintenance design remains open — no machinery built, only flagged as ratified direction in the docs above. Pin stays open.
+**Resolution:** item (b) doc propagation landed 2026-07-07 — PHILOSOPHY.md (identity, divergence, diagnosis-layer-as-ratified-direction, claim-court operator role, substrate/world-drift disambiguation), README.md (custodian opening + port-as-first-work-type, spine-as-product note), CLAUDE.md (one-line identity + spine-product note), HARNESS.md (bidirectional-audit intro promoted to spine-custody framing, GATE-HASH row generalized to comparison-count per work-type, §4 doc-ownership map carries the single ratified-pending-run5 note for the `ports/`→`work/` rename), `.claude/skills/ari-argue/SKILL.md` (precondition generalized to comparison-count per work-type + contract template "feature"→"work item"), `.claude/skills/ari-port/SKILL.md` (precondition 1 generalized to comparison-count per work-type). `git mv` of `ports/`→`work/` NOT executed — still pending run5's staged git state resolving, per decision 2b's sequencing. Item (c) incremental spine-maintenance design remains open — no machinery built, only flagged as ratified direction in the docs above. Pin stays open. `ports/`→`work/` git mv executed 2026-07-07; remaining open scope: item (c) incremental spine-maintenance design.
 
 ### PIN-26 — ripple: first-class multi-leg work-type (institute one promise in N repos)
 captured: 2026-07-07
@@ -376,17 +376,19 @@ Shaping fields.
 ### PIN-28 — pipeline = four-cause decomposition of "make a software change"; propagate to PHILOSOPHY.md
 captured: 2026-07-07
 stub: 0
-status: open
+status: done
 home: anima-lite
 goes-stale: superseded once PHILOSOPHY.md carries the pipeline-level four-cause table (intake/final, map/material, argue/formal, port/efficient)
 relates-to: .anima-lite/reorient/four-causes.md (the observation, ratified), PIN-27 (intake — the predicted missing final cause), PIN-26 (ripple — what exposed the seam), PIN-25 (reorient parent), PHILOSOPHY.md "four causes are not decoration"
 
 Ratified 2026-07-07 (Will): the skill decomposition is the four-cause description of "make a software change" where software is an argument — intake/telos, map/material, argue/formal, port/efficient. Load-bearing, not decoration: it predicted intake (pipeline ran 4 runs with final cause implicit, borrowed from proto code; ripple removed the proto and the seam appeared); makes pipeline completeness arguable (fifth skill must name a fifth cause or decompose); levels nest (spine is four-cause about the repo, pipeline is four-cause about the change); GATE-TELOS = where repo-telos and change-telos meet, structurally placing it in intake. Full statement: reorient/four-causes.md. Propagation: PHILOSOPHY.md gains the pipeline-level table next batch.
 
+**Resolution:** PHILOSOPHY.md carries the pipeline-level four-cause claim (2026-07-07); repo-level list intact.
+
 ### PIN-29 — workstream vocabulary + suspension procedure (pause/resume as first-class)
 captured: 2026-07-07
 stub: 2
-status: in-progress
+status: done
 home: anima-lite
 goes-stale: superseded once ari-backlog/SKILL.md carries the workstream definition + suspension procedure AND run5 has been suspended through it (first dogfood)
 relates-to: .anima-lite/_run5_isolated/RESTORE.md (the ad-hoc precedent), PIN-25 (reorient parent), .claude/skills/ari-backlog/SKILL.md (pin format + lifecycle — owning spec), vocab.md (workstream joins the settled vocabulary)
@@ -399,7 +401,7 @@ Shaping fields.
 **Scope:** In — workstream definition + suspension/resume procedure in ari-backlog/SKILL.md (owning spec for pin lifecycle); `paused` added to pin status enum; suspend run5 through the new procedure (separate pin records the paused workstream itself). Out — automation/hooks for suspension checks; any generalization to multi-workstream scheduling.
 **Batch:** reorient
 **Contract:** claim-shaped — the harness newly promises its operator that pausing a workstream is durable and reversible: all live state committed at suspension (no dirty-tree pauses), a manifest names exactly what exists and how to resume, and the backlog carries the paused status visibly until resumed or superseded.
-**Resolution:**
+**Resolution:** procedure landed in ari-backlog/SKILL.md; run5 suspended through it as first dogfood (PIN-30, commits 7b19d56/9dc2e86); three dogfood findings recorded — (a) procedure ambiguous on concurrent-workstream dirt: "commit-everything" needs scoping to the suspended workstream's own files, (b) pin-of-record edits can collide file-locally with another in-flight pin's uncommitted edit in backlog.md (needed manual hunk split), (c) State: field format unspecified — first-instance convention is "manifest <path>; suspension commit <hash>".
 
 ### PIN-30 — run5 workstream paused (isolated monthly-report A/B comparison)
 captured: 2026-07-07
@@ -419,3 +421,13 @@ Shaping fields.
 **Contract:** n/a — mechanical, no argument to preserve
 **Resolution:**
 **State:** manifest `.anima-lite/_run5_isolated/RESTORE.md`; suspension commit `7b19d56`.
+
+### PIN-31 — ari-backlog suspension procedure hardening (three dogfood findings from PIN-29/PIN-30)
+captured: 2026-07-07
+stub: 0
+status: open
+home: anima-lite
+goes-stale: superseded once ari-backlog/SKILL.md disambiguates suspension-commit scope, addresses same-file pin collision, and specifies State: format
+relates-to: PIN-29, PIN-30, .claude/skills/ari-backlog/SKILL.md
+
+First dogfood of the workstream-suspension procedure (run5, PIN-29/PIN-30) surfaced three gaps: (a) procedure ambiguous on concurrent-workstream dirt — "commit-everything" needs scoping to the suspended workstream's own files, not the whole tree; (b) pin-of-record edits can collide file-locally with another in-flight pin's uncommitted edit in backlog.md, needing a manual hunk split; (c) the `State:` shaping field's format is unspecified — first-instance convention used was "manifest <path>; suspension commit <hash>," not yet codified.

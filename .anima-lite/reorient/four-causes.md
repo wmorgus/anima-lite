@@ -1,6 +1,6 @@
 # The pipeline is a four-cause decomposition of "make a software change"
 
-Captured: 2026-07-07 (Will). Status: **ratified observation — propagate to PHILOSOPHY.md with the reorient batch.**
+Captured: 2026-07-07 (Will). Status: **ratified observation — propagated to PHILOSOPHY.md 2026-07-07.**
 
 ---
 

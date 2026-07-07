@@ -42,6 +42,8 @@ This layer is direction the identity has ratified, not machinery the harness has
 - Efficient: what acts on it. Most often missing from docs; most likely to silently break a port.
 - Final: what it's for. Everything else is oriented by this. If you don't know the telos, you can't sort substrate from claim.
 
+The same lens applies one level up: the skill pipeline is the four-cause decomposition of "make a software change," where software is an argument. Intake supplies the final cause (what the change is for — named, not yet built). Map supplies the material cause (the mapped codebase as matter). Argue supplies the formal cause (the contract as the change's essence — which claims, what promise). Port supplies the efficient cause (execution from the contract). The two levels nest without conflict: the spine is the four causes of the repo; the pipeline is the four causes of the change.
+
 ---
 
 **The operator role: the claim court.** The engineer is the claim court — yes, no, here's why. The agent does everything that isn't judgment.
