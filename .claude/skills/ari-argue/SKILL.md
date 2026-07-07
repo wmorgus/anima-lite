@@ -1,19 +1,20 @@
 ---
 name: ari-argue
-description: Reads .anima-lite/spine.md and a target feature, classifies every implementation detail as a substrate change (medium, free to translate) or a claim change (argument-altering, requires confirmation), and writes a branch-scoped contract. Called by ari-lite after ari-map has produced a current spine and before ari-port touches any code. Never silently drops or alters what a feature argues for.
+description: Reads .anima-lite/work/<slug>/intent.md (from ari-intake), the spine.md, and a target feature, classifies every implementation detail as a substrate change (medium, free to translate) or a claim change (argument-altering, requires confirmation), and writes a branch-scoped contract. Called by ari-lite after ari-intake has produced an argued intent artifact and ari-map has produced a current spine, before ari-port touches any code. Never silently drops or alters what a feature argues for.
 ---
 
 # ari-argue
 
 **This skill runs as a subagent spawned by the main pipeline agent — not as the main agent itself.** By the time ari-argue runs, the main agent carries ari-map probe context (spine reasoning, cause analysis). The classification loop and user back-and-forth are isolated here so the main agent's context stays clean.
 
-The spawning agent passes to this subagent: both spine directories (`spine-proto/` and `spine-prod/`, full contents), the proto feature source files being ported, and the current git branch name. On completion, this subagent returns a handoff summary to the main agent: contract path written, number of claim changes confirmed, and whether a telos conflict was found and how it was resolved.
+The spawning agent passes to this subagent: `work/<slug>/intent.md` from ari-intake, both spine directories (`spine-proto/` and `spine-prod/`, full contents), the proto feature source files being ported, and the current git branch name. On completion, this subagent returns a handoff summary to the main agent: contract path written, number of claim changes confirmed, and whether a telos conflict was found and how it was resolved.
 
 Argumentation: determine what a feature is claiming to the user, separate from how it happens to be implemented, and get the human to confirm anything that would change if the claim itself moved.
 
 ## Inputs
 
-- `.anima-lite/spine-proto/telos.md` and `.anima-lite/spine-prod/telos.md` — read first; telos check happens here.
+- `.anima-lite/work/<slug>/intent.md` — the primary input, produced by `/ari-intake`. Carries the work item's telos statement, sources, and claims, each with an `argued-by:` provenance line.
+- `.anima-lite/spine-proto/telos.md` and `.anima-lite/spine-prod/telos.md` — read for the conditional telos backstop (see step 1) and for substrate/claim classification context.
 - `.anima-lite/spine-proto/formal.md` and `.anima-lite/spine-prod/formal.md` — read for substrate classification (what patterns the prod spine uses informs what's a free translation vs. a structural claim).
 - Pull `material.md` or `efficient.md` from either spine directory if a specific detail requires it.
 - The feature/diff/branch being ported.
@@ -21,12 +22,14 @@ Argumentation: determine what a feature is claiming to the user, separate from h
 
 ## Preconditions
 
+- `work/<slug>/intent.md` exists for this work item. If it does not, halt and request `/ari-intake` — argue does not construct an argued intent from scratch; it contracts from one.
+- Every claim this skill contracts on carries an `argued-by:` line in `intent.md`. A claim without one is refused: send it back to intake rather than classifying or contracting it here. This is not a formatting nitpick — an unsourced claim is exactly the "invented behavior" intake exists to keep out of the pipeline.
 - The spine(s) relevant to this work item's comparison exist and `telos.md` in each is current (Commit: hash matches HEAD) — two spines for a port, one for single-repo debt work (the repo's own spine), zero additional spines for a pure world-drift check (the comparison is against the world, not another spine). Port is the only work-type fully specified today: both `spine-proto/` and `spine-prod/` directories must exist. Single-repo debt work and pure world-drift checks are ratified direction, not yet built — this skill does not yet run them end to end. If a required spine is missing or stale, halt and request ari-map for the affected repo.
 - A specific feature/diff is identified to argue about. This skill operates on one feature per invocation.
 
 ## Active orientations
 
-**Ari face.** Telos authority is senior here. Check the feature's argument against the prod spine's final cause before classifying anything. A feature that contradicts the prod telos is a routing question — scope creep or telos error — not a classification question. Route it before proceeding to step 3.
+**Ari face.** Telos authority sits primarily upstream now, in `/ari-intake` — the feature's argument was already checked against the target telos before this skill ran. What's senior here is vigilance for contradiction surfacing mid-contract: if classification turns up a claim that doesn't square with `intent.md`'s telos statement, that's a routing question — scope creep or telos error — not a classification question. Route it via the conditional GATE-TELOS backstop before proceeding to step 3.
 
 **Builder face.** Classification is argument-work. The substrate vs. claim distinction is determined by whether the user's understanding of what the feature promises would change — not "does this look different" but "does this promise different."
 
@@ -34,11 +37,11 @@ Argumentation: determine what a feature is claiming to the user, separate from h
 
 ## Process
 
-**1. Read both telos files.** Check the feature's argument against both purposes and don't-contradict rules — what the proto telos says this feature is for, and whether the prod telos leaves room for it. If a telos conflict is detected: present the conflict to the user, name whether it reads as a telos error (the spine's purpose is wrong) or scope creep (the feature is beyond what this repo is for), and wait for explicit confirmation before continuing. Do not write the contract until the user has acknowledged the conflict. Neither outcome is a silent continue. Note the proto telos's `Commit:` hash; the contract will pin to it.
+**1. Read both telos files.** GATE-TELOS already fired once, in `/ari-intake`, against `intent.md`'s telos statement — that is the primary check, done before any contracting existed to protect. This step is a backstop, not a repeat of that work: read both telos files for classification context, and only re-raise the gate if contracting itself surfaces a claim that contradicts `intent.md`'s recorded telos statement (a claim the intake pass didn't anticipate, or one whose real shape only becomes clear once classification is underway). Do not re-run the full telos check unconditionally — that is exactly the gate-fatigue failure mode intake's early placement exists to avoid. Note the proto telos's `Commit:` hash; the contract will pin to it.
 
-> **⛔ REQUIRED GATE — GATE-TELOS (telos conflict)**
-> If the feature conflicts with the prod telos, present the conflict explicitly and name whether it reads as telos error or scope creep. Do not write the contract until the user resolves it.
-> The pipeline halts here. Do not proceed until explicitly cleared.
+> **⛔ REQUIRED GATE — GATE-TELOS (telos conflict, conditional backstop)**
+> Fires only if contracting surfaces a claim that contradicts the telos statement recorded in `work/<slug>/intent.md` — not unconditionally on every run. When it fires: present the conflict to the user, name whether it reads as a telos error (the spine's or intent's purpose is wrong) or scope creep (the claim is beyond what this repo is for), and wait for explicit confirmation before continuing. Do not write the contract until the user has acknowledged the conflict.
+> The pipeline halts here when triggered. Do not proceed until explicitly cleared.
 
 **1a. Source-of-truth check.** Before identifying the argument, check whether the proto feature has multiple candidate components, variants, or demo wrappers that could each be "the feature" (e.g. two components that both partially implement overlapping behavior, or a demo page wrapping a component that also exists standalone). If more than one candidate exists: identify them, determine which is canonical — most complete, most recently evolved, or referenced by the demo entry point — and confirm the choice with the user before classification begins. Do not classify against an arbitrarily-picked candidate; a contract built on the wrong one silently misrepresents the feature. If only one candidate exists, note "single source" and proceed.
 

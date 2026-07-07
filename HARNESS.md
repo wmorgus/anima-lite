@@ -8,11 +8,11 @@
 
 ## Section 1 — Gate registry
 
-Every required and optional gate currently defined across the four skill files, plus the one precondition that behaves as a gate without a callout box (GATE-HASH).
+Every required and optional gate currently defined across the five skill files, plus the one precondition that behaves as a gate without a callout box (GATE-HASH).
 
 | ID | Name | Required/Optional | Owning skill | Trigger | Cleared by |
 |---|---|---|---|---|---|
-| GATE-TELOS | Telos conflict | Required | ari-argue | Feature's argument conflicts with the prod telos or don't-contradict rules (step 1) | User acknowledges the conflict, names it telos-error or scope-creep, and explicitly authorizes continuing |
+| GATE-TELOS | Telos conflict | Required | ari-intake (primary fire), ari-argue (conditional backstop) | Fires in ari-intake when the work item's change-telos conflicts with the target repo's telos or don't-contradict rules, before any contracting (intake step 4). Re-fires in ari-argue ONLY if contracting surfaces a claim contradicting the intent artifact's recorded telos (step 1) — not unconditionally | User acknowledges the conflict, names it telos-error or scope-creep, and explicitly authorizes continuing |
 | GATE-SCHEMA | Schema dependency | Required | ari-argue | A claim's declared `Schema deps:` resolves to zero prod classes/fields, checked before the contract is frozen (step 4c) | User resolves — drops the claim, amends it, or confirms the field exists under another name |
 | GATE-HASH | Spine-hash mismatch | Required (inline precondition, no callout box) | ari-port | The contract's `Spine commit:` hash doesn't match the current `Commit:` of the spine(s) relevant to this work item's comparison — two for a port (`spine-proto/telos.md`), one for single-repo debt work (the repo's own spine), zero additional for a pure world-drift check (precondition 3) | User confirms the contract still holds, or a quick re-pass through ari-argue is run |
 | GATE-BLOCKERS | Plan blockers | Required | ari-port | Execution plan's `## Blockers` section is non-empty (Step 1) | Every listed blocker is explicitly cleared with the user before the execution subagent is spawned |
@@ -32,12 +32,13 @@ Every required and optional gate currently defined across the four skill files, 
 
 | Spec | Canonical location | Owner skill | Who else reads it |
 |---|---|---|---|
+| Argued-intent artifact format (`work/<slug>/intent.md`) | `.claude/skills/ari-intake/SKILL.md` (Output section) | ari-intake | ari-argue (Inputs, Preconditions — primary input; refuses claims without an `argued-by:` line) |
 | Feature-ledger spec | `.claude/skills/ari-map/ledger-spec.md` | ari-map | ari-port (Step 5, harvest) |
 | Playwright verification spec | `.claude/skills/ari-argue/playwright-spec.md` | ari-argue | ari-port (Step 3, validation D/E) |
 | Contract format | `.claude/skills/ari-argue/SKILL.md` (Output section) | ari-argue | ari-port (Inputs, all steps) |
 | Blip format | `.claude/skills/ari-port/SKILL.md` (Output section) | ari-port | ari-argue (none — blips are downstream of it), validation agent |
 | Pin format | `.claude/skills/ari-backlog/SKILL.md` (Pin format section) | ari-backlog | none — self-contained |
-| Gate registry | `HARNESS.md` (this file, Section 1) | HARNESS.md | ari-map, ari-argue, ari-port, ari-backlog (all cite gate IDs inline) |
+| Gate registry | `HARNESS.md` (this file, Section 1) | HARNESS.md | ari-intake, ari-map, ari-argue, ari-port, ari-backlog (all cite gate IDs inline) |
 | Spine file formats | `.claude/skills/ari-map/SKILL.md` (Output section) | ari-map | ari-argue (Inputs), ari-port (Inputs) |
 | Metrics artifact spec (run row, backlog-health row, session-cost row, summary.md) | `.claude/skills/ari-port/metrics-spec.md` | ari-port | ari-backlog (backlog-health row), SessionEnd hook (session-cost row), calibration diffs |
 
@@ -70,8 +71,8 @@ Metadata only, same discipline as Sections 1–3: each fact below has exactly on
 
 | Fact | Canonical home | What others do |
 |---|---|---|
-| Artifact layout `work/<slug>/{contract,blips,plan,catchup,pr}.md` | Skill files (spine/contract/blip formats), indexed by HARNESS.md §2 | README.md points to HARNESS.md §2 instead of drawing the tree. **Renamed 2026-07-07:** the directory noun `ports/<slug>/` became `work/<slug>/` (skill name `ari-port` stays as-is) per vocab decision 2b, once run5's staged git state resolved. |
-| Skill roster (4 skills) | README.md (narrative one-liners) + CLAUDE.md (command list) | Everyone else links to `.claude/skills/<name>/SKILL.md` rather than restating what a skill does |
+| Artifact layout `work/<slug>/{intent,contract,blips,plan,catchup,pr}.md` | Skill files (intent/spine/contract/blip formats), indexed by HARNESS.md §2 | README.md points to HARNESS.md §2 instead of drawing the tree. **Renamed 2026-07-07:** the directory noun `ports/<slug>/` became `work/<slug>/` (skill name `ari-port` stays as-is) per vocab decision 2b, once run5's staged git state resolved. `intent.md` (ari-intake) added 2026-07-07, PIN-27 — the workstream now starts at intake, not at contract. |
+| Skill roster (5 skills) | README.md (narrative one-liners) + CLAUDE.md (command list) | Everyone else links to `.claude/skills/<name>/SKILL.md` rather than restating what a skill does |
 | Gate registry (count + IDs) | HARNESS.md §1 | README.md states no count — points to "see HARNESS.md §1" |
 | Gitignore/commit policy | CLAUDE.md + `.gitignore` itself | Nothing else states this fact |
 | Target-repo paths | CLAUDE.md | Nothing else states paths |
