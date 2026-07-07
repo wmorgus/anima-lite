@@ -35,7 +35,7 @@ Invoke this skill when any of the following hold:
 ### PIN-<n> — <one-line title>
 captured: <date>
 stub: <0|1|2>        # 0 = raw capture, 1 = shaped (scope named), 2 = contracted (ready to schedule)
-status: <open|scheduled|in-progress|done|superseded|elsewhere>
+status: <open|scheduled|in-progress|paused|done|superseded|elsewhere>
 home: <anima-lite | anima-corps | ...>
 goes-stale: <one line — what would invalidate this pin>
 relates-to: <spine §, FINDING-n, epistle path, blip — or "none yet">
@@ -51,7 +51,7 @@ Shaping fields — `not traced` until stub advances past 0.
 **Resolution:** <filled only at done/superseded>
 ```
 
-**Lifecycle:** open → scheduled → in-progress → done. Side exits: superseded, elsewhere. There is no "cancelled" state — a pin that's no longer worth doing is superseded, with a Resolution line saying why. This keeps the record honest: nothing just vanishes.
+**Lifecycle:** open → scheduled → in-progress → done. Side exits: superseded, elsewhere. In-progress ⇄ paused (workstream suspension, below). There is no "cancelled" state — a pin that's no longer worth doing is superseded, with a Resolution line saying why. This keeps the record honest: nothing just vanishes.
 
 ## Fast lane (mid-session capture)
 
@@ -72,6 +72,20 @@ Run at every ari-backlog sweep invocation, in order:
 5. **Archive done pins.** Move the full block (decision record intact) to `.anima-lite/archive/backlog/done-<year>.md`. Replace it in `backlog.md` with a one-line pointer: `### PIN-n — <title> → done, archived: archive/backlog/done-<year>.md`.
 6. **Flag un-exported elsewhere pins.** Any pin with `status: elsewhere` and no export confirmation resurfaces every sweep — do not let it go quiet. It stops resurfacing only when either (a) exported: status becomes `superseded`, Resolution reads `exported to <path>`, or (b) re-dated with a new `captured:` line noting why it's still here.
 7. **Write the backlog-health row.** `.anima-lite/metrics/backlog-health-<date>.md`, per `.claude/skills/ari-port/metrics-spec.md` (canonical spec — this step points to it, not restated here). Fields: open pin count by stub level, count by status, age of oldest open pin, capture-to-done latency for pins closed since this sweep (from each closed pin's `captured:` line vs. the git commit date that added its `Resolution:` line), and the un-exported elsewhere count from step 6.
+
+## Workstream suspension
+
+**Workstream:** the live span of a work item from intake to harvest — a work item in flight, with state on disk (uncommitted or staged changes, partial artifacts, mid-lifecycle contracts). Pins capture future work; runs name attempts; the workstream is the thing that can be *paused*. A pin points at the suspension record; it doesn't contain it.
+
+**Suspend** (in-progress → paused), in order:
+
+1. **Write or refresh the state manifest** at the workstream's artifact home (e.g. `<workstream-dir>/RESTORE.md`). It inventories: every path the workstream owns (committed / staged / unstaged / untracked, stated explicitly), any external state (worktrees, running environments, remote branches), exact resume steps, and what must NOT be touched while paused. The manifest is written for a cold reader — resume may happen in a session with no memory of this one.
+2. **Commit all workstream state** in a dedicated suspension commit (`pause(<slug>): <one line>`). No dirty-tree pauses — an uncommitted pause is not durable, and other work landing in the same tree will tangle with it. Commit-everything policy applies with no exceptions here.
+3. **Set the pin** to `status: paused` and add a `State:` shaping field pointing at the manifest path + the suspension commit hash. If no pin exists for the workstream, write one (fast lane is fine).
+
+**Resume** (paused → in-progress): read the manifest first; check whether anything that landed during the pause touches the workstream's files (renames, spec changes, spine refreshes — the manifest's do-not-touch list is the checklist); update the manifest's resume notes if reality drifted; set `status: in-progress` with a dated note.
+
+**Sweep obligation:** every sweep re-checks paused pins the same way it checks `goes-stale` — a pause with a stale manifest is a silent lie about resumability. Flag it, refresh it, or supersede the workstream honestly.
 
 ## Cross-repo handling
 
