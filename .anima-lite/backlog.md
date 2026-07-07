@@ -382,3 +382,22 @@ goes-stale: superseded once PHILOSOPHY.md carries the pipeline-level four-cause 
 relates-to: .anima-lite/reorient/four-causes.md (the observation, ratified), PIN-27 (intake — the predicted missing final cause), PIN-26 (ripple — what exposed the seam), PIN-25 (reorient parent), PHILOSOPHY.md "four causes are not decoration"
 
 Ratified 2026-07-07 (Will): the skill decomposition is the four-cause description of "make a software change" where software is an argument — intake/telos, map/material, argue/formal, port/efficient. Load-bearing, not decoration: it predicted intake (pipeline ran 4 runs with final cause implicit, borrowed from proto code; ripple removed the proto and the seam appeared); makes pipeline completeness arguable (fifth skill must name a fifth cause or decompose); levels nest (spine is four-cause about the repo, pipeline is four-cause about the change); GATE-TELOS = where repo-telos and change-telos meet, structurally placing it in intake. Full statement: reorient/four-causes.md. Propagation: PHILOSOPHY.md gains the pipeline-level table next batch.
+
+### PIN-30 — run5 workstream paused (isolated monthly-report A/B comparison)
+captured: 2026-07-07
+stub: 1
+status: paused
+home: anima-lite
+goes-stale: resumed, or superseded if run5's isolated comparison design is abandoned
+relates-to: .anima-lite/_run5_isolated/RESTORE.md, .anima-lite/_run5_isolated/run5-plan.md, PIN-23, PIN-24
+
+run5 (isolated naive-vs-disciplined port comparison of `monthly-report`) paused 2026-07-07 to clear the tree for the reorient batch — the `ports/` → `work/` rename and the `ari-intake` skill build next. This is the first formal workstream suspension carried out through the new ari-backlog procedure (PIN-29).
+
+---
+Shaping fields.
+
+**Scope:** Resume run5 per manifest.
+**Batch:** run5
+**Contract:** n/a — mechanical, no argument to preserve
+**Resolution:**
+**State:** manifest `.anima-lite/_run5_isolated/RESTORE.md`; suspension commit `7b19d56`.
