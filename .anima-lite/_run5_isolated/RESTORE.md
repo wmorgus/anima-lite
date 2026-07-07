@@ -6,8 +6,10 @@ dogfood of that procedure. This file supersedes the ad-hoc isolation note
 that previously lived here (content preserved below, under "Original
 isolation record").
 
-Pin of record: **PIN-30** in `.anima-lite/backlog.md` (`status: paused`).
+Pin of record: **PIN-30** in `.anima-lite/pins/PIN-30.md` (`status: paused`).
 The suspension commit hash is recorded in that pin's `State:` field.
+(Drift note 2026-07-07: backlog sharded to index + per-pin files during the
+pause — PIN-35. The pin's content is unchanged; only its file moved.)
 
 ## Why suspended
 

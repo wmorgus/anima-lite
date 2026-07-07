@@ -43,7 +43,7 @@ When unsure: ask whether a user who understood the feature's promise would notic
 
 **`/ari-port`** — four steps: plan → execute → validate → reconcile (+ harvest). Translates substrate freely, implements confirmed claims exactly, logs everything else as a blip. Halts back to ari-argue if the contract is actively contradicted by the real code.
 
-**`/ari-backlog`** — capture and sweep `.anima-lite/backlog.md`, a two-speed pin system for captured-but-not-yet-scheduled work. Runs before every calibration run. This is orthogonal to the per-port flow below, not a step inside it — it doesn't sit between ari-map/ari-argue/ari-port, it brackets the whole pipeline.
+**`/ari-backlog`** — capture and sweep the backlog (`.anima-lite/backlog.md` index + one `.anima-lite/pins/PIN-<n>.md` file per pin), a two-speed pin system for captured-but-not-yet-scheduled work. Runs before every calibration run. This is orthogonal to the per-port flow below, not a step inside it — it doesn't sit between ari-map/ari-argue/ari-port, it brackets the whole pipeline.
 
 Full detail on each — inputs, preconditions, output format — lives in that skill's `SKILL.md`, not here.
 

@@ -16,7 +16,7 @@ Intake is the final-cause skill: it establishes what the work item is *for*, bef
 - The raw intent source(s) for this work item — proto feature source (port), meeting notes/tickets/specs/an operator's own translation of a runaround email (ripple), or a diagnosed divergence (debt-work — see posture note below).
 - The target repo's `RESOLUTION.md` (the one-sentence sovereign description) — for self-changes to anima-lite, that's this repo's own `RESOLUTION.md` at repo root. Read this before the spine's `telos.md`; it is GATE-TELOS's apex layer. If the target repo has none, note it absent — do not fabricate one.
 - The target spine(s), especially `telos.md` — `.anima-lite/spine-<label>/telos.md` for whichever repo(s) this work item touches. Read before sharpening the change's own telos; GATE-TELOS checks the two against each other.
-- `.anima-lite/backlog.md`, if this work item originates from a pin — read the pin's body and Contract field (if shaped past stub:0) as a candidate source, not as a substitute for gathering the actual sources it points to.
+- `.anima-lite/pins/PIN-<n>.md` (found via the `.anima-lite/backlog.md` index), if this work item originates from a pin — read the pin's body and Contract field (if shaped past stub:0) as a candidate source, not as a substitute for gathering the actual sources it points to.
 
 ## Preconditions
 

@@ -29,9 +29,9 @@ Artifacts land in `.anima-lite/` in this directory. Everything under `.anima-lit
 - `/ari-map` — probe a repo, write a four-cause spine (material/formal/efficient/final)
 - `/ari-argue` — classify feature details as substrate or claim, confirm claim changes one at a time
 - `/ari-port` — translate substrate freely, implement confirmed claims exactly, log blips
-- `/ari-backlog` — capture and sweep the backlog (`.anima-lite/backlog.md`); run before every calibration run
+- `/ari-backlog` — capture and sweep the backlog (`.anima-lite/backlog.md` index + `.anima-lite/pins/PIN-<n>.md` per-pin files); run before every calibration run
 
-`.anima-lite/backlog.md` is committed durable state, not a scratch file — see `.claude/skills/ari-backlog/SKILL.md` for the pin format and sweep process.
+The backlog is committed durable state, not scratch: `.anima-lite/backlog.md` is the searchable index (one line per pin), each pin's full block lives in `.anima-lite/pins/PIN-<n>.md` — see `.claude/skills/ari-backlog/SKILL.md` for the pin format, index-line format, and sweep process.
 
 Canonical specs aren't limited to the five `SKILL.md` files above — three support files are canonical specs in their own right: `.claude/skills/ari-map/ledger-spec.md` (feature-ledger format), `.claude/skills/ari-argue/playwright-spec.md` (Playwright verification), and `.claude/skills/ari-port/metrics-spec.md` (metrics artifact shapes). See `HARNESS.md` §2 for the full spec-ownership map.
 
