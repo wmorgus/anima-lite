@@ -457,3 +457,23 @@ Shaping fields.
 **Batch:** reorient
 **Contract:** claim-shaped — suspension-commit scope narrows from "commit everything, no exceptions" to "everything belonging to the suspended workstream; unrelated concurrent-workstream dirt excluded." Confirmed by operator 2026-07-07 (via ari-argue claim round). Findings (b)/(c) substrate.
 **Resolution:** done 2026-07-07 — first work item run end-to-end through `/ari-intake` (dogfood of PIN-27): intent artifact `work/suspension-hardening/intent.md`, three claims all `argued-by: language` (PIN-29 findings a/b/c), GATE-TELOS clean against self-spine. Claim 1 operator-confirmed; all three landed in ari-backlog/SKILL.md suspend steps 2–3 (scoped commit + hunk-split maneuver + State: format). Intake surfaced one new gap → PIN-32.
+
+---
+
+### PIN-33 — the resolution: one-sentence sovereign description above the telos doc
+captured: 2026-07-07
+stub: 0
+status: open
+home: anima-lite
+goes-stale: superseded once a resolution artifact exists with a defined home, a divergence-check mechanism (drift-vs-growth adjudication), and anima-lite's own resolution ratified — or if the concept is folded into an existing artifact (telos.md) instead
+relates-to: .anima-lite/reorient/identity.md, .anima-lite/reorient/four-causes.md, spine-anima-lite/telos.md, PIN-26 (ripple — resolution as apex candidate), PIN-25 (reorient parent)
+
+Will's proposal (2026-07-07): every software repo should carry a **resolution** — a single maximally-compressed, maximally-legible sentence stating what the repo is. anima-lite's draft: "agentic harness using aristotelean decomposition to treat software as argument" (closing clause unsettled — "manage its changes through language" flagged soft; candidate sharpening: "admits change only as argument"). Layer ABOVE the telos doc: the telos doc is fallible commentary in service of the resolution; the resolution is the frozen core incarnate in language — highest form of caveman prose as a skill. Authority direction inverts normal docs: the sentence is ground truth, the code is fallible embodiment. "Live" means continuously-checked accuracy, not frequent edits — the sentence itself is maximally ember. Divergence is a named event needing adjudication: code drifted (fix code — custodian's normal work) vs. intent grew (re-ratify resolution — deliberate, rare, constitutional). Guard: propagation must never quietly become "edit the resolution to match what the code became." Natural mechanism fit: resolution = topmost promise / ripple-graph apex; per-intake terminal check "does the repo this change produces still answer to the resolution?" Generalizes beyond anima-lite — paper-shaped claim for the teleological-software thesis.
+
+---
+Shaping fields — `not traced` until stub advances past 0.
+
+**Scope:** not traced
+**Batch:** unbatched
+**Contract:** not traced
+**Resolution:**
