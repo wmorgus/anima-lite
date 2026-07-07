@@ -28,6 +28,7 @@ One line per pin: `[PIN-n](pins/PIN-n.md) — status, stub, batch — semantic h
 - [PIN-33](pins/PIN-33.md) — done, stub:2, unbatched — RESOLUTION.md: one-sentence sovereign description above telos.md; GATE-TELOS apex layer; constitutional drift-vs-growth adjudication; ratified + built
 - [PIN-34](pins/PIN-34.md) — in-progress, stub:2, unbatched — /ari-read built: read-register doorway, reconstruction over 4 question-shapes, GATE-QUERY + GATE-MATCH, judgment.md artifact, five-field tiling canonical in PHILOSOPHY; dogfood pending (first operator question)
 - [PIN-35](pins/PIN-35.md) — done, stub:2, unbatched — backlog sharded: backlog.md → index, pins/PIN-n.md per pin; kills PIN-31(b) collision class for pin bodies
+- [PIN-36](pins/PIN-36.md) — open, stub:0, unbatched — harness self-changes skip contract machinery: intake runs but no argue/contract stage; pin Contract fields stand in; same underlying fact as PIN-32 enum gap
 
 ## Archived pins
 
