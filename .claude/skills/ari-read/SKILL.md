@@ -47,7 +47,9 @@ Read is the reconstruction skill: truth about the system is scattered — across
 **2. Run GATE-QUERY.**
 
 > **⛔ REQUIRED GATE — GATE-QUERY (question intent)**
-> The question is recorded verbatim above this gate, not after it. State back, in one or two sentences, what you understand the question to be asking — without reframing it into a different, better-posed question and without proposing what the answer will turn out to be. This is a restatement for confirmation, not a synthesis for approval. Halt here until the operator confirms the restatement matches what they meant, or corrects it. Confirming intent is not staking it: do not let the confirmed restatement smuggle in a frame the operator didn't supply.
+> The question is recorded verbatim above this gate, not after it. State back, in one or two sentences, what you understand the question to be asking — without reframing it into a different, better-posed question and without proposing what the answer will turn out to be. This is a restatement for confirmation, not a synthesis for approval.
+> Present the gate as a diff, not a bare yes/no: the verbatim question and the restatement shown together, side by side, with the delta named explicitly — every word the restatement adds, narrows, or interprets beyond the verbatim text. The operator confirms against the diff; asking "does this match?" without showing both texts is not a presentation.
+> Halt here until the operator confirms the restatement matches what they meant, or corrects it. Confirming intent is not staking it: do not let the confirmed restatement smuggle in a frame the operator didn't supply.
 > The pipeline does not proceed to reconstruction until intent is confirmed.
 
 **3. Build the question's ontology.** Once intent is confirmed, decide which elements from which of the five fields actually bear on answering it, and classify the question-shape:
@@ -70,6 +72,7 @@ Name the shape and the fields consulted explicitly before reconstructing — thi
 
 > **⛔ REQUIRED GATE — GATE-MATCH (telos match + operator reading)**
 > Before presenting: does the prepared judgment actually align with the confirmed intent from GATE-QUERY — "this is what it is, and here's why," matched to what was asked, not to a nearby question that was easier to answer? Do not present until this holds; if it doesn't, return to step 4.
+> Present the return the same way GATE-QUERY presents the door: the confirmed intent restated alongside the judgment's core finding, so the operator reads the match itself, not a claim that a match exists.
 > Once it holds, the judgment is presented for the operator's reading — not self-certified as final. The artifact is not terminal until the operator has read it and the Operator reading section is filled. The agent's job ends at presentation; the operator's reading is a separate, required step, not a formality assumed to happen.
 
 **7. Record the destination.** State plainly in the judgment's `Feeds:` field what this judgment feeds, per its question-shape: nothing, a pin/debt-work handoff, calibration, or a blocked gate. If it feeds the write register, fire the fast-lane pin per `/ari-backlog`, citing the judgment's path as what surfaced it.
