@@ -26,7 +26,7 @@ One line per pin: `[PIN-n](pins/PIN-n.md) — status, stub, batch — semantic h
 - [PIN-31](pins/PIN-31.md) — done, stub:2, reorient — suspension procedure hardening: scoped pause commit, hunk-split collision maneuver, State: format; first work item through ari-intake
 - [PIN-32](pins/PIN-32.md) — open, stub:0, unbatched — intent.md work-type enum (port|ripple|debt-work) has no value for harness self-changes; hit twice (PIN-31, PIN-33); add harness-change or open the enum
 - [PIN-33](pins/PIN-33.md) — done, stub:2, unbatched — RESOLUTION.md: one-sentence sovereign description above telos.md; GATE-TELOS apex layer; constitutional drift-vs-growth adjudication; ratified + built
-- [PIN-34](pins/PIN-34.md) — open, stub:1, unbatched — ground-control mode for intake: reconstruction as read-register work-type, telos-matching judgment artifact; decompose ground-control needs before choosing container
+- [PIN-34](pins/PIN-34.md) — open, stub:1, unbatched — read register: sibling entry skill (container decided), reconstruction work-type over 4 question-shapes, telos-matching judgment artifact, five-field tiling + mode honesty; ratification round pending
 - [PIN-35](pins/PIN-35.md) — done, stub:2, unbatched — backlog sharded: backlog.md → index, pins/PIN-n.md per pin; kills PIN-31(b) collision class for pin bodies
 
 ## Archived pins
