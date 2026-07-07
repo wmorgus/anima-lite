@@ -358,7 +358,7 @@ Shaping fields.
 ### PIN-27 — ari-intake: new upstream skill (telos-sharpening + everything-argued-for)
 captured: 2026-07-07
 stub: 2
-status: in-progress
+status: done
 home: anima-lite
 goes-stale: superseded once an intake skill (or explicitly-ratified argue-phase alternative) exists with a defined argued-intent-artifact format and at least one work-type running through it
 relates-to: .anima-lite/reorient/intake.md (spec stub), PIN-26 (ripple — first consumer), PIN-25 (reorient parent), GATE-TELOS (fires earlier under intake), .anima-lite/reorient/identity.md (diagnosis layer — candidate future home)
@@ -371,7 +371,7 @@ Shaping fields.
 **Scope:** In — settle the three open questions in intake.md (DONE 2026-07-07, Q1–3 round: separate skill; `work/<slug>/intent.md` w/ per-claim `argued-by:` provenance; GATE-TELOS owned by intake + cheap argue backstop — recorded in reorient/intake.md); write ari-intake/SKILL.md; rewire ari-argue inputs to consume the intent artifact; HARNESS updates (§1 GATE-TELOS ownership + backstop, §2 argued-intent format row, §4 roster 4→5); README/CLAUDE/PHILOSOPHY roster + flow updates. Out — the diagnosis layer build (separate; intake is only its candidate home); ripple execution machinery (PIN-26).
 **Batch:** reorient
 **Contract:** claim-shaped — the pipeline's entry promise changes: nothing enters the pipeline unargued. Every work item passes intake before contracting; intake mints the workstream slug and emits `work/<slug>/intent.md` where every claim carries an `argued-by: prototype <path>` or `argued-by: language <source>` provenance line; ari-argue contracts only from that artifact and refuses claims without provenance; GATE-TELOS fires at intake (repo-telos meets change-telos) with a conditional re-fire backstop in argue. Ratified 2026-07-07.
-**Resolution:** in-progress — skill built 2026-07-07 (sonnet subagent, driver-validated): new `.claude/skills/ari-intake/SKILL.md` (7-step process, GATE-TELOS primary fire, intent.md template, debt-work honesty-gated as "ratified direction, not yet built"); ari-argue rewired (intent.md primary input, argued-by refusal precondition, GATE-TELOS conditional backstop); HARNESS §1 gate row split intake/backstop, §2 intent-format row, §4 roster 4→5; README/CLAUDE/PHILOSOPHY roster + flow updated. Stays open pending first work item run through intake (dogfood: PIN-31 as first language-derived intake).
+**Resolution:** in-progress — skill built 2026-07-07 (sonnet subagent, driver-validated): new `.claude/skills/ari-intake/SKILL.md` (7-step process, GATE-TELOS primary fire, intent.md template, debt-work honesty-gated as "ratified direction, not yet built"); ari-argue rewired (intent.md primary input, argued-by refusal precondition, GATE-TELOS conditional backstop); HARNESS §1 gate row split intake/backstop, §2 intent-format row, §4 roster 4→5; README/CLAUDE/PHILOSOPHY roster + flow updated. DONE 2026-07-07: dogfood complete — PIN-31 ran end-to-end as first language-derived work item (`work/suspension-hardening/intent.md`, GATE-TELOS clean, claim confirmed via argue round, changes landed). goes-stale condition met (skill exists, format defined, one work-type through it). Dogfood yield: PIN-32 (work-type enum gap).
 
 ### PIN-28 — pipeline = four-cause decomposition of "make a software change"; propagate to PHILOSOPHY.md
 captured: 2026-07-07
@@ -424,10 +424,36 @@ Shaping fields.
 
 ### PIN-31 — ari-backlog suspension procedure hardening (three dogfood findings from PIN-29/PIN-30)
 captured: 2026-07-07
-stub: 0
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once ari-backlog/SKILL.md disambiguates suspension-commit scope, addresses same-file pin collision, and specifies State: format
 relates-to: PIN-29, PIN-30, .claude/skills/ari-backlog/SKILL.md
 
 First dogfood of the workstream-suspension procedure (run5, PIN-29/PIN-30) surfaced three gaps: (a) procedure ambiguous on concurrent-workstream dirt — "commit-everything" needs scoping to the suspended workstream's own files, not the whole tree; (b) pin-of-record edits can collide file-locally with another in-flight pin's uncommitted edit in backlog.md, needing a manual hunk split; (c) the `State:` shaping field's format is unspecified — first-instance convention used was "manifest <path>; suspension commit <hash>," not yet codified.
+
+### PIN-32 — intent.md work-type enum has no value for harness self-changes
+captured: 2026-07-07
+stub: 0
+status: open
+home: anima-lite
+goes-stale: superseded once ari-intake/SKILL.md's intent template carries a work-type value (or open-enum rule) covering harness self-changes
+relates-to: .claude/skills/ari-intake/SKILL.md (Output template), work/suspension-hardening/intent.md (first instance), PIN-27
+
+Surfaced by ari-intake's very first work item (PIN-31, a harness self-change): the intent template's work-type enum is `port | ripple | debt-work` — none fit. First instance recorded `harness-change` ad hoc rather than fabricating a fit. Decide: add `harness-change` to the enum, or make the enum open with the listed values as the specified work-types. Also worth noting at shaping: PIN-31 resembled debt-work but the diagnosis was already human-made — the honesty gate's boundary (refuse undiagnosed debt-work vs. accept human-diagnosed divergence with language provenance) could be stated explicitly.
+
+---
+Shaping fields — `not traced` until stub advances past 0.
+
+**Scope:** not traced
+**Batch:** unbatched
+**Contract:** not traced
+**Resolution:**
+
+---
+Shaping fields.
+
+**Scope:** In — the three SKILL.md fixes above. Out — multi-workstream scheduling; suspension automation.
+**Batch:** reorient
+**Contract:** claim-shaped — suspension-commit scope narrows from "commit everything, no exceptions" to "everything belonging to the suspended workstream; unrelated concurrent-workstream dirt excluded." Confirmed by operator 2026-07-07 (via ari-argue claim round). Findings (b)/(c) substrate.
+**Resolution:** done 2026-07-07 — first work item run end-to-end through `/ari-intake` (dogfood of PIN-27): intent artifact `work/suspension-hardening/intent.md`, three claims all `argued-by: language` (PIN-29 findings a/b/c), GATE-TELOS clean against self-spine. Claim 1 operator-confirmed; all three landed in ari-backlog/SKILL.md suspend steps 2–3 (scoped commit + hunk-split maneuver + State: format). Intake surfaced one new gap → PIN-32.

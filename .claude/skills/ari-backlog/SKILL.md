@@ -80,8 +80,10 @@ Run at every ari-backlog sweep invocation, in order:
 **Suspend** (in-progress → paused), in order:
 
 1. **Write or refresh the state manifest** at the workstream's artifact home (e.g. `<workstream-dir>/RESTORE.md`). It inventories: every path the workstream owns (committed / staged / unstaged / untracked, stated explicitly), any external state (worktrees, running environments, remote branches), exact resume steps, and what must NOT be touched while paused. The manifest is written for a cold reader — resume may happen in a session with no memory of this one.
-2. **Commit all workstream state** in a dedicated suspension commit (`pause(<slug>): <one line>`). No dirty-tree pauses — an uncommitted pause is not durable, and other work landing in the same tree will tangle with it. Commit-everything policy applies with no exceptions here.
-3. **Set the pin** to `status: paused` and add a `State:` shaping field pointing at the manifest path + the suspension commit hash. If no pin exists for the workstream, write one (fast lane is fine).
+2. **Commit the suspended workstream's state** in a dedicated suspension commit (`pause(<slug>): <one line>`). Scope: everything *belonging to the suspended workstream* — its artifact dir, its manifest, its pin edit — and nothing else. Unrelated concurrent-workstream dirt in the same tree is explicitly excluded; sweeping it into the pause commit tangles other in-flight work into the wrong history. No dirty-tree pauses for the workstream's own files — an uncommitted pause is not durable.
+
+   *Shared-file collision:* if the pin-of-record edit collides file-locally with another in-flight pin's uncommitted edit in `backlog.md`, split at hunk level — stage only the suspension pin's hunks (`git add -p` or equivalent) into the suspension commit; leave the other pin's edit in the tree.
+3. **Set the pin** to `status: paused` and add a `State:` shaping field, format: `**State:** manifest <path>; suspension commit <hash>`. If no pin exists for the workstream, write one (fast lane is fine).
 
 **Resume** (paused → in-progress): read the manifest first; check whether anything that landed during the pause touches the workstream's files (renames, spec changes, spine refreshes — the manifest's do-not-touch list is the checklist); update the manifest's resume notes if reality drifted; set `status: in-progress` with a dated note.
 
