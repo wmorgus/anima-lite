@@ -1,32 +1,23 @@
 # Telos: plus web-app (prod)
 Commit: 29d41e50
 Confidence: high
-Refresh trigger: servlet URL mappings added/removed, applicationContext.xml restructured, Ant build targets change, Bootstrap/jQuery version upgraded, or reflection subsystem (Reflection/SessionReflection/StudentReflection) schema/servlet changes
+Refresh trigger: a new persistent entity is added (re-verify the 8-part wiring checklist still holds), applicationContext.xml bean-wiring structure changes, Spring/Hibernate/Servlet-API major version bumps, the build's JDK floor changes, or dev's `plus.version` advances materially past v11.3.0.x.
 
-## Purpose
-PLUS is a server-side Java web application that delivers tutoring, student management, and AI-assisted coach review to educators and institutions. It exists to provide a structured, multi-tenant educational workflow — session tracking, lesson assignment, progress monitoring, and post-session mentor/tutor reflection capture — through a traditional request/response web architecture. New work either fits inside that layered, session-authenticated, server-rendered model or contradicts it.
+## §1 Purpose
+Production tutoring-operations system of record for CMU PL2. It exists to reliably track and coordinate human tutoring delivery at institutions: the institution → group → shift → session hierarchy, tutor staffing/signups, student enrollment, call-offs, and post-session reflections. Everything is server-rendered and DB-backed (Hibernate/MySQL); there is no SPA or client-side state layer. New work either serves this operational-tracking purpose server-side or contradicts it.
 
-## Don't contradict
-- UI is JSP + jQuery + Bootstrap 4.1.3, not React/Vue — do not introduce a frontend framework or client-side router
-- All business logic must go through the Service layer (via ServiceFactory); do not call DAOs directly from servlets or JSPs
-- New entities require: *Item.java, *.hbm.xml mapping, applicationContext.xml registration, *Dao interface + *DaoHibernate impl, *Service interface + *ServiceImpl, and a SQL alter script
-- Authentication is session-based; AbstractServlet is the base class for 10 confirmed servlets, but it is NOT a hard rule — most servlets, including the reflection subsystem's own ReflectionServlet, extend HttpServlet directly with their own session checks (see formal.md FINDING-1)
-- Build and deploy via Ant; do not add Maven, Gradle, or npm build steps to the main compile path
-- New feature JS uses ES module syntax (import/export) with type="module" script tags — do not write new global-scope jQuery scripts for feature-level code; legacy shared utilities (pl2Banners.js, pl2EffortGraph.js) remain global-scope but do not add to them
-- A native "Tutor Reflection Form" subsystem already exists (ReflectionServlet, SessionReflectionItem/StudentReflectionItem, reflection.jsp/js/scss) and has been actively developed since 2020 through at least April 2026 (commit 462dfa96, "Card2225: Tutor Reflection Form Editing") — any tutor-reflection-form work must be checked against this subsystem before assuming new code is needed
+## §2 Don't contradict
+- **New persistent entities require the full 8-part wiring** (formal.md concrete example): `Item.java` + `.hbm.xml` + `applicationContext.xml` (dao bean + `daoMap` entry + service bean) + `Dao` interface + `DaoHibernate` impl + `Service` interface + `ServiceImpl` + `ServiceFactory` getter + a versioned SQL alter under `java/sql/pl2/v11.x/alter/`. Skipping any part ships a half-wired entity.
+- **No annotation DI.** All dependency injection is Spring XML + setter injection, resolved at runtime via `ServiceFactory.DEFAULT` and `DaoFactory.getDao(XItem.class)`. Do not introduce `@Autowired` — it is used nowhere (0 hits repo-wide).
+- **Schema changes ship as versioned SQL alter scripts** under `java/sql/pl2/v11.x/alter/`, never as live DDL or Hibernate auto-DDL. CI gates only that these alters apply cleanly (efficient.md §3).
+- **Do not invent student-side data prod lacks.** No student-side session capacity, no `subject`/course taxonomy, and no out-of-band (email/SMS/push) student notification channel — students have no email field and only an in-app pull inbox. See material.md §8.
+- **Do not assume a uniform AJAX envelope or JSTL views.** JSON response shape is per-endpoint (only 1/17 servlets use `{status}`); views are raw JSP scriptlets, not JSTL. See formal.md §3.
 
-## Cause files (reference depth)
-- [material.md](material.md) — tech stack and load-bearing dependencies
-- [formal.md](formal.md) — architecture patterns; new code follows these conventions
-- [efficient.md](efficient.md) — build/CI/deploy; how to verify a change works
+## §3 Cause files (reference depth)
+- [material.md](material.md) — tech stack, entity/field inventory (§7), capabilities prod does NOT have (§8), domain vocabulary (§9)
+- [formal.md](formal.md) — layered servlet→service→dao→item architecture, per-stratum patterns + seams, 8-part wiring trace
+- [efficient.md](efficient.md) — Ant build, JDK-17 floor, SQL-only CI gate, dev branching, Docker/Tomcat deploy
 
-## Disclaimers
+## §4 Disclaimers
 Telos is inferred, not declared. Treat any claim here that materially affects
 a coding decision as worth a quick verification pass against the actual code.
-
-## Refresh diff (vs commit 90e0ff79, 2026-07-06)
-- **Monthly-report port artifacts are gone at 29d41e50, confirmed absent.** No `MonthlyReportServlet` (java or class), no `weekly_report` servlet mapping, and no `MonthlyReports`/`MonthlyReport` URL patterns anywhere in `web.xml` (grep across the whole tree, case-insensitive, returns nothing). These lived on a port branch layered onto 90e0ff79, not on `dev`. The prior spine's servlet-hierarchy claims ("10 extend AbstractServlet... MonthlyReportServlet"), the two-URL-pattern servlet finding (FINDING-6), and the monthly-report seam-protocol note are all dropped from this refresh.
-- **TutorAiInsightItem/Service/Dao are NOT part of the dropped port work — they are native to `dev`.** They are wired through `TutorReviewServlet` (`/PLUS/TutorReview`), registered in `applicationContext.xml`, and trace to commit `73c87e9b` ("Add Tutor AI Coach Review page (V1: Impact + Growth Insights)"). The old spine's material.md listed them as load-bearing entities without tying them to MonthlyReportServlet; that entry was correct and is retained here, just re-attributed to the Coach Review feature rather than monthly reporting.
-- **AbstractServlet count reverts to 9** (was reported as 10 in the stale spine, inflated by the now-absent MonthlyReportServlet). Re-confirmed by grep at HEAD 29d41e50.
-- **New finding, not present in old spine:** the native reflection subsystem (ReflectionServlet, SessionReflectionItem, StudentReflectionItem) is a long-lived, actively-committed feature (2020–2026) that is architecturally and nominally close to the incoming `tutor-reflection-form` port. It was out of scope for the prior spine's probe. It is the single most important new fact for the upcoming port and is detailed in material.md §5/§6 and formal.md §3/§5.
-- No other architectural drift detected: layering (servlet/service/dao/item/dto/helper), ServiceFactory usage, Ant build targets, and Bootstrap 4.1.3/jQuery 3.5.1 versions are unchanged from the prior spine.

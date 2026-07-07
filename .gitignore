@@ -1,1 +1,5 @@
-.DS_Store
+*.DS_Store
+
+# Validation screenshot review aids — regenerable binary; the prose manifest
+# (.anima-lite/ports/<slug>/screenshots.md) is the committed, diffable record. See PIN-24.
+.anima-lite/ports/*/screenshots/*.png

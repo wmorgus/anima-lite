@@ -1,42 +1,37 @@
 # Efficient: plus web-app (prod)
 (Reference depth — see telos.md for entry point and commit hash — HEAD: 29d41e50)
 
-## Build tooling (code-derived: build.xml + .github/workflows/)
-- Apache Ant (java/build.xml) — primary build system; no Maven, Gradle, or npm pipeline
-- External libs in java/extlib/ — checked in, no dependency resolution at build time
-- `npx sass` — Sass compile step (not a bundler)
+## §1 Build tooling
+- **Apache Ant** (`java/build.xml`, ~636 lines, `<project name="PLUS" default="runA">`). No Maven/Gradle/Ivy — every dependency is a vendored jar under `java/extlib/` (+ `hibernate/`, `spring/` subdirs) wired as literal `<pathelement>`s.
+- **JDK 17 is a hard floor** (confirmed by bytecode, not inference): `build.xml` sets no `javac source/target/release`, so javac uses the ambient JDK — but `spring-core-6.2.5.jar` and `hibernate/jakarta.persistence-api-3.2.0.jar` on the compile classpath are class-file **major 61 (Java 17)**. Javac cannot even read a classpath jar newer than its own JDK, so JDK 11 fails `ant compile` on class-file version. (This is exactly the run4 compile blocker.)
+- **SASS**: Dart Sass via `npx sass` (`compile-sass` target, build.xml:198) compiling `java/sass/*.scss` → `java/css-build`. NOTE: no `.scss` source is present at dev HEAD — the target exists, its source tree is effectively empty here (formal.md §3 Frontend).
+- Ant itself: 1.9.14 (local dev, Homebrew) / 1.9.16 (Docker); Node 17.9.1.
 
-## Key Ant targets (code-derived: build.xml target enumeration)
-- `ant compile` — compile Java sources only
-- `ant deploy` — compile + Sass + deploy to local Tomcat (main dev loop)
-- `ant deployAll` — deploy + configuration files (use after applicationContext.xml changes)
-- `ant compile-sass` — Sass only
-- `ant lint-js` — validates JavaScript with ESLint (present at 29d41e50; not previously recorded in the stale spine — confirm whether it runs in CI or is dev-invoked only)
-- `ant war.vm` — package production WAR
-- `ant release.plus` — WAR + SQL + lessons (full release artifact)
-- `ant clean.db.pl2` — drop and recreate database tables
+## §2 Key targets (from build.xml)
+- `compile` → `jar` (`plus.jar`) → `compile-sass` → `deploy` (jar+sass to local Tomcat)
+- `deployAll` — prepareVersionProperties + deploy + config filter + updateTomcat (the one-shot "build + push to local Tomcat"; what the Docker images invoke)
+- `war`/`war.vm` — build `ROOT.war` for release
+- `test-compile`/`test`/`test-unit`/`test-integration` — JUnit; **NOT a dependency of `deployAll`** (opt-in)
+- `lint-js` — ESLint via `npm run lint:quiet` (opt-in, not wired to CI)
 
-## Local dev prerequisites
-- `java/build.properties` (copy from build.properties.sample): local.tomcat, local.docroot, base.files.dir
-- `java/db.properties` (copy from db.properties.sample): MySQL credentials, pl2_db
-- Java 17 required for Tomcat 11 (Tomcat 11.0.23 requires JDK 17+)
-- Known blocker (still present at 29d41e50): `StudentsServlet.java` uses `case EdTechName.IXL:` syntax; verify Java 17 compatibility before relying on `ant deployAll` succeeding cleanly
+## §3 CI/CD — SQL-only gate
+Exactly two GitHub Actions workflows, and **neither compiles or tests Java**:
+- `check-tables-pl2.yml` — on PR into `dev` touching `java/sql/pl2**`: spins a MySQL 8.0.43 container and validates that `create_tables_pl2.sql` + the versioned alter scripts apply cleanly. **The only automated gate in the repo.**
+- `sql-notification.yml` — on merged PR touching `.sql`: posts a Slack notice. Not a gate.
+- **Gap**: no CI runs `ant compile`/`test`/`war`, ESLint, or SASS. Any Java compile break, test failure, or lint failure ships to `dev` undetected. → **Validation of a port here is necessarily static-review-only for compile correctness** unless a JDK-17 local build is run.
 
-## CI/CD (code-derived: .github/workflows/)
-- Integration branch: `dev` (PRs target dev, not main) — the prod repo probed here is checked out at `29d41e50` on `anima-lite-tutor-reflection-form`, which equals the current `dev` tip
-- GitHub Actions: `check-tables-pl2.yml` — triggers on PRs to `dev` that touch `java/sql/pl2**`
-  - Runs `create_tables_pl2.sql` + recent alter scripts in Docker; schema validation only
-  - Second workflow: `sql-notification.yml`
-- No compile/deploy CI — schema validation only; all functional verification is manual
-- `lint-js` Ant target exists but is not wired into either workflow file — ESLint is not currently CI-enforced
+## §4 Branching model
+Base/integration branch is **`dev`** — **there is no `main`** (`git branch -a` → local: dev + feature/port branches; `origin/HEAD → origin/dev`). Remote carries 600+ ticket-per-branch feature branches (`Card-###`, `c###-…`, agent `claude/…`/`codex/…`) feeding `dev` via PR. `dev` is periodically version-stamped for QA — `git log dev` shows `v11.3.0.4 for QA` atop merged PRs, preceded by `v11.3.0.3 / .2 for QA` — i.e. a version-bump-per-QA-cycle cadence. No `main`/`release` branch observed to confirm the next hop to production.
 
-## Schema management (code-derived: java/sql/pl2/)
-- Create: `java/sql/pl2/v9.x/create/create_tables_pl2.sql` (use latest v11.x for fresh installs)
-- Migrations: `java/sql/pl2/v9.x/alter/` — hand-written, version-specific scripts
-- Hibernate `hbm2ddl.auto=validate` — schema must match HBM mappings or startup fails
+## §5 Deploy path
+Docker image wrapping the Ant pipeline: `docker/{plus,plus-dev,release}.dockerfile` build the app and `RUN ant clean.all clean.tomcat deployAll`, then serve Tomcat on 8080. `docker/docker-compose.yml` composes `webapp` + a `db-updater` (runs `docker/update-db/` over `java/sql`) + `llm`/`email` sidecars + MySQL. Schema changes ship as versioned alter scripts under `java/sql/pl2/v11.x/alter/`; `docker/check-tables/` (CI, §3) validates they apply. No CD automation pushing the image was found — the pipeline stops at "buildable image + validated SQL"; final production rollout isn't evidenced in this repo (gap).
 
-## Verifying a change
-1. `ant deployAll` (for config changes) or `ant deploy` (Java + JS only)
-2. Browser test at `http://localhost:8080`
-3. Schema changes: run alter script manually before deploy
-4. No automated test suite for the reflection area beyond `StudentReflectionDaoIntegrationTest.java` (java/test/); no automated test suite generally — manual + CI schema check on PR
+## §5a Named findings / constraints
+- **Docker base images are stale-contradictory**: all three Dockerfiles install **JDK 7u80** on `tomcat:7-jre7`, which cannot build the Java-17-bytecode Spring/Hibernate jars now on the compile classpath (§1). A separate unmerged branch `origin/docker-update-jdk-mysql-tomcat` attempts a bump (to JDK 11 / Tomcat 8.5 — still short of 17) — migration is in-flight and unreconciled. Do NOT treat the committed Dockerfile's JDK version as ground truth.
+- `build.properties.nix` (local dev: Tomcat 11.0.8) is materially newer than what the committed Docker images build/run — reading it alone to answer "how does this deploy" misleads.
+- `deployAll` does not depend on `test*`/`lint-js` — "build passed" and "tests passed" are independent, non-enforced claims.
+
+## Verifying a change (practical)
+1. Compile requires JDK 17+ (§1). Env without it → static review only.
+2. No general automated test suite; CI checks only SQL alters. Browser test at `localhost:8080` after `ant deployAll` if a full JDK-17/Tomcat env is available.
+3. Schema changes: add a versioned alter under `java/sql/pl2/v11.x/alter/` — CI will gate it.
