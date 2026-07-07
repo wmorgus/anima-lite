@@ -108,6 +108,6 @@ Precondition, not a schedule: invoke before every calibration run, or on user re
 
 ## Escalation / Notes
 
-**No priority ranks.** Batches plus status are the only ordering the backlog itself asserts. Intra-batch order is decided by whoever picks up the batch in a working session — the backlog records what's queued and how it's grouped, not what order to do it in.
+**No priority ranks.** Batches plus status are the only ordering the backlog itself asserts. Intra-batch order is decided by whoever picks up the batch in a working session — the backlog records what's queued and how it's grouped, not what order to do it in. The working order itself lives in `.anima-lite/session-backlog.md` — operator-owned, a ladder of pointers to pins, re-cut freely with no shaping ceremony; pin files remain the source of truth for content, that file asserts order only.
 
 **Self-application (implemented).** Backlog health — capture-to-done latency, age distribution by stub level, how often elsewhere pins go un-exported — now feeds the metrics/ system via sweep step 7 above, per `.claude/skills/ari-port/metrics-spec.md`'s backlog-health row spec (PIN-2/3, sensors sprint).
