@@ -273,3 +273,112 @@ Out — the spine inventory itself (PIN-21); mechanizing this as a hook (it's gr
 **Batch:** spine-completeness
 **Contract:** n/a — harness/process change, no user-facing argument to preserve
 **Resolution:** in-progress — landed in ari-argue/SKILL.md on 2026-07-07 (sonnet subagent, driver-validated): per-claim `Schema deps:` field added to contract template; step 4c pre-freeze schema-dependency check (spine §7 inventory first, then grep prod `item/`/`dto/`/`enums/`); required GATE-SCHEMA callout mirroring GATE-TELOS. Driver wired the matching HARNESS.md §1 registry row, §3 enforcement row (hybrid mechanical/judgment), and metrics-spec.md gate-table row. Stub advanced 1→2: the contract-format change (explicit per-claim schema-dep declaration) was in scope and shipped, resolving the noun-extraction over-fire concern. Pin stays open pending run5 demonstrating GATE-SCHEMA halts on a real nonexistent-field dependency.
+
+---
+
+### PIN-23 — spine-anima-lite is stale + format-behind; needs full re-probe
+captured: 2026-07-07
+stub: 2
+status: open
+home: anima-lite
+goes-stale: superseded once spine-anima-lite is re-probed fresh at current HEAD in the new format; or if the self-spine is deliberately retired
+relates-to: spine-anima-lite/*, PIN-21 (completeness overhaul), PIN-6/PIN-7/PIN-8 (the FINDING-3/5/versioning items the stale spine still tracks by name), CLAUDE.md (artifact layout), HARNESS.md §1 (gate count)
+
+The self-spine (`spine-anima-lite/`) is BOTH content-stale and format-behind, found during the 2026-07-07 spine review. It pins to `Commit: 28d8464` while HEAD is `979a7bf` (GATE-HASH would fire), and its content describes a pre-ari-backlog era: material.md §4 claims artifacts are gitignored flat files (`contracts/<branch>.md`, `blips/<branch>.md`) — WRONG, current layout is per-slug `ports/<slug>/{contract,blips,plan,catchup,pr}.md` committed durable state (contradicts CLAUDE.md); formal.md §1 says "three sequential skills" (now four — ari-backlog exists); formal.md §3 says "6 required / 3 optional gates" (now 7 required incl. GATE-SCHEMA / 4 optional incl. GATE-PIN-CLAIM); formal.md §5 says "there is no .anima-lite/backlog.md" (it exists now). It also predates the completeness overhaul (no material §7/§8/§9, no per-stratum formal §3 + Seams). NOT on run5's critical path (run5 uses spine-proto + spine-prod), so deferred — but it is actively lying about its own artifact layout and is the cleanest dogfood that the completeness overhaul generalizes beyond a Java backend.
+
+---
+Shaping fields.
+
+**Scope:** In — a full ari-map re-probe of anima-lite at current HEAD, rewriting all four spine-anima-lite files in the new format, with the prod-shaped new sections ADAPTED to a markdown/skill repo: §7 entity/field inventory → artifact/spec inventory table (artifact type → owning spec → key fields → where consumed; HARNESS §2 is ~80% this already); §8 capabilities-NOT → "what the harness deliberately does not do" (no concurrent-same-branch locking, no mechanical enforcement of judgment gates, no mid-session change detection, no automated pass/fail); §9 → harness vocab glossary (substrate/claim, stub:0–3, gate types, the three faces, blip severities); per-stratum formal §3 → per-skill or per-artifact-lifecycle strata, each with a required Seams: line (FINDING-3 "lite face lost on direct invocation" is a seam). Fix the stale layout/skill-count/gate-count facts. Keep corrections OUT of the spine files (report drift in the probe's return, not baked into the artifact — per 2026-07-07 user direction).
+Out — anything on run5's critical path; retiring the self-spine (a separate decision).
+
+**Batch:** spine-completeness
+**Contract:** n/a — harness/process change, no user-facing argument to preserve
+**Resolution:**
+
+---
+
+### PIN-24 — validation agent captures Playwright screenshots for review
+captured: 2026-07-07
+stub: 2
+status: open
+home: anima-lite
+goes-stale: superseded once ari-port Step 3 + playwright-spec.md carry the reachability-gated screenshot-capture step AND a run with a reachable target actually produces review screenshots
+relates-to: .claude/skills/ari-argue/playwright-spec.md, .claude/skills/ari-port/SKILL.md (Step 3 validation D/E), .claude/skills/ari-argue/SKILL.md (proto-visual-reference pattern being mirrored), run4/run5 static-env constraint (JDK17/Tomcat/browser)
+
+Pre-run5 request (2026-07-07): the end-of-port validation agent (ari-port Step 3) should, during its Playwright pass, CAPTURE screenshots of the ported feature and save them so human review is visual, not just PASS/FAIL + blips. Design constraint: the prod target needs a JDK17+Tomcat+browser runtime that is frequently unavailable (validation has been static-review-only). So capture MUST be reachability-gated with graceful fallback — mirror ari-argue's `proto-server-not-reached` pattern: capture when the URL renders, note `target-not-reachable — static review only` and continue when it doesn't. Never a validation failure.
+
+---
+Shaping fields.
+
+**Scope:** In — (a) playwright-spec.md gains a screenshot-capture-for-review procedure: one shot per contract Playwright `check`/claim + each `## Proto visual reference` section, saved under `.anima-lite/ports/<slug>/screenshots/` with a naming convention + a prose markdown manifest (the diffable record; PNGs are the eyeball aid); (b) ari-port Step 3 instructs the validation agent to run it (referencing the spec), reachability-gated, and surface the screenshots path in the review path (validation/blips summary and/or pr.md). Likely a .gitignore follow-up (recommend gitignore the PNGs, commit the prose manifest) — driver-owned.
+Out — mechanizing; standing up a prod runtime (separate env concern — see note); HARNESS edits (driver).
+
+**Batch:** validation-review
+**Contract:** n/a — harness/process change, no user-facing argument to preserve
+**Env dependency:** DORMANT until a reachable target exists. In this env (JDK11, no Tomcat/browser) it degrades to the static-review fallback — so run5 produces screenshots ONLY if a prod runtime is stood up. Capability is added regardless; firing is gated on runtime.
+**Resolution:** in-progress — landed 2026-07-07 (sonnet subagent, driver-validated): playwright-spec.md gained a `## Screenshot capture for review` section (WHEN/WHAT/WHERE/manifest/gitignore-note/reachability-fallback); ari-port Step 3 instructs the validation agent to capture (referencing the spec), reachability-gated, surfacing screenshots in the catchup + end-of-session review path. Driver added `.anima-lite/ports/*/screenshots/*.png` to `.gitignore` (PNGs regenerable; `screenshots.md` prose manifest is the committed record). Open follow-up (minor): Step 4e catchup template + Output end-of-session checklist don't yet carry a literal screenshots line-item — currently relies on the Step 3 instruction; wire mechanically if a run shows it's missed. Stays open pending a run with a reachable target actually producing review screenshots (dormant in this env).
+
+### PIN-25 — identity reorientation: custodian of promise/artifact alignment (vocab review + propagation)
+captured: 2026-07-07
+stub: 2
+status: open
+home: anima-lite
+goes-stale: superseded once vocab review is settled AND canonical docs (README/PHILOSOPHY/CLAUDE/HARNESS + skill files) carry the expanded identity
+relates-to: .anima-lite/reorient/identity.md (single home of the reorientation), anima-corps logic.md §8.6/§8.11 (diagnostic taxonomy provenance), HARNESS.md bidirectional-audit rule (spine-custody seed), PIN-23 (self-spine re-probe — will need the new identity's vocabulary)
+
+Team feedback: translation alone isn't a compelling product; tech-debt solvency is. Identity expands from "argument-preserving port toolkit" to "custodian of the alignment between what a codebase promises and what it actually is" — slop and tech debt unified as the same object (unratified promise/artifact divergence, differing only in author: LLM vs. time). Spine promotes from precondition to product (incremental maintenance, update-on-change); port demotes to one work-type among several; new upstream diagnosis layer (four primitives: spec/epistemic/world-drift/craft — four-way in, binary substrate/claim out). Three rulings recorded in the doc: corpus-agnostic on agent structure, full vocab review before propagation, incremental spine custody confirmed. Full statement: .anima-lite/reorient/identity.md.
+
+---
+Shaping fields.
+
+**Scope:** In — (a) vocab review per the table in reorient/identity.md (substrate collision, port/proto/prod generalization, new-terms canonization); (b) propagation of the settled vocabulary + identity into README/PHILOSOPHY/CLAUDE/HARNESS and skill files; (c) incremental spine-maintenance design (ari-map gains update-on-change). Out — run5 (proceeds under current identity); any import of corpus agent-role routing; building the diagnosis layer itself (separate contract once vocab lands).
+**Batch:** reorient
+**Contract:** claim-shaped — the harness's promise to its operator widens from "ports preserve the argument" to "all divergence between promise and artifact is detected, decomposed, and ratified before any fix lands." Vocabulary ratified 2026-07-07 (vocab.md decisions 1a/2b/3b/4b/5a): substrate/claim kept + world-drift imported; `ports/`→`work/` directory rename (skill name stays); preconditions generalize to comparison-count per work-type; spine promoted precondition→product in docs; "divergence" canonized. Item (a) DONE; remaining scope = (b) propagation (sequence the git mv after run5 state resolves) + (c) incremental spine-maintenance design.
+**Resolution:** item (b) doc propagation landed 2026-07-07 — PHILOSOPHY.md (identity, divergence, diagnosis-layer-as-ratified-direction, claim-court operator role, substrate/world-drift disambiguation), README.md (custodian opening + port-as-first-work-type, spine-as-product note), CLAUDE.md (one-line identity + spine-product note), HARNESS.md (bidirectional-audit intro promoted to spine-custody framing, GATE-HASH row generalized to comparison-count per work-type, §4 doc-ownership map carries the single ratified-pending-run5 note for the `ports/`→`work/` rename), `.claude/skills/ari-argue/SKILL.md` (precondition generalized to comparison-count per work-type + contract template "feature"→"work item"), `.claude/skills/ari-port/SKILL.md` (precondition 1 generalized to comparison-count per work-type). `git mv` of `ports/`→`work/` NOT executed — still pending run5's staged git state resolving, per decision 2b's sequencing. Item (c) incremental spine-maintenance design remains open — no machinery built, only flagged as ratified direction in the docs above. Pin stays open.
+
+### PIN-26 — ripple: first-class multi-leg work-type (institute one promise in N repos)
+captured: 2026-07-07
+stub: 1
+status: open
+home: anima-lite
+goes-stale: superseded once ari-argue carries intent-artifact input mode + per-target contract sections AND ari-port carries per-leg execution + cross-leg coherence check, with one ripple run completed
+relates-to: .anima-lite/reorient/ripple.md (spec), .anima-lite/reorient/identity.md (work-type list), .anima-lite/reorient/intake.md / PIN-27 (upstream dependency), PIN-25 (reorient parent), vocab.md decision 3b (comparison-count preconditions)
+
+Ratified 2026-07-07: ripple is a first-class work-type, generalized to N execution legs — one new feature instituting the same promise in multiple repos (first instance: proto+prod) from a single ratified contract apex. NOT a greenfield+port composition (proto code would contaminate the prod contract). Named threat: sibling divergence — N repos making almost-the-same promise, already silently looming in current multi-repo setups; answered by a cross-leg coherence check in validation (integration-testing posture): substrate free per leg, claims identical across legs. Proposed-unratified: break-reopens-all-legs rule; sequential-proto-first default ordering. Full spec: reorient/ripple.md.
+
+---
+Shaping fields.
+
+**Scope:** In — (a) ari-argue: intent-artifact input mode, GATE-SCHEMA against every target, per-target substrate-mapping contract sections (claims section stays single); (b) ari-port: per-leg execution + blips, cross-leg coherence check in validation; (c) precondition text extension (N target spines under contract apex); (d) ledger shared-origin entry type; (e) ratify or drop the two proposed rules. Out — ari-intake itself (PIN-27); building the diagnosis layer.
+**Batch:** reorient
+**Contract:** not traced — claim-shaped (new promise class: cross-leg claim identity); write at stub:2
+**Resolution:**
+
+### PIN-27 — ari-intake: new upstream skill (telos-sharpening + everything-argued-for)
+captured: 2026-07-07
+stub: 1
+status: open
+home: anima-lite
+goes-stale: superseded once an intake skill (or explicitly-ratified argue-phase alternative) exists with a defined argued-intent-artifact format and at least one work-type running through it
+relates-to: .anima-lite/reorient/intake.md (spec stub), PIN-26 (ripple — first consumer), PIN-25 (reorient parent), GATE-TELOS (fires earlier under intake), .anima-lite/reorient/identity.md (diagnosis layer — candidate future home)
+
+Ratified 2026-07-07 (Will): intake is currently implicit pre-mapping inside ari-argue; ripple exposes the seam. New skill sharpens the work item's telos and ensures everything being added is argued for — by prototype or by language derived from context. Output: argued intent artifact that ari-argue contracts from. Cross-cutting: upstream of argue for all work-types (port's intake near-trivial; ripple's authored; debt-work's intake = the diagnosis layer itself — noted as diagnosis's natural home, not yet ratified). Open at shaping: skill-vs-phase boundary, artifact format (per-claim argued-by provenance), telos-sharpening gate semantics. Spec stub: reorient/intake.md.
+
+---
+Shaping fields.
+
+**Scope:** In — settle the three open questions in intake.md; define the argued-intent-artifact format; write the SKILL.md; rewire ari-argue inputs to consume it; HARNESS registry updates (new gate placement for early GATE-TELOS). Out — the diagnosis layer build (separate; intake is only its candidate home); ripple execution machinery (PIN-26).
+**Batch:** reorient
+**Contract:** not traced — claim-shaped (changes the pipeline's entry promise: nothing enters unargued); write at stub:2
+**Resolution:**
+
+### PIN-28 — pipeline = four-cause decomposition of "make a software change"; propagate to PHILOSOPHY.md
+captured: 2026-07-07
+stub: 0
+status: open
+home: anima-lite
+goes-stale: superseded once PHILOSOPHY.md carries the pipeline-level four-cause table (intake/final, map/material, argue/formal, port/efficient)
+relates-to: .anima-lite/reorient/four-causes.md (the observation, ratified), PIN-27 (intake — the predicted missing final cause), PIN-26 (ripple — what exposed the seam), PIN-25 (reorient parent), PHILOSOPHY.md "four causes are not decoration"
+
+Ratified 2026-07-07 (Will): the skill decomposition is the four-cause description of "make a software change" where software is an argument — intake/telos, map/material, argue/formal, port/efficient. Load-bearing, not decoration: it predicted intake (pipeline ran 4 runs with final cause implicit, borrowed from proto code; ripple removed the proto and the seam appeared); makes pipeline completeness arguable (fifth skill must name a fifth cause or decompose); levels nest (spine is four-cause about the repo, pipeline is four-cause about the change); GATE-TELOS = where repo-telos and change-telos meet, structurally placing it in intake. Full statement: reorient/four-causes.md. Propagation: PHILOSOPHY.md gains the pipeline-level table next batch.

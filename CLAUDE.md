@@ -1,6 +1,6 @@
 # anima-lite
 
-Argument-preserving port toolkit for porting features from plus-uno (prototype) to plus web-app (production).
+anima-lite is the custodian of the alignment between what a codebase promises and what it actually is. Porting features from plus-uno (prototype) to plus web-app (production) is the work-type currently built — see `PHILOSOPHY.md` for the full identity.
 
 Run Claude Code from this directory — the skills are in `.claude/skills/`.
 
@@ -20,7 +20,7 @@ Run Claude Code from this directory — the skills are in `.claude/skills/`.
 /ari-port
 ```
 
-Artifacts land in `.anima-lite/` in this directory. Everything under `.anima-lite/` is committed durable state — spines, and per-slug port artifacts (`ports/<slug>/{contract,blips,plan,catchup,pr}.md`). `archive/` is a calibration-snapshot channel only, not a backup channel — it holds point-in-time copies of runs, it does not substitute for committing the live artifacts.
+Artifacts land in `.anima-lite/` in this directory. Everything under `.anima-lite/` is committed durable state — spines, and per-slug port artifacts (`ports/<slug>/{contract,blips,plan,catchup,pr}.md`). Spines are the product of this custody, not just precondition input consumed once per port — see `PHILOSOPHY.md`; continuous, incremental spine maintenance is ratified direction, not yet built. `archive/` is a calibration-snapshot channel only, not a backup channel — it holds point-in-time copies of runs, it does not substitute for committing the live artifacts.
 
 ## Skills
 

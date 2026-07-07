@@ -1,10 +1,10 @@
 # anima-lite
 
-Argument-preserving feature port toolkit for Claude Code.
+anima-lite is the custodian of the alignment between what a codebase promises and what it actually is.
 
-Ports a feature from a prototype repo to a production repo while preserving what the feature *argues* — not just what it does. Code is a structure of promises to a user. Translation has to preserve the promises, not just the mechanics.
+Porting a feature from a prototype repo to a production repo — preserving what the feature *argues*, not just what it does — is the first work-type this custody takes, and currently the only one fully built. Code is a structure of promises to a user. Translation has to preserve the promises, not just the mechanics.
 
-See `PHILOSOPHY.md` for the core commitments.
+See `PHILOSOPHY.md` for the core commitments, including the diagnosis layer and the divergence framing that widen this identity beyond porting — both ratified direction, not yet built.
 
 ---
 
@@ -33,7 +33,7 @@ When unsure: ask whether a user who understood the feature's promise would notic
 
 ## Four skills
 
-**`/ari-map`** — probe a repo and write a four-cause spine (material, formal, efficient, final). Run once for each repo in the port pair. Must be current before anything else runs.
+**`/ari-map`** — probe a repo and write a four-cause spine (material, formal, efficient, final). Run once for each repo in the port pair. Must be current before anything else runs. The spine is itself the durable asset — docs provably current against code — not just fuel consumed by one port; continuous, incremental spine maintenance (update-on-change) is ratified direction, not yet built. Today the spine refreshes on demand, per ari-map's own preconditions.
 
 **`/ari-argue`** — read both spines plus the feature, identify what it's arguing, classify every implementation detail as substrate or claim, and confirm claim changes with the user one at a time. Produces a branch-scoped contract.
 
@@ -146,7 +146,7 @@ Full gate registry (IDs, owning skill, trigger, what clears it) and enforcement-
 
 ## Artifacts
 
-Per-slug port artifacts live at `.anima-lite/ports/<slug>/{contract,blips,plan,catchup,pr}.md`. Spine directories live at `.anima-lite/spine-<label>/{telos,material,formal,efficient}.md`. The exact file formats are owned by the skill that writes them (spine format: ari-map; contract format: ari-argue; blip format: ari-port) and indexed in `HARNESS.md` §2 — not restated here.
+Per-slug port artifacts live at `.anima-lite/ports/<slug>/{contract,blips,plan,catchup,pr}.md`. Spine directories live at `.anima-lite/spine-<label>/{telos,material,formal,efficient}.md`. The exact file formats are owned by the skill that writes them (spine format: ari-map; contract format: ari-argue; blip format: ari-port) and indexed in `HARNESS.md` §2 — not restated here. (Directory-noun rename status for `ports/<slug>/`: see `HARNESS.md` §4.)
 
 The metrics system under `.anima-lite/metrics/` (run rows, backlog-health rows, session-cost rows, `summary.md`) and the `SessionEnd` cost hook (`.claude/hooks/session-cost.py`) also exist — spec owned by `.claude/skills/ari-port/metrics-spec.md`.
 

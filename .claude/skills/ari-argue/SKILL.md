@@ -21,7 +21,7 @@ Argumentation: determine what a feature is claiming to the user, separate from h
 
 ## Preconditions
 
-- Both `spine-proto/` and `spine-prod/` directories exist and `telos.md` in each is current (Commit: hash matches HEAD). If either is missing or stale, halt and request ari-map for the affected repo.
+- The spine(s) relevant to this work item's comparison exist and `telos.md` in each is current (Commit: hash matches HEAD) — two spines for a port, one for single-repo debt work (the repo's own spine), zero additional spines for a pure world-drift check (the comparison is against the world, not another spine). Port is the only work-type fully specified today: both `spine-proto/` and `spine-prod/` directories must exist. Single-repo debt work and pure world-drift checks are ratified direction, not yet built — this skill does not yet run them end to end. If a required spine is missing or stale, halt and request ari-map for the affected repo.
 - A specific feature/diff is identified to argue about. This skill operates on one feature per invocation.
 
 ## Active orientations
@@ -118,7 +118,7 @@ Source of truth: <component/file confirmed canonical in step 1a — required whe
 Status: FROZEN FOR SESSION — do not modify without re-running ari-argue
 
 ## The argument
-<one or two sentences: what is this feature claiming to the user>
+<one or two sentences: what is this work item claiming to the user>
 
 ## Substrate changes (free to translate)
 - <detail> — <why this is medium, not claim>

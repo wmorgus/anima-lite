@@ -19,7 +19,7 @@ Four steps: plan → execute → validate → reconcile. The hard epistemic work
 
 ## Preconditions
 
-1. Both `spine-proto/` and `spine-prod/` exist and `telos.md` in each is current. If either is stale or missing: halt, request ari-map for the affected repo.
+1. The spine(s) relevant to this work item's comparison exist and `telos.md` in each is current — two spines for a port, one for single-repo debt work (the repo's own spine), zero additional spines for a pure world-drift check. Port is the only work-type fully specified today: both `spine-proto/` and `spine-prod/` must exist and be current. Single-repo debt work and pure world-drift checks are ratified direction, not yet built — this skill does not yet run them end to end. If a required spine is stale or missing: halt, request ari-map for the affected repo.
 2. `ports/<branch-slug>/contract.md` exists for the current branch and feature, status is not "DRAFT," and has no unconfirmed items in Open Questions. If any fail: halt, request ari-argue.
 3. The contract's `Spine commit:` hash matches `spine-proto/telos.md`'s current `Commit:`. If mismatched — another branch refreshed the spine since this contract was confirmed — don't auto-fail or proceed silently. Summarize what changed and ask the user whether the contract still holds or needs a quick re-pass through ari-argue.
 
@@ -193,6 +193,12 @@ If `playwright:` is present in the contract, the validation agent:
 5. Logs any failure as a `CONTRACT-BREAK` blip — a claim that passes static code review but fails live in the browser is a CONTRACT-BREAK
 
 The Playwright pass does not replace the static check — both must pass. If the dev server is not running, skip D and note it as an info blip: `Severity: info — Playwright pass skipped: dev server not reachable at <url>`.
+
+**Screenshot capture (rides the same D/E browser pass).** While the browser session from D/E is live and `feature_url` is reachable, the validation agent also captures screenshots for human review — one per Playwright `check` and one per `## Proto visual reference` section, saved under `.anima-lite/ports/<branch-slug>/screenshots/` with a prose manifest at `.anima-lite/ports/<branch-slug>/screenshots.md`. Full capture procedure, save path, naming convention, and manifest format: see `.claude/skills/ari-argue/playwright-spec.md` — canonical, referenced rather than restated here.
+
+This is reachability-gated with the same graceful fallback as D/E and the proto visual reference step: if `feature_url` is not reachable, do not attempt capture — write `screenshots: target-not-reachable — static review only` to `screenshots.md` and proceed. An unreachable target degrades validation to static review; it is never a validation FAIL, and it never blocks PASS or PASS (pending review).
+
+**Surface screenshots in the human-review path.** When screenshots were captured, the end-of-session summary and `catchup.md`'s "How to verify" section must point the reviewer at `.anima-lite/ports/<branch-slug>/screenshots/` and `screenshots.md` — so review has a visual, not just PASS/FAIL and prose blips. When capture was skipped (target unreachable), state that plainly in the same places ("screenshots: target-not-reachable — static review only") so the reviewer knows to expect a static-only review rather than assuming the step was forgotten.
 
 Contract `playwright:` block format and the worked example: see `.claude/skills/ari-argue/playwright-spec.md` — the canonical spec, referenced rather than restated here.
 

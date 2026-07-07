@@ -2,7 +2,7 @@
 
 **Governing rule: operative text lives in the skill files where it fires; HARNESS.md holds metadata — inventory, ownership, enforcement level. Never duplicate behavioral prose here.** If a gate's body text or a spec's shape needs to change, edit it at the skill file (or support file) that owns it, then update this index if the ID, owner, or trigger changed. This file never becomes the second place a reader has to check to know what a gate does. This applies to human-facing docs too, not just skill specs — README.md, CLAUDE.md, and PHILOSOPHY.md each own facts nobody else restates; see §4.
 
-**Bidirectional audit for docs.** Any skill or agent that reads README.md, CLAUDE.md, or HARNESS.md in the course of work and finds it disagrees with observed disk state fires a fast-lane backlog pin immediately — zero ceremony, per ari-backlog stub:0. Doc drift is a finding, not a distraction from the task at hand.
+**Bidirectional audit for docs — spine custody, not just hygiene.** Any skill or agent that reads README.md, CLAUDE.md, or HARNESS.md in the course of work and finds it disagrees with observed disk state fires a fast-lane backlog pin immediately — zero ceremony, per ari-backlog stub:0. This is not a cleanliness rule bolted onto the pipeline: every doc read is an audit *because* the spine — and these docs with it — is the product this harness custodians, not a disposable precondition consumed once per port (see `PHILOSOPHY.md`). Doc drift is a finding, not a distraction from the task at hand.
 
 ---
 
@@ -14,7 +14,7 @@ Every required and optional gate currently defined across the four skill files, 
 |---|---|---|---|---|---|
 | GATE-TELOS | Telos conflict | Required | ari-argue | Feature's argument conflicts with the prod telos or don't-contradict rules (step 1) | User acknowledges the conflict, names it telos-error or scope-creep, and explicitly authorizes continuing |
 | GATE-SCHEMA | Schema dependency | Required | ari-argue | A claim's declared `Schema deps:` resolves to zero prod classes/fields, checked before the contract is frozen (step 4c) | User resolves — drops the claim, amends it, or confirms the field exists under another name |
-| GATE-HASH | Spine-hash mismatch | Required (inline precondition, no callout box) | ari-port | Contract's `Spine commit:` hash doesn't match `spine-proto/telos.md`'s current `Commit:` (precondition 3) | User confirms the contract still holds, or a quick re-pass through ari-argue is run |
+| GATE-HASH | Spine-hash mismatch | Required (inline precondition, no callout box) | ari-port | The contract's `Spine commit:` hash doesn't match the current `Commit:` of the spine(s) relevant to this work item's comparison — two for a port (`spine-proto/telos.md`), one for single-repo debt work (the repo's own spine), zero additional for a pure world-drift check (precondition 3) | User confirms the contract still holds, or a quick re-pass through ari-argue is run |
 | GATE-BLOCKERS | Plan blockers | Required | ari-port | Execution plan's `## Blockers` section is non-empty (Step 1) | Every listed blocker is explicitly cleared with the user before the execution subagent is spawned |
 | GATE-BREAK | CONTRACT-BREAK | Required | ari-port | Execution subagent returns `contract_break: true` — contract actively contradicted by the real code (Step 2) | Ari-argue re-run completes and produces an amendment covering the uncovered case |
 | GATE-BLIPS | Review-suggested blips | Required | ari-port | Validation agent returns PASS (pending review) — one or more `review-suggested` blips outstanding (Step 3) | User acknowledges each review-suggested blip individually |
@@ -70,7 +70,7 @@ Metadata only, same discipline as Sections 1–3: each fact below has exactly on
 
 | Fact | Canonical home | What others do |
 |---|---|---|
-| Artifact layout `ports/<slug>/{contract,blips,plan,catchup,pr}.md` | Skill files (spine/contract/blip formats), indexed by HARNESS.md §2 | README.md points to HARNESS.md §2 instead of drawing the tree |
+| Artifact layout `ports/<slug>/{contract,blips,plan,catchup,pr}.md` | Skill files (spine/contract/blip formats), indexed by HARNESS.md §2 | README.md points to HARNESS.md §2 instead of drawing the tree. **Rename pending:** the directory noun `ports/<slug>/` is ratified to become `work/<slug>/` (skill name `ari-port` stays as-is) — sequenced after run5's staged git state resolves. Disk is `ports/<slug>/` today; every doc stays accurate to that until the `git mv` lands. |
 | Skill roster (4 skills) | README.md (narrative one-liners) + CLAUDE.md (command list) | Everyone else links to `.claude/skills/<name>/SKILL.md` rather than restating what a skill does |
 | Gate registry (count + IDs) | HARNESS.md §1 | README.md states no count — points to "see HARNESS.md §1" |
 | Gitignore/commit policy | CLAUDE.md + `.gitignore` itself | Nothing else states this fact |
