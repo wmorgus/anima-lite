@@ -8,7 +8,7 @@
 
 ## Section 1 — Gate registry
 
-Every required and optional gate currently defined across the five skill files, plus the one precondition that behaves as a gate without a callout box (GATE-HASH).
+Every required and optional gate currently defined across the six skill files, plus the one precondition that behaves as a gate without a callout box (GATE-HASH).
 
 | ID | Name | Required/Optional | Owning skill | Trigger | Cleared by |
 |---|---|---|---|---|---|
@@ -23,6 +23,8 @@ Every required and optional gate currently defined across the five skill files, 
 | GATE-PLAN-REVIEW | Plan review | Optional | ari-port | Execution plan blockers cleared (or none existed), before execution begins (Step 1) | User reviews or explicitly skips |
 | GATE-CATCHUP-REVIEW | Catch-up doc review | Optional | ari-port | Completeness-critic patches applied to the catch-up doc, before PR creation (Step 4e(ii)) | User reviews or explicitly skips |
 | GATE-PIN-CLAIM | Claim-shaped pin | Optional | ari-backlog | A pin's Contract is classified claim-shaped during the slow-lane sweep (step 4) | User reviews the contract paragraph or explicitly skips |
+| GATE-QUERY | Question intent | Required | ari-read | The question is recorded verbatim (step 1); its restated intent must be confirmed before reconstruction begins (step 2) | Operator confirms the restatement matches what they meant, or corrects it — confirming is not staking the question's frame |
+| GATE-MATCH | Telos match + operator reading | Required | ari-read | The prepared judgment is checked against the confirmed intent from GATE-QUERY before presentation (step 6) | Operator reads the presented judgment and fills its Operator reading section — the artifact is not terminal until this happens |
 
 **On GATE-HASH's inline form:** it is not written as a `> **⛔ REQUIRED GATE**` callout in ari-port's SKILL.md — it is stated as precondition 3's paragraph ("If mismatched... don't auto-fail or proceed silently... ask the user whether the contract still holds"). It is included here because it functions identically to a required gate: it halts the pipeline pending explicit user resolution. Skill authors should treat any precondition phrased this way as gate-registry material even without the callout formatting.
 
@@ -42,6 +44,7 @@ Every required and optional gate currently defined across the five skill files, 
 | Spine file formats | `.claude/skills/ari-map/SKILL.md` (Output section) | ari-map | ari-argue (Inputs), ari-port (Inputs) |
 | Metrics artifact spec (run row, backlog-health row, session-cost row, summary.md) | `.claude/skills/ari-port/metrics-spec.md` | ari-port | ari-backlog (backlog-health row), SessionEnd hook (session-cost row), calibration diffs |
 | Resolution artifact (`RESOLUTION.md` format + adjudication procedure) | `RESOLUTION.md` (the sentence + ratification line); operative adjudication procedure in `.claude/skills/ari-intake/SKILL.md` (GATE-TELOS apex layer) | ari-intake | ari-argue (conditional backstop), every doc that cites the sentence |
+| Judgment artifact format (`work/<slug>/judgment.md`) | `.claude/skills/ari-read/SKILL.md` (Output section) | ari-read | operator (GATE-MATCH reading), ari-backlog (when a judgment feeds a pin) |
 
 ---
 
@@ -73,7 +76,7 @@ Metadata only, same discipline as Sections 1–3: each fact below has exactly on
 | Fact | Canonical home | What others do |
 |---|---|---|
 | Artifact layout `work/<slug>/{intent,contract,blips,plan,catchup,pr}.md` | Skill files (intent/spine/contract/blip formats), indexed by HARNESS.md §2 | README.md points to HARNESS.md §2 instead of drawing the tree. **Renamed 2026-07-07:** the directory noun `ports/<slug>/` became `work/<slug>/` (skill name `ari-port` stays as-is) per vocab decision 2b, once run5's staged git state resolved. `intent.md` (ari-intake) added 2026-07-07, PIN-27 — the workstream now starts at intake, not at contract. |
-| Skill roster (5 skills) | README.md (narrative one-liners) + CLAUDE.md (command list) | Everyone else links to `.claude/skills/<name>/SKILL.md` rather than restating what a skill does |
+| Skill roster (6 skills) | README.md (narrative one-liners) + CLAUDE.md (command list) | Everyone else links to `.claude/skills/<name>/SKILL.md` rather than restating what a skill does |
 | Gate registry (count + IDs) | HARNESS.md §1 | README.md states no count — points to "see HARNESS.md §1" |
 | Gitignore/commit policy | CLAUDE.md + `.gitignore` itself | Nothing else states this fact |
 | Target-repo paths | CLAUDE.md | Nothing else states paths |

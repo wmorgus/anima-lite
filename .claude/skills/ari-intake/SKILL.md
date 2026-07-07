@@ -20,6 +20,7 @@ Intake is the final-cause skill: it establishes what the work item is *for*, bef
 
 ## Preconditions
 
+- The work item is an intent to *change* this or a target repo — not a question about one. If it's a question about the system rather than an intent to change it, this is not intake's work: halt and route to `/ari-read`. Mode honesty is explicit at both doorways — nothing enters unregistered.
 - A work item has been identified — a feature to port, a ripple to author, or a diagnosed divergence — but no slug exists for it yet. If a slug and `work/<slug>/intent.md` already exist and nothing about the intent has changed, do not re-run intake; proceed to `/ari-argue`.
 - At least one candidate spine is reachable for the telos check. If no spine exists yet for a repo this work item touches, halt and request `/ari-map` for that repo before continuing — GATE-TELOS cannot fire against a telos that hasn't been probed.
 

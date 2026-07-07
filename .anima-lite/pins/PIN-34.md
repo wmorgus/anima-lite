@@ -1,7 +1,7 @@
 ### PIN-34 — ari-intake only exists in vibe-engineer mode; needs ground-control mode too
 captured: 2026-07-07
-stub: 1
-status: open
+stub: 2
+status: in-progress
 home: anima-lite
 goes-stale: superseded once intake (or a sibling doorway) defines a reading-register entry — a work-type or mode whose output is validation/drift-finding rather than a change contract
 relates-to: PIN-27 (intake build), PIN-32 (work-type enum gap — adjacent), PIN-33 (resolution divergence adjudication — natural first consumer), .claude/skills/ari-intake/SKILL.md, anima-corps corpora/anima/logic.md §11.6–11.7 (vibe engineering / ground control registers)
@@ -42,5 +42,5 @@ Shaping fields — `not traced` until stub advances past 0.
 
 **Scope:** In — sibling entry skill for the read register (container decided 2026-07-07, above); reconstruction as the read-register work-type, one work-type covering all four question-shapes; telos-matching judgment artifact spec (verbatim question + believed/observed/belief-edge + cited-by provenance held, shown on demand); mode-honesty norm (forced register selection, no undeclared default); field tiling recorded (home TBD, ratification round); instrument-not-reader guard in spec text. Out — building retrieval/query machinery; anima-core semantic retrieval (separate track); resolving §15.14/§15.18 corpus-side; any self-certifying terminal state.
 **Batch:** unbatched
-**Contract:** not traced
+**Contract:** claim-shaped — the harness gains a second doorway and promises mode honesty: every work item enters through a declared register (/ari-intake for change, /ari-read for question — no undeclared default underneath). The read register promises: verbatim question recorded before any ontology-building and intent confirmed without being staked for the asker (GATE-QUERY); reconstruction with cited-by provenance held, shown on demand; a telos-matching judgment that returns only when it aligns with the confirmed question and terminates presented-for-operator-reading, never self-certified (GATE-MATCH — instrument, not reader). Ratified 2026-07-07 round: /ari-read; work/<slug>/judgment.md self-contained staged single file; GATE-QUERY + GATE-MATCH as new gate IDs; five-field tiling canonical in PHILOSOPHY.md + reorient design record.
 **Resolution:**

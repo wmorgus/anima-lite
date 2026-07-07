@@ -50,6 +50,27 @@ The same lens applies one level up: the skill pipeline is the four-cause decompo
 
 ---
 
+**The five fields — canonical home (PIN-34).** Every reconstruction and every change reasons from the same five fields, tiled once here so both registers can cite it instead of restating it:
+
+1. **User intent** — the ask as asked, verbatim, then confirmed.
+2. **Ratified intent** — the promise layer: `RESOLUTION.md` → spine `telos.md` → contracts → confirmed claims. What the system should be.
+3. **Belief** — the map: spines and docs. Best-faith approximation of what and where we believe the system to be, including where those beliefs end — the confidence edge is part of the field. `/ari-map` authors belief, not truth.
+4. **Reality** — live data: code as it sits, runtime behavior, the target repos. Always sampled, never held in full — which is why belief exists.
+5. **The record** — the diachronic trail: git history, blips, `RESOLUTION.md`'s ratification line, done pins, the backlog ledger. Append-only fact of how the present came to be; not belief, not intent, not present state.
+
+**Register flows.** The write register (`/ari-intake` → `/ari-map`/`/ari-argue` → `/ari-port`) spends belief to change reality and appends to the record. The read register (`/ari-read`) spends reality to repair belief and audits the record. Neither subsumes the other — a work item is a change or a question, never both at once.
+
+**The generative check.** The five fields taken pairwise are not just a taxonomy — each divergence between two fields already names a piece of machinery this harness has, or is building:
+- user intent × ratified intent — GATE-TELOS (does the ask conflict with what the repo is for?)
+- belief × reality — GATE-HASH, stale-spine detection, blips (a blip is a belief edge hit mid-work)
+- ratified intent × reality — drift or debt, the custodian's core object
+- the record × everything — the compliance-vs-substance reading: did a gate actually get engaged, or just checked off? (`/ari-read`'s record question-shape is the first machinery built for this pairing)
+- user intent × belief — reconstruction's ontology step: which parts of what we believe actually bear on what was asked
+
+**Mode honesty.** Every work item enters through a declared register, never through an undeclared default underneath: an intent to change the repo enters via `/ari-intake`; a question about the repo enters via `/ari-read`. Each doorway names the fork explicitly and routes to the other rather than absorbing work that isn't its shape. Nothing enters unargued (intake's discipline); one level up, nothing enters unregistered.
+
+---
+
 **The operator role: the claim court.** The engineer is the claim court — yes, no, here's why. The agent does everything that isn't judgment.
 
 ---

@@ -13,7 +13,7 @@ Backlog items are pins, not tickets. A pin exists so an observation made mid-ses
 - `.anima-lite/backlog.md` — the index: one searchable line per pin, derived from the pin files. Committed, durable state.
 - `.anima-lite/archive/backlog/done-<year>.md` — archived done pins, full block intact.
 - `.claude/skills/ari-port/metrics-spec.md` — canonical spec for the backlog-health row written at sweep step 7.
-- Whatever surfaced the pin: a spine finding, an epistle, a session observation, a tabled decision.
+- Whatever surfaced the pin: a spine finding, an epistle, a session observation, a tabled decision, a `/ari-read` judgment (`work/<slug>/judgment.md`) surfacing a divergence.
 
 ## Preconditions
 

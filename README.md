@@ -33,9 +33,15 @@ When unsure: ask whether a user who understood the feature's promise would notic
 
 ---
 
-## Five skills
+## Two doorways, mode honesty
+
+Every work item enters through a declared register, never through an undeclared default: an intent to *change* the repo enters via `/ari-intake`; a question *about* the repo enters via `/ari-read`. Each doorway names the fork explicitly and routes to the other if a work item shows up at the wrong one — nothing enters unregistered.
+
+## Six skills
 
 **`/ari-intake`** — sharpen the work item's telos and ensure everything it asks for is argued for, either by prototype (the proto feature's code carries the argument) or by language derived from context (tickets, meetings, specs, an operator's own translation). Mints the workstream slug and writes the argued-intent artifact, `work/<slug>/intent.md`. Runs first, upstream of `/ari-map` and `/ari-argue` — nothing enters the pipeline unargued.
+
+**`/ari-read`** — the read-register doorway, sibling to `/ari-intake` not a step inside it: a question about the system goes in, verbatim, and a telos-matched judgment comes out. Confirms the question's intent without staking it for the asker (GATE-QUERY), reconstructs an answer from the five fields (user intent, ratified intent, belief, reality, the record — canonical in `PHILOSOPHY.md`), and returns only when the prepared judgment matches the confirmed intent, presented for the operator's own reading, never self-certified (GATE-MATCH). Mints its own slug and writes `work/<slug>/judgment.md`.
 
 **`/ari-map`** — probe a repo and write a four-cause spine (material, formal, efficient, final). Run once for each repo in the port pair. Must be current before anything else runs. The spine is itself the durable asset — docs provably current against code — not just fuel consumed by one port; continuous, incremental spine maintenance (update-on-change) is ratified direction, not yet built. Today the spine refreshes on demand, per ari-map's own preconditions.
 
@@ -57,12 +63,23 @@ The four causes aren't four independent probes concatenated into a spine — the
 
 ## Execution flow
 
-`ari-backlog` isn't drawn into the pipeline below — it runs orthogonally, swept before every calibration run rather than as a step between map/argue/port.
+`ari-backlog` isn't drawn into the pipeline below — it runs orthogonally, swept before every calibration run rather than as a step between map/argue/port. `/ari-read` is likewise not a stage inside this pipeline — it's a doorway beside intake, taken instead of it when the work item is a question rather than a change.
 
 ```mermaid
 flowchart TD
-    USER(["👤 User"]) --> ARIINTAKE
+    USER(["👤 User"]) --> FORK{{"question or change?"}}
+    FORK -- change --> ARIINTAKE
+    FORK -- question --> ARIREAD
     USER -.->|"before every calibration run"| BACKLOG(["🗂️ ari-backlog\nsweep — orthogonal to this flow"])
+
+    subgraph ARIREAD["ari-read  ·  sibling doorway"]
+        AR1["record question verbatim → mint slug"]
+        ARQUERY{{"⛔ GATE-QUERY\n(confirm intent, don't stake it)"}}
+        AR2["ontology · reconstruct · belief-repair"]
+        ARMATCH{{"⛔ GATE-MATCH\n(telos-match → present for reading)"}}
+        AR1 --> ARQUERY --> AR2 --> ARMATCH
+    end
+    ARMATCH --> READDONE(["👤 operator reads judgment.md"])
 
     subgraph ARIINTAKE["ari-intake  ·  main agent"]
         AI1["mint slug → work/<slug>/"]
@@ -142,9 +159,9 @@ flowchart TD
     classDef orth  fill:#f0f0f0,stroke:#999,color:#444,stroke-dasharray: 5 5
 
     class AM2,AM3,AM4,AA,AP2,AP3,AP6 sub
-    class AI1,AI2,AI3,AI4,AM1,AM5,AP1,AP4,AP5,AP7,AP8 main
-    class USER,GH user
-    class ITELOS,TELOS,HASHCHECK,BLOCKER,BREAK,BLIPS,PRGATE req
+    class AI1,AI2,AI3,AI4,AM1,AM5,AP1,AP4,AP5,AP7,AP8,AR1,AR2 main
+    class USER,GH,READDONE user
+    class ITELOS,TELOS,HASHCHECK,BLOCKER,BREAK,BLIPS,PRGATE,ARQUERY,ARMATCH req
     class OPT1,OPT2,OPT3 opt
     class BACKLOG orth
 ```
