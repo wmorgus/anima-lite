@@ -103,7 +103,7 @@ Each spine directory is shared, repo-level state. Refresh collisions across bran
 5. For each claim change: present to the user one at a time, never bundled. "This change would alter what the feature promises — [specific description of what changes and why it's a claim]. Confirm this change or preserve the original?" Wait for explicit confirmation before continuing to the next.
 6. If the user is unavailable or the session is interrupted: default to preserving the original claim. Never guess at confirmation.
 
-**Output:** `.anima-lite/contracts/<branch-slug>.md`
+**Output:** `.anima-lite/work/<branch-slug>/contract.md`
 
 **Contract format:**
 ```markdown
@@ -141,7 +141,7 @@ Contracts are branch-scoped. Concurrent ports off the same prototype don't share
 3. For anything not covered by the contract: new information. Log as a blip. Default conservative — if the choice is between a more permissive or a more restrictive interpretation of the feature's promise, take the more restrictive.
 4. If a contract item is contradicted by the real code (not merely absent from the contract): halt. Do not log as a blip. Kick back to argumentation-contract with the specific contradiction named — file, line, what the contract assumed, what the code shows.
 
-**Output:** `.anima-lite/blips/<branch-slug>.md`
+**Output:** `.anima-lite/work/<branch-slug>/blips.md`
 
 **Blip format:**
 ```markdown
