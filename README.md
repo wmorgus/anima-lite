@@ -39,17 +39,17 @@ Every work item enters through a declared register, never through an undeclared 
 
 ## Six skills
 
-**`/ari-intake`** — sharpen the work item's telos and ensure everything it asks for is argued for, either by prototype (the proto feature's code carries the argument) or by language derived from context (tickets, meetings, specs, an operator's own translation). Mints the workstream slug and writes the argued-intent artifact, `work/<slug>/intent.md`. Runs first, upstream of `/ari-map` and `/ari-argue` — nothing enters the pipeline unargued.
+**`/ari-intake`** — sharpen the work item's telos and ensure everything it asks for is argued for, either by prototype (the proto feature's code carries the argument) or by language derived from context (tickets, meetings, specs, an operator's own translation). Mints the workstream slug and writes the argued-intent artifact, `work/<slug>/intent.md`. Runs first, upstream of `/ari-map` and `/ari-argue-rhetoric` — nothing enters the pipeline unargued.
 
 **`/ari-read`** — the read-register doorway, sibling to `/ari-intake` not a step inside it: a question about the system goes in, verbatim, and a telos-matched judgment comes out. Confirms the question's intent without staking it for the asker (GATE-QUERY), reconstructs an answer from the five fields (user intent, ratified intent, belief, reality, the record — canonical in `PHILOSOPHY.md`), and returns only when the prepared judgment matches the confirmed intent, presented for the operator's own reading, never self-certified (GATE-MATCH). Mints its own slug and writes `work/<slug>/judgment.md`.
 
 **`/ari-map`** — probe a repo and write a four-cause spine (material, formal, efficient, final). Run once for each repo in the port pair. Must be current before anything else runs. The spine is itself the durable asset — docs provably current against code — not just fuel consumed by one port; continuous, incremental spine maintenance (update-on-change) is ratified direction, not yet built. Today the spine refreshes on demand, per ari-map's own preconditions.
 
-**`/ari-argue`** — read the argued-intent artifact from `/ari-intake`, both spines, and the feature, classify every implementation detail as substrate or claim, and confirm claim changes with the user one at a time. Produces a branch-scoped contract. Refuses any claim that reaches it without an `argued-by:` line — that goes back to intake.
+**`/ari-argue-rhetoric`** — read the argued-intent artifact from `/ari-intake`, both spines, and the feature, classify every implementation detail as substrate or claim, and confirm claim changes with the user one at a time. Produces a branch-scoped contract. Refuses any claim that reaches it without an `argued-by:` line — that goes back to intake.
 
-**`/ari-port`** — four steps: plan → execute → validate → reconcile (+ harvest). Translates substrate freely, implements confirmed claims exactly, logs everything else as a blip. Halts back to ari-argue if the contract is actively contradicted by the real code.
+**`/ari-code-rhetoric`** — four steps: plan → execute → validate → reconcile (+ harvest). Translates substrate freely, implements confirmed claims exactly, logs everything else as a blip. Halts back to ari-argue-rhetoric if the contract is actively contradicted by the real code.
 
-**`/ari-backlog`** — capture and sweep the backlog (`.anima-lite/backlog.md` index + one `.anima-lite/pins/PIN-<n>.md` file per pin), a two-speed pin system for captured-but-not-yet-scheduled work. Runs before every calibration run. This is orthogonal to the per-port flow below, not a step inside it — it doesn't sit between ari-map/ari-argue/ari-port, it brackets the whole pipeline.
+**`/ari-backlog`** — capture and sweep the backlog (`.anima-lite/backlog.md` index + one `.anima-lite/pins/PIN-<n>.md` file per pin), a two-speed pin system for captured-but-not-yet-scheduled work. Runs before every calibration run. This is orthogonal to the per-port flow below, not a step inside it — it doesn't sit between ari-map/ari-argue-rhetoric/ari-code-rhetoric, it brackets the whole pipeline.
 
 Full detail on each — inputs, preconditions, output format — lives in that skill's `SKILL.md`, not here.
 
@@ -107,7 +107,7 @@ flowchart TD
     AM5 --> OPT1{{"◎ spine review"}}
     OPT1 --> ARIARGUE
 
-    subgraph ARIARGUE["ari-argue"]
+    subgraph ARIARGUE["ari-argue-rhetoric"]
         AA(["⟳ argue subagent\nintent.md + spines + proto source\n→ classify substrate / claim\n→ confirm each claim with user\n→ write contract"])
         TELOS{{"⛔ telos conflict?\n(conditional backstop —\nonly if contracting contradicts intent.md)"}}
         AA --> TELOS
@@ -120,7 +120,7 @@ flowchart TD
     HASHCHECK -- ok --> ARIPORT
     HASHCHECK -- mismatch → re-map --> ARIMAP
 
-    subgraph ARIPORT["ari-port  ·  main agent"]
+    subgraph ARIPORT["ari-code-rhetoric  ·  main agent"]
         AP1["Step 1 — plan.md"]
         BLOCKER{{"⛔ plan blockers?"}}
         OPT2{{"◎ plan review"}}
@@ -181,9 +181,9 @@ Full gate registry (IDs, owning skill, trigger, what clears it) and enforcement-
 
 ## Artifacts
 
-Per-slug port artifacts live at `.anima-lite/work/<slug>/{intent,contract,blips,plan,catchup,pr}.md`. Spine directories live at `.anima-lite/spine-<label>/{telos,material,formal,efficient}.md`. The exact file formats are owned by the skill that writes them (intent format: ari-intake; spine format: ari-map; contract format: ari-argue; blip format: ari-port) and indexed in `HARNESS.md` §2 — not restated here. (Directory-noun rename: `ports/<slug>/` became `work/<slug>/` 2026-07-07 per vocab decision 2b; see `HARNESS.md` §4. `intent.md` added 2026-07-07, PIN-27 — the workstream now starts at `/ari-intake`, which mints the slug.)
+Per-slug port artifacts live at `.anima-lite/work/<slug>/{intent,contract,blips,plan,catchup,pr}.md`. Spine directories live at `.anima-lite/spine-<label>/{telos,material,formal,efficient}.md`. The exact file formats are owned by the skill that writes them (intent format: ari-intake; spine format: ari-map; contract format: ari-argue-rhetoric; blip format: ari-code-rhetoric) and indexed in `HARNESS.md` §2 — not restated here. (Directory-noun rename: `ports/<slug>/` became `work/<slug>/` 2026-07-07 per vocab decision 2b; see `HARNESS.md` §4. `intent.md` added 2026-07-07, PIN-27 — the workstream now starts at `/ari-intake`, which mints the slug.)
 
-The metrics system under `.anima-lite/metrics/` (run rows, backlog-health rows, session-cost rows, `summary.md`) and the `SessionEnd` cost hook (`.claude/hooks/session-cost.py`) also exist — spec owned by `.claude/skills/ari-port/metrics-spec.md`.
+The metrics system under `.anima-lite/metrics/` (run rows, backlog-health rows, session-cost rows, `summary.md`) and the `SessionEnd` cost hook (`.claude/hooks/session-cost.py`) also exist — spec owned by `.claude/skills/ari-code-rhetoric/metrics-spec.md`.
 
 Spine refresh collisions across branches surface as merge conflicts. That's intentional: two diverging mental models of the same repo should conflict explicitly.
 
@@ -195,10 +195,10 @@ Spine refresh collisions across branches surface as merge conflicts. That's inte
 /ari-intake feature: path/to/feature/dir
 /ari-map    path: ../proto-repo,          label: proto
 /ari-map    path: ../../prod-repo,        label: prod
-/ari-argue  feature: path/to/feature/dir
-/ari-port
+/ari-argue-rhetoric  feature: path/to/feature/dir
+/ari-code-rhetoric
 ```
 
-Invoke from the anima-lite root. Both target repos must be on disk. `/ari-intake` mints the workstream slug and writes `work/<slug>/intent.md` first. Spines must be current (commit hash in `telos.md` matches HEAD of the target repo) before ari-argue runs, and `intent.md` must exist before ari-argue runs.
+Invoke from the anima-lite root. Both target repos must be on disk. `/ari-intake` mints the workstream slug and writes `work/<slug>/intent.md` first. Spines must be current (commit hash in `telos.md` matches HEAD of the target repo) before ari-argue-rhetoric runs, and `intent.md` must exist before ari-argue-rhetoric runs.
 
 Run `/ari-backlog` before every calibration run — see `CLAUDE.md` and `.claude/skills/ari-backlog/SKILL.md`.

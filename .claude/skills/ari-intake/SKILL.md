@@ -1,6 +1,6 @@
 ---
 name: ari-intake
-description: Sharpens a work item's telos and ensures everything entering it is argued for — by prototype (the proto feature's code carries the argument) or by language derived from context (meeting outcomes, tickets, specs, the operator's own translation). Mints the workstream slug and writes the argued-intent artifact at work/<slug>/intent.md. Called first, before ari-map or ari-argue touch anything — nothing enters the pipeline unargued.
+description: Sharpens a work item's telos and ensures everything entering it is argued for — by prototype (the proto feature's code carries the argument) or by language derived from context (meeting outcomes, tickets, specs, the operator's own translation). Mints the workstream slug and writes the argued-intent artifact at work/<slug>/intent.md. Called first, before ari-map or ari-argue-rhetoric touch anything — nothing enters the pipeline unargued.
 ---
 
 # ari-intake
@@ -9,7 +9,7 @@ Intake is the final-cause skill: it establishes what the work item is *for*, bef
 
 **Intake answers:** where does this intent come from, and is every part of it argued for? Nothing enters the pipeline unargued — no invented behavior, no "while we're at it."
 
-**Argue answers:** may this intent change or institute promises? Classification and one-at-a-time ratification are unchanged, and stay entirely inside `/ari-argue`. Intake does not classify substrate vs. claim — it only establishes that a claim exists and is sourced.
+**Argue answers:** may this intent change or institute promises? Classification and one-at-a-time ratification are unchanged, and stay entirely inside `/ari-argue-rhetoric`. Intake does not classify substrate vs. claim — it only establishes that a claim exists and is sourced.
 
 ## Inputs
 
@@ -21,7 +21,7 @@ Intake is the final-cause skill: it establishes what the work item is *for*, bef
 ## Preconditions
 
 - The work item is an intent to *change* this or a target repo — not a question about one. If it's a question about the system rather than an intent to change it, this is not intake's work: halt and route to `/ari-read`. Mode honesty is explicit at both doorways — nothing enters unregistered.
-- A work item has been identified — a feature to port, a ripple to author, or a diagnosed divergence — but no slug exists for it yet. If a slug and `work/<slug>/intent.md` already exist and nothing about the intent has changed, do not re-run intake; proceed to `/ari-argue`.
+- A work item has been identified — a feature to port, a ripple to author, or a diagnosed divergence — but no slug exists for it yet. If a slug and `work/<slug>/intent.md` already exist and nothing about the intent has changed, do not re-run intake; proceed to `/ari-argue-rhetoric`.
 - At least one candidate spine is reachable for the telos check. If no spine exists yet for a repo this work item touches, halt and request `/ari-map` for that repo before continuing — GATE-TELOS cannot fire against a telos that hasn't been probed.
 
 ## Per-work-type posture
@@ -39,7 +39,7 @@ Intake is upstream of argue for every work-type, but the amount of work intake d
 
 **No invented behavior.** The single discipline this skill exists to enforce: every claim in the intent artifact has a named source. "This seems like a good idea while we're here" is not a source. If a claim has no prototype path and no language source, it does not belong in `intent.md` — cut it, or go find where it actually came from.
 
-**Gate-fatigue guard, held forward.** GATE-TELOS fires once, here, at full strength. It is not meant to fire again by default in `/ari-argue` — see that skill's conditional backstop. Doing the telos work carefully here is what earns argue the right to treat it as settled.
+**Gate-fatigue guard, held forward.** GATE-TELOS fires once, here, at full strength. It is not meant to fire again by default in `/ari-argue-rhetoric` — see that skill's conditional backstop. Doing the telos work carefully here is what earns argue the right to treat it as settled.
 
 ## Process
 
@@ -69,7 +69,7 @@ A claim with neither is not ready for `intent.md`. Either find its real source o
 
 **6. Write `work/<slug>/intent.md`** (template below).
 
-**7. Hand off to `/ari-argue`.** Intake's output is argue's primary input. Do not perform substrate/claim classification here — that judgment belongs entirely to argue, unchanged by this skill's existence.
+**7. Hand off to `/ari-argue-rhetoric`.** Intake's output is argue's primary input. Do not perform substrate/claim classification here — that judgment belongs entirely to argue, unchanged by this skill's existence.
 
 ## Output
 
@@ -110,6 +110,6 @@ routed here before the diagnosis layer exists>
 
 **Slug ownership.** Once minted, the slug is the workstream's name for its full life (intake → argue → port → harvest). Do not rename mid-workstream; if the work item's scope changes enough to need a new name, that is itself a telos question — reopen GATE-TELOS, don't silently rename.
 
-**Claims without provenance are refused downstream, not just discouraged here.** `/ari-argue` enforces this on its own input — see its Inputs/Preconditions. Intake enforcing it at the source is the cheap place to catch it; argue enforcing it again is the backstop, not a redundant duplicate check invented independently.
+**Claims without provenance are refused downstream, not just discouraged here.** `/ari-argue-rhetoric` enforces this on its own input — see its Inputs/Preconditions. Intake enforcing it at the source is the cheap place to catch it; argue enforcing it again is the backstop, not a redundant duplicate check invented independently.
 
 **Debt-work is honesty-gated, not feature-gated.** Until the diagnosis layer is built, this skill should say so plainly to anyone who invokes it for a debt-work item, rather than producing an `intent.md` that dresses up an undiagnosed divergence as an argued one.

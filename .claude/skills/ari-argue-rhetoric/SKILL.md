@@ -1,11 +1,11 @@
 ---
-name: ari-argue
-description: Reads .anima-lite/work/<slug>/intent.md (from ari-intake), the spine.md, and a target feature, classifies every implementation detail as a substrate change (medium, free to translate) or a claim change (argument-altering, requires confirmation), and writes a branch-scoped contract. Called by ari-lite after ari-intake has produced an argued intent artifact and ari-map has produced a current spine, before ari-port touches any code. Never silently drops or alters what a feature argues for.
+name: ari-argue-rhetoric
+description: Reads .anima-lite/work/<slug>/intent.md (from ari-intake), the spine.md, and a target feature — or, for ripple work items, the intent artifact directly — classifies every implementation detail as a substrate change (medium, free to translate) or a claim change (argument-altering, requires confirmation), and writes a branch-scoped contract. Called by ari-lite after ari-intake has produced an argued intent artifact and ari-map has produced a current spine, before ari-code-rhetoric touches any code. Never silently drops or alters what a feature argues for.
 ---
 
-# ari-argue
+# ari-argue-rhetoric
 
-**This skill runs as a subagent spawned by the main pipeline agent — not as the main agent itself.** By the time ari-argue runs, the main agent carries ari-map probe context (spine reasoning, cause analysis). The classification loop and user back-and-forth are isolated here so the main agent's context stays clean.
+**This skill runs as a subagent spawned by the main pipeline agent — not as the main agent itself.** By the time ari-argue-rhetoric runs, the main agent carries ari-map probe context (spine reasoning, cause analysis). The classification loop and user back-and-forth are isolated here so the main agent's context stays clean.
 
 The spawning agent passes to this subagent: `work/<slug>/intent.md` from ari-intake, both spine directories (`spine-proto/` and `spine-prod/`, full contents), the proto feature source files being ported, and the current git branch name. On completion, this subagent returns a handoff summary to the main agent: contract path written, number of claim changes confirmed, and whether a telos conflict was found and how it was resolved.
 
@@ -17,15 +17,24 @@ Argumentation: determine what a feature is claiming to the user, separate from h
 - `.anima-lite/spine-proto/telos.md` and `.anima-lite/spine-prod/telos.md` — read for the conditional telos backstop (see step 1) and for substrate/claim classification context.
 - `.anima-lite/spine-proto/formal.md` and `.anima-lite/spine-prod/formal.md` — read for substrate classification (what patterns the prod spine uses informs what's a free translation vs. a structural claim).
 - Pull `material.md` or `efficient.md` from either spine directory if a specific detail requires it.
-- The feature/diff/branch being ported.
+- The feature/diff/branch being ported — except for **ripple** work items, where there is no proto/prod feature diff to read at all. See "Intent-artifact input mode (ripple)" below.
 - Current git branch name (for output naming).
+
+## Intent-artifact input mode (ripple)
+
+When `work/<slug>/intent.md` carries `Work-type: ripple`, this skill's primary input changes shape: the input is the intent artifact itself, directly — not a feature/diff/branch in any one repo. There is no source code to read the argument off of, because a ripple institutes a promise in N repos at once rather than translating one that already exists somewhere (`reorient/ripple.md` ruling 1). Consequences for process:
+
+- Every claim classified here is born from one of `intent.md`'s `Claims` entries and its `argued-by:` provenance line — never inferred by reading a single leg's implementation, and never backfilled from whichever leg happens to be easiest to read. A ripple claim's source is the intent artifact, full stop; a leg's eventual code is downstream of the contract, not upstream of it.
+- Step 1a (source-of-truth check, below) does not apply — there is no candidate-component ambiguity to resolve, because there is no existing implementation to disambiguate. Skip it and proceed from the intent artifact's claim list.
+- Step 2 (identify the argument) is answered directly from `intent.md`'s Telos statement and Claims section rather than inferred from mechanics.
+- Substrate/claim classification (step 3) still applies per target: what's substrate in one leg's spine may not translate identically to another's, but the *claims themselves* are one promise shared across every leg — see the per-target substrate-mapping template in Output, below.
 
 ## Preconditions
 
 - `work/<slug>/intent.md` exists for this work item. If it does not, halt and request `/ari-intake` — argue does not construct an argued intent from scratch; it contracts from one.
 - Every claim this skill contracts on carries an `argued-by:` line in `intent.md`. A claim without one is refused: send it back to intake rather than classifying or contracting it here. This is not a formatting nitpick — an unsourced claim is exactly the "invented behavior" intake exists to keep out of the pipeline.
-- The spine(s) relevant to this work item's comparison exist and `telos.md` in each is current (Commit: hash matches HEAD) — two spines for a port, one for single-repo debt work or a harness-change (the repo's own spine), zero additional spines for a pure world-drift check (the comparison is against the world, not another spine). Port is the only work-type fully specified today: both `spine-proto/` and `spine-prod/` directories must exist. Single-repo debt work and pure world-drift checks are ratified direction, not yet built — this skill does not yet run them end to end. Harness-change is single-spine (this repo's own) and IS built, per PIN-36. If a required spine is missing or stale, halt and request ari-map for the affected repo.
-- A specific feature/diff is identified to argue about. This skill operates on one feature per invocation.
+- The spine(s) relevant to this work item's comparison exist and `telos.md` in each is current (Commit: hash matches HEAD) — two spines for a port, one for single-repo debt work or a harness-change (the repo's own spine), N target spines for a ripple (one per leg named in the contract apex — the comparison-count generalizes past the fixed two of a port; see `reorient/vocab.md` decision 3b), zero additional spines for a pure world-drift check (the comparison is against the world, not another spine). Port is the only work-type fully specified today: both `spine-proto/` and `spine-prod/` directories must exist. Single-repo debt work and pure world-drift checks are ratified direction, not yet built — this skill does not yet run them end to end. Harness-change is single-spine (this repo's own) and IS built, per PIN-36. If a required spine is missing or stale, halt and request ari-map for the affected repo.
+- A specific feature/diff is identified to argue about — except for ripple work items, where the intent artifact itself (with a current spine per named target) stands in; see "Intent-artifact input mode" above.
 
 ## Active orientations
 
@@ -63,7 +72,7 @@ If no spine section applies, say so explicitly. The contract must be verifiable:
 
 **Interaction model.** How the user physically moves through the feature — collapse/expand, auto-advance, one-at-a-time focus, toggle behavior, keyboard flow. A user who understood the feature's promise would notice if sequential discovery became everything-at-once. Classify interaction patterns as claims by default; only call them substrate if you can articulate why the specific pattern doesn't affect the promise.
 
-When writing a contract for an interaction model claim, name the invariant the interaction enforces — not just the implementation sub-tasks. "One card expanded at a time" is an invariant; "auto-expand UNDER_REVIEW, toggle on click" are the sub-tasks. A contract that names only the sub-tasks passes to ari-port without stating what the sub-tasks exist to enforce. ari-port will implement the sub-tasks and miss the invariant. Name both.
+When writing a contract for an interaction model claim, name the invariant the interaction enforces — not just the implementation sub-tasks. "One card expanded at a time" is an invariant; "auto-expand UNDER_REVIEW, toggle on click" are the sub-tasks. A contract that names only the sub-tasks passes to ari-code-rhetoric without stating what the sub-tasks exist to enforce. ari-code-rhetoric will implement the sub-tasks and miss the invariant. Name both.
 
 **Semantic register of labels and attribution.** Wording is substrate when it's two phrasings of the same thing. Register shift is a claim: endorsement → disclaimer, celebration → warning, brand confidence → liability caveat. "Powered by PLUS AI Coach" and "generated by AI, which may make mistakes!" are not two phrasings of the same promise — they are different promises. Surface the shift, confirm it.
 
@@ -88,10 +97,12 @@ Even on a lighter pass, the subagent must produce a positive claim: not "no clai
 
 If any of the three conditions is not met, run the full pass.
 
-**4c. Schema-dependency check (pre-freeze).** For every claim's declared `Schema deps:`, verify each named entity/field/enum actually exists in prod before the contract is written. Check the prod spine's entity/field inventory first, if present (`spine-prod/material.md`, per PIN-21's spine-completeness work) — a current, complete spine often settles this by inspection alone. When the spine doesn't cover the dependency, or is silent rather than confirming absence, grep the prod repo directly (path from this project's `CLAUDE.md`, Target repos table) under its schema-bearing directories — `item/`, `dto/`, `enums/` — for the named entity/field/enum. A declared dependency that resolves to zero prod classes or fields is a contract-time break, not a wording detail to smooth over: HALT, surface it to the user for resolution — drop the claim, amend it, or confirm the field exists under a different name — before freezing the contract. This is a backstop, not the primary defense: the spine's entity/field inventory and negative-space list are meant to catch this by the time ari-argue reads them; this check exists for when the spine is still incomplete — a fresh probe, an unusual noun, or drift since the last map. Declaring a `Schema deps:` value is not the same as confirming it resolves — do not skip this step by trusting the claim author's own list.
+**4c. Schema-dependency check (pre-freeze).** For every claim's declared `Schema deps:`, verify each named entity/field/enum actually exists in prod before the contract is written. Check the prod spine's entity/field inventory first, if present (`spine-prod/material.md`, per PIN-21's spine-completeness work) — a current, complete spine often settles this by inspection alone. When the spine doesn't cover the dependency, or is silent rather than confirming absence, grep the prod repo directly (path from this project's `CLAUDE.md`, Target repos table) under its schema-bearing directories — `item/`, `dto/`, `enums/` — for the named entity/field/enum. A declared dependency that resolves to zero prod classes or fields is a contract-time break, not a wording detail to smooth over: HALT, surface it to the user for resolution — drop the claim, amend it, or confirm the field exists under a different name — before freezing the contract. This is a backstop, not the primary defense: the spine's entity/field inventory and negative-space list are meant to catch this by the time ari-argue-rhetoric reads them; this check exists for when the spine is still incomplete — a fresh probe, an unusual noun, or drift since the last map. Declaring a `Schema deps:` value is not the same as confirming it resolves — do not skip this step by trusting the claim author's own list.
+
+**Ripple: run this check against every leg, not just prod.** For a ripple work item, "prod" above generalizes to every target repo named in the ripple's contract apex — the check is not satisfied by resolving a `Schema deps:` entry against one leg's spine while the others go unchecked. Since one claim renders differently per leg's substrate (see the per-target substrate-mapping template in Output, below), each leg's own schema-bearing directories must independently confirm the entity/field/enum that leg's rendering of the claim relies on. A dependency that resolves in leg A but not leg B is exactly the sibling-divergence risk `reorient/ripple.md` ruling 3 names — surface it as a per-leg GATE-SCHEMA finding, not a single pass/fail for the whole ripple.
 
 > **⛔ REQUIRED GATE — GATE-SCHEMA (schema dependency)**
-> If a claim's declared `Schema deps:` entry resolves to zero prod classes or fields, halt and surface it to the user for resolution — drop the claim, amend it, or confirm the field exists under another name. Do not freeze the contract until the user resolves it.
+> If a claim's declared `Schema deps:` entry resolves to zero classes or fields **in any target repo this claim applies to** — prod for a port, every leg named in the contract apex for a ripple — halt and surface it to the user for resolution — drop the claim, amend it, or confirm the field exists under another name in the affected repo(s). Do not freeze the contract until the user resolves it for every checked target.
 > The pipeline halts here. Do not proceed until explicitly cleared.
 
 ## Proto visual reference (if server reachable)
@@ -119,8 +130,8 @@ Write `.anima-lite/work/<branch-slug>/contract.md`, where `<branch-slug>` is the
 Branch: <branch-slug>
 Generated: <date>
 Spine commit: <the Commit: hash from spine-proto/telos.md at time of writing>
-Source of truth: <component/file confirmed canonical in step 1a — required whenever multiple candidates existed; "n/a — single source" otherwise>
-Status: FROZEN FOR SESSION — do not modify without re-running ari-argue
+Source of truth: <component/file confirmed canonical in step 1a — required whenever multiple candidates existed; "n/a — single source" otherwise; "n/a — ripple, no prior implementation" for ripple work items>
+Status: FROZEN FOR SESSION — do not modify without re-running ari-argue-rhetoric
 
 ## The argument
 <one or two sentences: what is this work item claiming to the user>
@@ -132,8 +143,19 @@ Status: FROZEN FOR SESSION — do not modify without re-running ari-argue
 - <detail> — Decision: <preserve|change-to-X> — Confirmed: <yes/default-preserve, with date>
   Schema deps: <prod entities/fields/enums this claim's rule logic relies on, e.g. "SessionItem.sessionStart, StudentSessionItem, InstitutionItem" — or "none" if the claim relies on no prod schema (pure UI/interaction)>
 
+For a **ripple** work item, this section stays single — one promise, N renderings, never N separate claim lists — but each claim gains a per-target substrate-mapping subsection immediately under it, naming how the one claim renders against each target's own substrate:
+
+- <claim name> — Decision: <change-to-X> — Confirmed: <yes, with date>
+  Schema deps: <as above, or "none">
+  **Per-target substrate mapping:**
+  - <target-a label>: <how this claim's invariant renders in target-a's idiom — e.g. "React state hook toggling a `locked` boolean, per spine-target-a/formal.md §3">
+  - <target-b label>: <how the same claim's invariant renders in target-b's idiom — e.g. "Java servlet session attribute + JSP conditional include, per spine-target-b/formal.md §3">
+  - <target-n label>: <...>
+
+  The claim (what's promised) is identical across every row; the mapping is where substrate is free to differ per leg's own spine (`reorient/ripple.md` ruling 3 — cross-leg coherence is a claims-identical, substrate-free-per-leg check, not a uniform-implementation check).
+
 ## Open questions
-<anything not yet confirmed; ari-port must halt and escalate if it hits these>
+<anything not yet confirmed; ari-code-rhetoric must halt and escalate if it hits these>
 
 ## Proto visual reference
 <one line per major section describing what the proto renders — derived from screenshots if server was reachable, from source reading if not>
@@ -156,4 +178,4 @@ Block schema, the `expect`-field rules, and a worked example: see `playwright-sp
 
 Branch-scoping exists because multiple branches can be mid-port off the same prototype at once — each gets its own contract even though they share the spine. Don't write to a singleton `contract.md`.
 
-Once written with no open Open Questions, the contract is frozen for the session and ready for ari-port. If ari-port later finds the contract contradicted by the real code (not just incomplete), it will halt and hand the specific delta back to this skill — treat that as new evidence, not as a do-over of step 3 from scratch.
+Once written with no open Open Questions, the contract is frozen for the session and ready for ari-code-rhetoric. If ari-code-rhetoric later finds the contract contradicted by the real code (not just incomplete), it will halt and hand the specific delta back to this skill — treat that as new evidence, not as a do-over of step 3 from scratch.

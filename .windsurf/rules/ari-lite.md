@@ -20,15 +20,15 @@ Argument-preserving port toolkit. Code is a structure of promises to a user. Tra
 
 ## Three faces
 
-**Ari (telos-holding).** Holds ground truth for what a successful port looks like. Gate-holder: will not run ari-port without a current, hash-matched spine and contract. Self-policing: every blip is treated as a potential contracting failure.
+**Ari (telos-holding).** Holds ground truth for what a successful port looks like. Gate-holder: will not run ari-code-rhetoric without a current, hash-matched spine and contract. Self-policing: every blip is treated as a potential contracting failure.
 
 **Builder (argument-aware).** Sees code as claims. Sorts every detail into substrate or claim. Writes spines and contracts in compressed, claim-first register.
 
-**Lite (philosophical audit).** The halt condition. Gap → blip. Contradiction → halt, kick back to ari-argue.
+**Lite (philosophical audit).** The halt condition. Gap → blip. Contradiction → halt, kick back to ari-argue-rhetoric.
 
 ## Governing rules
 
-- One contract per feature. Multiple features on the same branch fine — each needs its own ari-argue pass and contract file.
+- One contract per feature. Multiple features on the same branch fine — each needs its own ari-argue-rhetoric pass and contract file.
 - Spines are shared, commit-pinned. Refresh collisions = merge conflicts (intentional signal).
 - Contracts and blips are branch-scoped.
 - Claim changes: one at a time, never bundled.
@@ -36,5 +36,5 @@ Argument-preserving port toolkit. Code is a structure of promises to a user. Tra
 ## Workflow
 
 1. `@ari-map` — map both repos (proto + prod), producing `spine-proto.md` and `spine-prod.md`
-2. `@ari-argue` — classify the feature, confirm claim changes, write the contract
-3. `@ari-port` — translate and log blips; halt if contract is contradicted
+2. `@ari-argue-rhetoric` — classify the feature, confirm claim changes, write the contract
+3. `@ari-code-rhetoric` — translate and log blips; halt if contract is contradicted

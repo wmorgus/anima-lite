@@ -5,7 +5,7 @@ description: Produces .anima-lite/spine-<label>/ — a four-file spine directory
 
 # ari-map
 
-Spine-finding: probe a repo's material, formal, efficient, and final causes and write the result to a spine directory. The telos file is the coding-agent-facing entry point; the cause files are analytical reference for ari-argue and ari-port.
+Spine-finding: probe a repo's material, formal, efficient, and final causes and write the result to a spine directory. The telos file is the coding-agent-facing entry point; the cause files are analytical reference for ari-argue-rhetoric and ari-code-rhetoric.
 
 ## Inputs
 
@@ -22,19 +22,19 @@ Invoke this skill when any of the following hold:
 - Build/CI config changed since the spine's `Commit:`.
 - Caller or user flags the spine as wrong.
 
-If none hold and a current spine directory exists, do not invoke — proceed directly to ari-argue.
+If none hold and a current spine directory exists, do not invoke — proceed directly to ari-argue-rhetoric.
 
 ## Active orientations
 
-**Lite face.** The `formal.md` file is where the lite face does its work. Document inconsistencies between stated and actual patterns as named findings — "The README claims X; the actual code does Y" — not as hedges. Eliding an inconsistency is not neutrality; it misleads ari-argue's telos check and ari-port's substrate translations downstream.
+**Lite face.** The `formal.md` file is where the lite face does its work. Document inconsistencies between stated and actual patterns as named findings — "The README claims X; the actual code does Y" — not as hedges. Eliding an inconsistency is not neutrality; it misleads ari-argue-rhetoric's telos check and ari-code-rhetoric's substrate translations downstream.
 
-**Scope fence.** This spine maps one repo only. Do not reference the other repo in the port pair, compare to the proto, or anticipate what ari-argue will find. Cross-repo comparison is ari-argue's job. Name what this repo does; leave what it means for the port to ari-argue.
+**Scope fence.** This spine maps one repo only. Do not reference the other repo in the port pair, compare to the proto, or anticipate what ari-argue-rhetoric will find. Cross-repo comparison is ari-argue-rhetoric's job. Name what this repo does; leave what it means for the port to ari-argue-rhetoric.
 
 **Bidirectional audit.** Reading a prior spine (the refresh case) or a feature-ledger entry (during a probe) is also an audit of that artifact, not just a source to build on. Drift runs both directions: the artifact may be stale (reality moved since it was written) or it may have been wrong at write time (a probe or classification error that predates any code change). Never silently correct drift into the new spine — name it as a finding with the direction stated, e.g. "formal.md previously claimed X; code now shows Y (stale)" versus "formal.md claimed X; grep shows this was never true (wrong at write time)." Process step 6's ledger rule ("if the probe contradicts it, the spine wins and the ledger entry was stale — note it as a finding") is one instance of this orientation, applied to the spine/ledger pair; this generalizes it to any upstream artifact a probe touches.
 
 ## Process
 
-**Minimum probe before writing.** Spine files look authoritative regardless of probe depth — a shallow probe misleads ari-port's substrate decisions just as confidently as a deep one. Before writing any cause file, run these steps:
+**Minimum probe before writing.** Spine files look authoritative regardless of probe depth — a shallow probe misleads ari-code-rhetoric's substrate decisions just as confidently as a deep one. Before writing any cause file, run these steps:
 
 1. `find <repo> -type f | head -200` (or equivalent) — enumerate actual structure; don't infer from README
 2. Per layer in the formal cause, read at least 2 representative files to confirm the pattern holds, not just the most prominent one
@@ -79,11 +79,11 @@ From the Final cause, derive **don't-contradict rules** — imperative constrain
 
 **Comprehensive feature map.** Attempt a comprehensive feature map — identify every user-facing feature in the repo, not just the ones tied to the current port. For each identified feature, create a stub in `.anima-lite/features/` at the deepest level the probe can confirm without over-claiming. "The feature exists and its entry point is X" is a valid `stub:1`. Do not require full-chain visibility before creating a stub; require only that every populated field was confirmed in code.
 
-**Domain-central features go to stub:2 at map-time.** For features built on domain-central entities — recurring nouns that show up across the repo (sessions, students, institutions, and similar) — probe to `stub:2` (entry point + primary data structure + key fields, per ledger-spec.md), not `stub:1`. Stopping at stub:1 for these defers field-depth to ari-port, which runs after the contract freezes — too late for ari-argue to catch a claim built on a field that doesn't exist. The ledger is uncapped and per-feature, so it absorbs this field-level volume without pressuring the cause-file cap. This does not relax the honest-stub rule: populate `Primary data structure` at stub:2 only with fields the probe actually confirmed — a dishonest stub:2 is worse than an honest stub:1.
+**Domain-central features go to stub:2 at map-time.** For features built on domain-central entities — recurring nouns that show up across the repo (sessions, students, institutions, and similar) — probe to `stub:2` (entry point + primary data structure + key fields, per ledger-spec.md), not `stub:1`. Stopping at stub:1 for these defers field-depth to ari-code-rhetoric, which runs after the contract freezes — too late for ari-argue-rhetoric to catch a claim built on a field that doesn't exist. The ledger is uncapped and per-feature, so it absorbs this field-level volume without pressuring the cause-file cap. This does not relax the honest-stub rule: populate `Primary data structure` at stub:2 only with fields the probe actually confirmed — a dishonest stub:2 is worse than an honest stub:1.
 
 How to identify features: trace entry points (servlet URL mappings, route configs, JSP file inventory) and group them by user-facing function. A feature is a user-facing capability — not a utility, not a shared service. When in doubt whether something is a feature or infrastructure, ask: does a human user interact with this directly? If yes, it is a feature.
 
-ari-map writes the stub. ari-port enriches it. Two sessions may touch the same file; the `stub:` header makes coverage state legible at a glance.
+ari-map writes the stub. ari-code-rhetoric enriches it. Two sessions may touch the same file; the `stub:` header makes coverage state legible at a glance.
 
 **The different-feature test.** Before writing any observation into a cause file, ask: would this be useful to an agent working on a different feature in the same repo? Yes → it belongs in the spine. No → it belongs in the contract or blips for the feature that surfaced it.
 
@@ -95,7 +95,7 @@ When in doubt, keep it out. Wrong in a contract costs one feature; wrong in the 
 
 ## Output
 
-Write four files to `.anima-lite/spine-<label>/`. Section numbers make spine findings citable by ari-argue and ari-port — cite the section, not just the file.
+Write four files to `.anima-lite/spine-<label>/`. Section numbers make spine findings citable by ari-argue-rhetoric and ari-code-rhetoric — cite the section, not just the file.
 
 ---
 
@@ -128,7 +128,7 @@ a coding decision as worth a quick verification pass against the actual code.
 
 ---
 
-**`material.md`** — analytical reference for ari-argue and ari-port.
+**`material.md`** — analytical reference for ari-argue-rhetoric and ari-code-rhetoric.
 
 ```markdown
 # Material: <repo-name> (<label>)
@@ -193,7 +193,7 @@ nouns instead of rediscovering them. One line per noun.
 
 ---
 
-**`formal.md`** — analytical reference. The most important cause file for ari-port's substrate translations.
+**`formal.md`** — analytical reference. The most important cause file for ari-code-rhetoric's substrate translations.
 
 ```markdown
 # Formal: <repo-name> (<label>)
@@ -212,10 +212,10 @@ nouns instead of rediscovering them. One line per noun.
 the shape of a typical change. Named inconsistencies as findings.
 
 §3 is per-stratum, not a flat list: state the dominant pattern separately for
-Backend, Frontend, and Data flow, because these are the substrates ari-port
+Backend, Frontend, and Data flow, because these are the substrates ari-code-rhetoric
 translates independently — "what to translate this layer INTO" is the question
 each subsection answers. This per-layer idiom map is the canonical source
-ari-argue's substrate-changes classification is derived from; without it, each
+ari-argue-rhetoric's substrate-changes classification is derived from; without it, each
 port hand-derives the same layer-by-layer mapping (React→JSP, useState→
 round-trips, PLUS DS→Bootstrap) from scratch instead of reading it off the spine.
 
@@ -239,9 +239,9 @@ Provenance rule: tag each finding as (code-derived) or (README-stated).
 - (code-derived): you grepped or read files and the pattern is confirmed in actual code
 - (README-stated): the README or docs claim this; you have not verified it in code
 
-ari-port treats formal.md as ground truth for substrate decisions. A README-stated
+ari-code-rhetoric treats formal.md as ground truth for substrate decisions. A README-stated
 pattern that the code contradicts silently misdirects translations. The tag lets
-ari-port and human reviewers know which claims need a verification pass before
+ari-code-rhetoric and human reviewers know which claims need a verification pass before
 acting on them.
 
 Seam protocol rule: documenting that layers exist is not documenting what crosses
@@ -293,12 +293,12 @@ During probe, attempt a comprehensive feature map (see "Comprehensive feature ma
 Format, stub levels, and field ownership: see `ledger-spec.md` in this skill's directory.
 
 > **◎ OPTIONAL GATE — GATE-SPINE-REVIEW (spine review)**
-> Spine written — review before ari-argue runs? (skip to proceed). Especially recommended on first-time repos where probe depth is uncertain.
+> Spine written — review before ari-argue-rhetoric runs? (skip to proceed). Especially recommended on first-time repos where probe depth is uncertain.
 
 ## Escalation / Notes
 
 Each spine directory is shared, repo-level state. Commit the full directory rather than gitignoring it. Merge conflicts on spine files are a legitimate signal that two sessions' mental models diverged — resolve by re-probing fresh, not by picking a side.
 
-Both the proto and prod spine directories must be current before ari-argue can run. ari-argue's contracts pin to the `Commit:` hash in `spine-proto/telos.md` (or whatever label is used for the prototype repo).
+Both the proto and prod spine directories must be current before ari-argue-rhetoric can run. ari-argue-rhetoric's contracts pin to the `Commit:` hash in `spine-proto/telos.md` (or whatever label is used for the prototype repo).
 
 On refresh, re-probe fully rather than patching — and note what changed versus the previous version.

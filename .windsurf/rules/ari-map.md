@@ -1,11 +1,11 @@
 ---
 trigger: manual
-description: Probe a repo and write a four-file spine directory (telos + material + formal + efficient). Run once for each repo in the port pair before ari-argue.
+description: Probe a repo and write a four-file spine directory (telos + material + formal + efficient). Run once for each repo in the port pair before ari-argue-rhetoric.
 ---
 
 # ari-map
 
-Spine-finding: probe a repo's four causes and write the result to `.anima-lite/spine-<label>/`. The telos file is the coding-agent-facing entry point; cause files are analytical reference for ari-argue and ari-port.
+Spine-finding: probe a repo's four causes and write the result to `.anima-lite/spine-<label>/`. The telos file is the coding-agent-facing entry point; cause files are analytical reference for ari-argue-rhetoric and ari-code-rhetoric.
 
 ## Inputs
 
@@ -22,9 +22,9 @@ Spine-finding: probe a repo's four causes and write the result to `.anima-lite/s
 
 ## Active orientations
 
-**Lite face.** `formal.md` is where the lite face does its work. Document inconsistencies as named findings — "The README claims X; the actual code does Y." Eliding an inconsistency misleads ari-argue's telos check and ari-port's substrate translations.
+**Lite face.** `formal.md` is where the lite face does its work. Document inconsistencies as named findings — "The README claims X; the actual code does Y." Eliding an inconsistency misleads ari-argue-rhetoric's telos check and ari-code-rhetoric's substrate translations.
 
-**Scope fence.** This spine maps one repo only. Do not reference the other repo or anticipate what ari-argue will find. Cross-repo comparison is ari-argue's job.
+**Scope fence.** This spine maps one repo only. Do not reference the other repo or anticipate what ari-argue-rhetoric will find. Cross-repo comparison is ari-argue-rhetoric's job.
 
 ## Process
 
@@ -70,4 +70,4 @@ Telos is inferred, not declared.
 (Reference depth — see telos.md for entry point and commit hash)
 ```
 
-Commit the full directory. Both `spine-proto/` and `spine-prod/` must be current before ari-argue runs.
+Commit the full directory. Both `spine-proto/` and `spine-prod/` must be current before ari-argue-rhetoric runs.

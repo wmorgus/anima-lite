@@ -1,9 +1,9 @@
 ---
 trigger: manual
-description: Translate the feature from proto to prod using spine and contract as binding context. Runs only after ari-map and ari-argue have produced current, hash-matched artifacts.
+description: Translate the feature from proto to prod using spine and contract as binding context. Runs only after ari-map and ari-argue-rhetoric have produced current, hash-matched artifacts.
 ---
 
-# ari-port
+# ari-code-rhetoric
 
 Execution: the hard epistemic work happened upstream — this should feel mechanical. If it feels ambiguous, the contract was incomplete.
 
@@ -16,7 +16,7 @@ Execution: the hard epistemic work happened upstream — this should feel mechan
 ## Preconditions
 
 1. Both spines exist and are current. If not: halt, run ari-map.
-2. Contract exists, status is not "DRAFT," no unconfirmed Open Questions. If not: halt, run ari-argue.
+2. Contract exists, status is not "DRAFT," no unconfirmed Open Questions. If not: halt, run ari-argue-rhetoric.
 3. Contract's `Spine commit:` matches `spine-proto.md`'s `Commit:`. If mismatched: surface the diff and ask whether the contract still holds — don't auto-fail or proceed silently.
 
 ## Active orientations
@@ -28,7 +28,7 @@ Execution: the hard epistemic work happened upstream — this should feel mechan
 - **Substrate** — translate freely using the prod spine's formal cause as the guide.
 - **Claim changes** — implement exactly per the contract's confirmed decision. Do not relitigate.
 - **Uncovered cases** — log as blip, default conservative.
-- **Contract contradicted** — halt. Write as `CONTRACT-BREAK`, report execution paused, re-run ari-argue with the specific contradiction.
+- **Contract contradicted** — halt. Write as `CONTRACT-BREAK`, report execution paused, re-run ari-argue-rhetoric with the specific contradiction.
 
 ## Output
 

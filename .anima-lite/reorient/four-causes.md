@@ -12,8 +12,8 @@ The skill decomposition is the four-cause description of "make a software change
 |---|---|---|
 | **ari-intake** | **final** | what the change is for — telos sharpened, everything argued for |
 | **ari-map** | **material** | what the change is made from and into — the mapped codebase as matter |
-| **ari-argue** | **formal** | what the change IS — the contract as its essence: which claims, what promise |
-| **ari-port** | **efficient** | what brings form into matter — execution FROM the contract (the builder works from the form; skill name kept per vocab decision 2b, the work-type noun generalizes) |
+| **ari-argue-rhetoric** | **formal** | what the change IS — the contract as its essence: which claims, what promise |
+| **ari-code-rhetoric** | **efficient** | what brings form into matter — execution FROM the contract (the builder works from the form; skill renamed per PIN-26 ruling 6 — see ripple.md — while the work-type noun "port" still generalizes independently of the skill's rhetoric name) |
 
 The harness applied the four causes to repos (the spine files); the pipeline itself instantiates the same four causes over the change. The method is its own metaphysics — the tool's architecture recapitulates its diagnostic lens.
 

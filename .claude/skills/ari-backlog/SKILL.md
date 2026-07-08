@@ -12,7 +12,7 @@ Backlog items are pins, not tickets. A pin exists so an observation made mid-ses
 - `.anima-lite/pins/PIN-<n>.md` — one file per pin, full block. Committed, durable state. The pin file is the source of truth.
 - `.anima-lite/backlog.md` — the index: one searchable line per pin, derived from the pin files. Committed, durable state.
 - `.anima-lite/archive/backlog/done-<year>.md` — archived done pins, full block intact.
-- `.claude/skills/ari-port/metrics-spec.md` — canonical spec for the backlog-health row written at sweep step 7.
+- `.claude/skills/ari-code-rhetoric/metrics-spec.md` — canonical spec for the backlog-health row written at sweep step 7.
 - Whatever surfaced the pin: a spine finding, an epistle, a session observation, a tabled decision, a `/ari-read` judgment (`work/<slug>/judgment.md`) surfacing a divergence.
 
 ## Preconditions
@@ -76,7 +76,7 @@ Run at every ari-backlog sweep invocation, in order:
 
 5. **Archive done pins.** Move the full block (decision record intact) from `pins/PIN-<n>.md` to `.anima-lite/archive/backlog/done-<year>.md` and delete the pin file. Move its index line to "Archived pins" as a pointer: `- PIN-<n> — done, archived: archive/backlog/done-<year>.md — <title>`.
 6. **Flag un-exported elsewhere pins.** Any pin with `status: elsewhere` and no export confirmation resurfaces every sweep — do not let it go quiet. It stops resurfacing only when either (a) exported: status becomes `superseded`, Resolution reads `exported to <path>`, or (b) re-dated with a new `captured:` line noting why it's still here.
-7. **Write the backlog-health row.** `.anima-lite/metrics/backlog-health-<date>.md`, per `.claude/skills/ari-port/metrics-spec.md` (canonical spec — this step points to it, not restated here). Fields: open pin count by stub level, count by status, age of oldest open pin, capture-to-done latency for pins closed since this sweep (from each closed pin's `captured:` line vs. the git commit date that added its `Resolution:` line), and the un-exported elsewhere count from step 6.
+7. **Write the backlog-health row.** `.anima-lite/metrics/backlog-health-<date>.md`, per `.claude/skills/ari-code-rhetoric/metrics-spec.md` (canonical spec — this step points to it, not restated here). Fields: open pin count by stub level, count by status, age of oldest open pin, capture-to-done latency for pins closed since this sweep (from each closed pin's `captured:` line vs. the git commit date that added its `Resolution:` line), and the un-exported elsewhere count from step 6.
 
 ## Workstream suspension
 
@@ -110,4 +110,4 @@ Precondition, not a schedule: invoke before every calibration run, or on user re
 
 **No priority ranks.** Batches plus status are the only ordering the backlog itself asserts. Intra-batch order is decided by whoever picks up the batch in a working session — the backlog records what's queued and how it's grouped, not what order to do it in. The working order itself lives in `.anima-lite/session-backlog.md` — operator-owned, a ladder of pointers to pins, re-cut freely with no shaping ceremony; pin files remain the source of truth for content, that file asserts order only.
 
-**Self-application (implemented).** Backlog health — capture-to-done latency, age distribution by stub level, how often elsewhere pins go un-exported — now feeds the metrics/ system via sweep step 7 above, per `.claude/skills/ari-port/metrics-spec.md`'s backlog-health row spec (PIN-2/3, sensors sprint).
+**Self-application (implemented).** Backlog health — capture-to-done latency, age distribution by stub level, how often elsewhere pins go un-exported — now feeds the metrics/ system via sweep step 7 above, per `.claude/skills/ari-code-rhetoric/metrics-spec.md`'s backlog-health row spec (PIN-2/3, sensors sprint).

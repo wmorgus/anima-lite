@@ -1,11 +1,11 @@
 ---
-name: ari-port
-description: Performs the code translation from prototype to prod repo, using spine.md and the current branch's contract as binding context. Called by ari-lite only after ari-map and ari-argue have produced current, hash-matched, branch-scoped artifacts. Logs every meaningful translation decision as a blip and halts back to ari-argue if the contract proves unsatisfiable against the real code, rather than guessing.
+name: ari-code-rhetoric
+description: Performs the code translation from prototype to prod repo, using spine.md and the current branch's contract as binding context. Called by ari-lite only after ari-map and ari-argue-rhetoric have produced current, hash-matched, branch-scoped artifacts. Logs every meaningful translation decision as a blip and halts back to ari-argue-rhetoric if the contract proves unsatisfiable against the real code, rather than guessing.
 ---
 
-# ari-port
+# ari-code-rhetoric
 
-Four steps: plan → execute → validate → reconcile. The hard epistemic work happened upstream in ari-argue. If execution feels ambiguous, that's a sign the contract was incomplete, not a cue to use judgment alone.
+Four steps: plan → execute → validate → reconcile. The hard epistemic work happened upstream in ari-argue-rhetoric. If execution feels ambiguous, that's a sign the contract was incomplete, not a cue to use judgment alone.
 
 ## Inputs
 
@@ -15,13 +15,13 @@ Four steps: plan → execute → validate → reconcile. The hard epistemic work
 - Pull `material.md` or `efficient.md` from either spine directory if a specific translation decision requires it.
 - `.anima-lite/work/<branch-slug>/contract.md` for the current branch and feature.
 - The prototype code being translated.
-- `.claude/skills/ari-port/metrics-spec.md` — canonical spec for the run row written at Step 5.5.
+- `.claude/skills/ari-code-rhetoric/metrics-spec.md` — canonical spec for the run row written at Step 5.5.
 
 ## Preconditions
 
 1. The spine(s) relevant to this work item's comparison exist and `telos.md` in each is current — two spines for a port, one for single-repo debt work (the repo's own spine), zero additional spines for a pure world-drift check. Port is the only work-type fully specified today: both `spine-proto/` and `spine-prod/` must exist and be current. Single-repo debt work and pure world-drift checks are ratified direction, not yet built — this skill does not yet run them end to end. If a required spine is stale or missing: halt, request ari-map for the affected repo.
-2. `work/<branch-slug>/contract.md` exists for the current branch and feature, status is not "DRAFT," and has no unconfirmed items in Open Questions. If any fail: halt, request ari-argue.
-3. The contract's `Spine commit:` hash matches `spine-proto/telos.md`'s current `Commit:`. If mismatched — another branch refreshed the spine since this contract was confirmed — don't auto-fail or proceed silently. Summarize what changed and ask the user whether the contract still holds or needs a quick re-pass through ari-argue.
+2. `work/<branch-slug>/contract.md` exists for the current branch and feature, status is not "DRAFT," and has no unconfirmed items in Open Questions. If any fail: halt, request ari-argue-rhetoric.
+3. The contract's `Spine commit:` hash matches `spine-proto/telos.md`'s current `Commit:`. If mismatched — another branch refreshed the spine since this contract was confirmed — don't auto-fail or proceed silently. Summarize what changed and ask the user whether the contract still holds or needs a quick re-pass through ari-argue-rhetoric.
 
 Do not proceed on partial or mismatched context. This is the failure mode the whole pipeline exists to prevent: code moved without its meaning, or moved against terrain that already shifted underneath it.
 
@@ -61,7 +61,7 @@ For each confirmed claim in the contract, in implementation order:
 <anything that would halt execution — CONTRACT-BREAK risk, missing infrastructure, ambiguous contract item>
 ```
 
-Surface the plan before executing. If a blocker is found in planning, halt here — re-run ari-argue rather than proceeding with partial information.
+Surface the plan before executing. If a blocker is found in planning, halt here — re-run ari-argue-rhetoric rather than proceeding with partial information.
 
 > **⛔ REQUIRED GATE — GATE-BLOCKERS (plan blockers)**
 > If `## Blockers` in the plan is non-empty, surface each blocker to the user. Do not spawn the execution subagent until all blockers are explicitly cleared.
@@ -71,6 +71,8 @@ Surface the plan before executing. If a blocker is found in planning, halt here 
 > After blockers are cleared (or if none exist), offer plan review. "Plan written — review before execution? (skip to proceed)."
 
 ### Step 2 — Execute
+
+**Ripple: per-leg execution, parallel by default.** For a ripple work item, this step runs once per target leg named in the shared contract's apex — each leg gets its own execution subagent, its own feature branch (in its own repo), and its own commit history, all reading the same frozen contract. Legs execute **in parallel by default** (`reorient/ripple.md` ruling 5): the shared contract is what guarantees cross-leg coherence, so there is no correctness reason to stage one leg ahead of another, and no leg is privileged as "first." Sequential ordering (running one leg to completion before starting the next — e.g. proto-first) is available only as an explicit, judgment-based deviation when the operator has a specific reason to want it, never as the standing default; if you deviate, name the reason in the plan or a blip so a reader doesn't mistake the deviation for a forgotten default. Each leg logs its own blips to its own `.anima-lite/work/<branch-slug>/blips-<leg-label>.md` (or the leg's own repo-local blips file, if the leg's repo maintains one) — never one shared `blips.md` across legs, since a shared file would attribute one leg's decisions to another's commit history and defeat the per-claim traceability commit discipline exists to protect.
 
 **Feature branch first.** Before touching any code, check the current branch in the prod repo. If you are on a long-lived branch (`main`, `master`, `dev`, `develop`, `staging`, or any branch that appears to be an integration target), create and switch to a feature branch named after the contract slug:
 
@@ -100,7 +102,7 @@ The subagent's job: implement the plan, follow commit discipline below, write bl
 - **Anything not covered by the contract** — log as a blip immediately, make the conservative choice (preserve current behavior).
 - **Contract-clarity watch** — while implementing, flag anything in the contract that looks under-specified or potentially wrong in light of what the prototype source actually does. This is softer than CONTRACT-BREAK (which fires only when the contract is actively contradicted). Log these as `Severity: info`, `Type: contract-clarity` blips. They don't halt execution but give the main agent and reviewer a signal that the contract may need sharpening for future ports of similar features.
 
-If the contract is actively wrong — not incomplete, but contradicted by what the prototype code does — **halt**. Write the contradiction to blips as `CONTRACT-BREAK` and report execution paused pending a re-run of ari-argue.
+If the contract is actively wrong — not incomplete, but contradicted by what the prototype code does — **halt**. Write the contradiction to blips as `CONTRACT-BREAK` and report execution paused pending a re-run of ari-argue-rhetoric.
 
 **Halt means halt — do not self-resolve.** On a CONTRACT-BREAK, stop and return the delta to the driver. Do not narrow the claim, drop it, or otherwise work around the contradiction to keep executing — that is the driver's call to make with the user, not yours. Logging the break loudly is necessary but not a substitute for halting; a loudly-logged CONTRACT-BREAK that the subagent then resolved on its own is still a bypassed gate.
 
@@ -111,12 +113,19 @@ The subagent returns a handoff to the main agent:
 - Summary of blips logged
 - `contract_break: true/false` — if true, execution is paused
 
-Main agent on `contract_break: true`: surface the CONTRACT-BREAK blip to the user and request an ari-argue re-run before proceeding. Do not advance to Step 3.
+Main agent on `contract_break: true`: surface the CONTRACT-BREAK blip to the user and request an ari-argue-rhetoric re-run before proceeding. Do not advance to Step 3.
 
-**Partial commit preservation.** Do not revert commits already made before the CONTRACT-BREAK was discovered. The commits represent completed work that the contract did cover — reverting them loses that work without benefit. Leave the branch as-is. When re-running ari-argue, provide the list of commits already made (from the execution subagent's handoff) so ari-argue can write a contract amendment rather than a full re-contract. The amendment covers only the uncovered case; previously confirmed and implemented claims are settled.
+**Partial commit preservation.** Do not revert commits already made before the CONTRACT-BREAK was discovered. The commits represent completed work that the contract did cover — reverting them loses that work without benefit. Leave the branch as-is. When re-running ari-argue-rhetoric, provide the list of commits already made (from the execution subagent's handoff) so ari-argue-rhetoric can write a contract amendment rather than a full re-contract. The amendment covers only the uncovered case; previously confirmed and implemented claims are settled.
+
+**Ripple: two-tier CONTRACT-BREAK reopen (`reorient/ripple.md` ruling 4).** For a ripple work item, a CONTRACT-BREAK discovered in any one leg does not stay scoped to that leg — but it also does not automatically trigger rework everywhere. Two tiers, not one:
+
+1. **Consideration reopens for every other leg, always.** The moment a leg reports `contract_break: true`, ari-argue-rhetoric consideration reopens for every *other* leg named in the contract apex, not just the leg that broke. This is a judgment call, argued explicitly: does the amendment the break requires touch claims this other leg has already honored? The judgment itself — yes or no, and why — is the record, whether or not it leads to rework.
+2. **Execution (this skill) only reopens where that judgment concludes the leg's telos is better honored by the amendment.** If ari-argue-rhetoric's per-leg judgment says a leg's already-implemented claims stand unaffected by the amendment, that leg's execution is **not** re-run — the judgment is logged as closed, not silently skipped, and the leg's existing commits stand. Only a leg whose judgment concludes the amendment changes what that leg must honor gets its execution subagent re-spawned against the amended contract.
+
+This replaces both blind full-rework (re-running every leg on any break) and shallow auto-recheck (assuming a break in one leg is scoped to that leg alone) — neither extreme is acceptable, and the judgment call itself is what the harness's discipline requires being on record. Do not let a leg's execution proceed unexamined just because it "probably isn't affected" — the consideration pass in tier 1 is mandatory for every leg, every time, even when the eventual answer is "no rework needed."
 
 > **⛔ REQUIRED GATE — GATE-BREAK (CONTRACT-BREAK)**
-> If the execution subagent returns `contract_break: true`, surface the CONTRACT-BREAK blip to the user and halt. Re-run ari-argue with the new information before proceeding to Step 3.
+> If the execution subagent returns `contract_break: true`, surface the CONTRACT-BREAK blip to the user and halt. Re-run ari-argue-rhetoric with the new information before proceeding to Step 3. For a ripple work item, this includes ari-argue-rhetoric's mandatory per-other-leg consideration pass (tier 1 above) before any leg's execution resumes.
 > The pipeline halts here. Do not proceed until explicitly cleared.
 
 **Commit discipline** — commit after each claim is fully implemented, before moving to the next. Do not accumulate all changes into a single working-tree blob. The commit message format:
@@ -155,7 +164,7 @@ The validation agent checks three things independently, reading changed files di
 
 **A. Claim implementation** — for each confirmed claim change in the contract: is it implemented correctly? Absent or partial = FAIL.
 
-**B. Blip classification quality** — for each blip with `Contracting failure?: n/a`: does the blip describe something that was actually a claim-level decision (something that should have gone to ari-argue)? If yes, that `n/a` is a misclassification = FAIL. This is the self-audit check the execution agent ran on itself — the validator audits the auditor.
+**B. Blip classification quality** — for each blip with `Contracting failure?: n/a`: does the blip describe something that was actually a claim-level decision (something that should have gone to ari-argue-rhetoric)? If yes, that `n/a` is a misclassification = FAIL. This is the self-audit check the execution agent ran on itself — the validator audits the auditor.
 
 **C. Blip severity routing** — `review-suggested` blips are surfaced to the user and require acknowledgment before PASS. `info` blips are noted but don't block. `CONTRACT-BREAK` blips mean execution should have already halted — if one reaches validation, that is itself a FAIL.
 
@@ -183,7 +192,7 @@ The validation agent returns one of:
 
 On FAIL: loop back to Step 2, fix the specific finding, re-validate. Do not declare completion before the validation agent returns PASS or PASS (pending review) with acknowledged items.
 
-**D. Live browser validation (strongly recommended, optional)** — if the contract specifies a `playwright:` block (format: `.claude/skills/ari-argue/playwright-spec.md`), the validation agent runs a browser pass using Playwright MCP tools after the static checks pass. The browser pass is a second validation layer: it confirms claims are not only implemented in code but functional in a running browser.
+**D. Live browser validation (strongly recommended, optional)** — if the contract specifies a `playwright:` block (format: `.claude/skills/ari-argue-rhetoric/playwright-spec.md`), the validation agent runs a browser pass using Playwright MCP tools after the static checks pass. The browser pass is a second validation layer: it confirms claims are not only implemented in code but functional in a running browser.
 
 If `playwright:` is present in the contract, the validation agent:
 1. Navigates to `playwright.login_url` and performs the login sequence specified in `playwright.login_steps`
@@ -194,13 +203,21 @@ If `playwright:` is present in the contract, the validation agent:
 
 The Playwright pass does not replace the static check — both must pass. If the dev server is not running, skip D and note it as an info blip: `Severity: info — Playwright pass skipped: dev server not reachable at <url>`.
 
-**Screenshot capture (rides the same D/E browser pass).** While the browser session from D/E is live and `feature_url` is reachable, the validation agent also captures screenshots for human review — one per Playwright `check` and one per `## Proto visual reference` section, saved under `.anima-lite/work/<branch-slug>/screenshots/` with a prose manifest at `.anima-lite/work/<branch-slug>/screenshots.md`. Full capture procedure, save path, naming convention, and manifest format: see `.claude/skills/ari-argue/playwright-spec.md` — canonical, referenced rather than restated here.
+**F. Cross-leg coherence check (ripple).** For a ripple work item, once every leg's own A–E checks have run, a separate validation pass reads *across* legs against the single shared contract — this is an integration-testing posture, not a per-leg check repeated N times. The named threat is sibling divergence: N repos making almost-the-same promise, nastiest at birth because there is no reference implementation to diff against, only the contract (`reorient/ripple.md` ruling 3). The check:
+
+1. For each claim in the contract's `## Claim changes` section, walk every leg's implementation of that claim (using each leg's per-target substrate-mapping subsection from the contract as the map of where to look) and confirm the *claim itself* — the invariant, not the code shape — is identical across legs. A user-facing promise that holds in leg A but not leg B is a cross-leg CONTRACT-BREAK, logged against whichever leg's implementation diverges from the claim as confirmed.
+2. Substrate is explicitly **not** compared leg-to-leg — each leg's substrate is free to follow its own spine's idiom (a React state hook and a JSP conditional include can both honor the same claim correctly). Do not flag a substrate difference as a finding; flag only a claim-level difference.
+3. Log the result as a blip regardless of outcome: `Severity: info` if coherent across all legs (a positive finding, not silence — same discipline as ari-argue-rhetoric's lighter-pass rule), `CONTRACT-BREAK` if any leg's rendering of a claim diverges from the others' in what it actually promises the user.
+
+This check cannot run until every leg named in the contract apex has reached its own PASS or PASS (pending review) — a leg still mid-execution has nothing yet to compare.
+
+**Screenshot capture (rides the same D/E browser pass).** While the browser session from D/E is live and `feature_url` is reachable, the validation agent also captures screenshots for human review — one per Playwright `check` and one per `## Proto visual reference` section, saved under `.anima-lite/work/<branch-slug>/screenshots/` with a prose manifest at `.anima-lite/work/<branch-slug>/screenshots.md`. Full capture procedure, save path, naming convention, and manifest format: see `.claude/skills/ari-argue-rhetoric/playwright-spec.md` — canonical, referenced rather than restated here.
 
 This is reachability-gated with the same graceful fallback as D/E and the proto visual reference step: if `feature_url` is not reachable, do not attempt capture — write `screenshots: target-not-reachable — static review only` to `screenshots.md` and proceed. An unreachable target degrades validation to static review; it is never a validation FAIL, and it never blocks PASS or PASS (pending review).
 
 **Surface screenshots in the human-review path.** When screenshots were captured, the end-of-session summary and `catchup.md`'s "How to verify" section must point the reviewer at `.anima-lite/work/<branch-slug>/screenshots/` and `screenshots.md` — so review has a visual, not just PASS/FAIL and prose blips. When capture was skipped (target unreachable), state that plainly in the same places ("screenshots: target-not-reachable — static review only") so the reviewer knows to expect a static-only review rather than assuming the step was forgotten.
 
-Contract `playwright:` block format and the worked example: see `.claude/skills/ari-argue/playwright-spec.md` — the canonical spec, referenced rather than restated here.
+Contract `playwright:` block format and the worked example: see `.claude/skills/ari-argue-rhetoric/playwright-spec.md` — the canonical spec, referenced rather than restated here.
 
 ### Step 4 — Reconcile
 
@@ -305,7 +322,7 @@ The critic's job: attempt to answer the questions a reviewer would ask from the 
 - Which section is missing the information
 - What specific content would resolve it
 
-Secondary task: scan the blips log for any `Contracting failure?: n/a` entries and check whether they describe something that a more rigorous ari-argue pass would have caught. If yes, note it — not as a blocking finding, but as a signal that the ari-argue step may have under-classified. This closes the feedback loop from execution back to argumentation.
+Secondary task: scan the blips log for any `Contracting failure?: n/a` entries and check whether they describe something that a more rigorous ari-argue-rhetoric pass would have caught. If yes, note it — not as a blocking finding, but as a signal that the ari-argue-rhetoric step may have under-classified. This closes the feedback loop from execution back to argumentation.
 
 If the critic finds no gaps, proceed directly to 4f — no patch needed.
 
@@ -340,11 +357,11 @@ Commit the ledger file alongside the spine — it persists across sessions.
 
 ### Step 5.5 — Instrument
 
-After the ledger harvest, the main agent writes the run row: `.anima-lite/metrics/run-<date>-<slug>.md`, per `.claude/skills/ari-port/metrics-spec.md` (canonical spec — this step points to it, not restated here).
+After the ledger harvest, the main agent writes the run row: `.anima-lite/metrics/run-<date>-<slug>.md`, per `.claude/skills/ari-code-rhetoric/metrics-spec.md` (canonical spec — this step points to it, not restated here).
 
 Two operative instructions:
 
-1. **Track usage as the pipeline runs, not retroactively.** Throughout the pipeline (ari-map, ari-argue, and every ari-port subagent spawn — plan, execute, validate, critic), record each subagent's returned usage (tokens, duration) and the model tier it was spawned at. The run row's phase table is assembled from these running notes at Step 5.5, not reconstructed from memory after the fact. If a subagent's return didn't include usage data, its row gets `not traced` — never a guessed figure.
+1. **Track usage as the pipeline runs, not retroactively.** Throughout the pipeline (ari-map, ari-argue-rhetoric, and every ari-code-rhetoric subagent spawn — plan, execute, validate, critic), record each subagent's returned usage (tokens, duration) and the model tier it was spawned at. The run row's phase table is assembled from these running notes at Step 5.5, not reconstructed from memory after the fact. If a subagent's return didn't include usage data, its row gets `not traced` — never a guessed figure.
 2. **Fill the gate table exhaustively from the registry.** Every gate ID in `HARNESS.md` Section 1 gets a row in the run row's gate table, whether or not it fired this run. No gate is omitted because it seemed irrelevant to this feature — an omitted row is indistinguishable from an unconsidered gate, which defeats the point of the table.
 
 Also append the run row to `.anima-lite/metrics/summary.md`'s table per metrics-spec.md.
@@ -365,7 +382,7 @@ Downstream consequence: <what this means going forward>
 Contracting failure?: <what should have been in the contract to cover this — or "n/a" if genuinely unforeseeable>
 ```
 
-**Every blip's `Why:` field cites the spine section it rests on.** Bare reasoning ("this seemed right," "kept the existing behavior") is not acceptable, the same discipline ari-argue applies to substrate/claim classifications. If no spine section applies, the blip must say so explicitly rather than omitting the question — a blip that skips the citation is as unverifiable as a bare classification.
+**Every blip's `Why:` field cites the spine section it rests on.** Bare reasoning ("this seemed right," "kept the existing behavior") is not acceptable, the same discipline ari-argue-rhetoric applies to substrate/claim classifications. If no spine section applies, the blip must say so explicitly rather than omitting the question — a blip that skips the citation is as unverifiable as a bare classification.
 
 A blip is logged whenever: a substrate change has a non-obvious downstream consequence; something uncovered by the contract came up and got a conservative default; a prod-repo convention conflicts with the prototype's approach and one was chosen; or anything a user skimming the PR would likely miss but want to know.
 
@@ -381,6 +398,6 @@ At session end (after reconcile complete):
 
 **Driver's independent break-scan is not optional.** Before trusting the execution subagent's handoff, the main agent independently scans the committed diff itself for un-surfaced CONTRACT-BREAKs — do not proceed on the subagent's summary that it "handled" everything. GATE-BREAK is a judgment gate (HARNESS.md §3) and cannot be mechanized: no hook can decide whether reality contradicts a claim, so the main-agent review layer is the only reliable enforcement. A self-policing executor is not sufficient on its own.
 
-One agent session, one feature. A second feature on the same branch needs its own ari-argue pass and its own contract file, even if the spine is reused.
+One agent session, one feature. A second feature on the same branch needs its own ari-argue-rhetoric pass and its own contract file, even if the spine is reused.
 
 This skill does not implement locking for two sessions running against the identical branch-slug simultaneously — that's out of scope for a prototyping-stage tool. If that happens, the right answer is "don't," not new infrastructure.

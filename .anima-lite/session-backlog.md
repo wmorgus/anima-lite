@@ -6,7 +6,7 @@ Updated: 2026-07-07
 
 ## Ladder
 
-1. **PIN-26 ripple build** — contract ratified (`work/pin26-ripple-contract/`); remaining: execute the two skill renames (ari-argue→ari-argue-rhetoric, ari-port→ari-code-rhetoric, full reference sweep), ari-argue-rhetoric intent-artifact input mode, ari-code-rhetoric per-leg execution + cross-leg coherence check, ledger shared-origin entry type.
+1. **PIN-26 ripple — prove it** — machinery built (renames executed, intent-artifact mode, per-leg execution + coherence check, ledger shared-origin entry). Stays open until a real N-leg feature runs through it end to end.
 2. **PIN-23 self-spine re-probe** — spine stale at 28d8464; held until after 26 lands so the re-probe runs once, not per-change.
 3. **PIN-30 run5 resume** — paused A/B port; proves PIN-21/22 spine-completeness work. Manifest re-check mandatory on resume — write pipeline has changed under it.
 4. **PIN-25c** — incremental spine maintenance design (spine as product, update-on-change). Design-only; pairs with 23's fresh baseline.

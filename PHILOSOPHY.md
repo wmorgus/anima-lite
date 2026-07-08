@@ -44,7 +44,7 @@ This layer is direction the identity has ratified, not machinery the harness has
 
 The same lens applies one level up: the skill pipeline is the four-cause decomposition of "make a software change," where software is an argument. Intake supplies the final cause (what the change is for — telos sharpened, everything argued for; built as `/ari-intake`, PIN-27). Map supplies the material cause (the mapped codebase as matter). Argue supplies the formal cause (the contract as the change's essence — which claims, what promise). Port supplies the efficient cause (execution from the contract). The two levels nest without conflict: the spine is the four causes of the repo; the pipeline is the four causes of the change.
 
-Naming carries the same asymmetry (ratified 2026-07-07, PIN-26; renamed, not yet built): argue and port are being renamed to **ari-argue-rhetoric** and **ari-code-rhetoric** — formal cause makes the claim, efficient cause makes it real, and "rhetoric" is the shared root because both are where an argument is actively made or materialized. Intake and map stay bare: they surface facts (telos sharpened, spine read) rather than making an argument, so neither carries the name.
+Naming carries the same asymmetry (ratified and executed 2026-07-07, PIN-26): argue and port were renamed to **ari-argue-rhetoric** and **ari-code-rhetoric** — formal cause makes the claim, efficient cause makes it real, and "rhetoric" is the shared root because both are where an argument is actively made or materialized. Intake and map stay bare: they surface facts (telos sharpened, spine read) rather than making an argument, so neither carries the name.
 
 ---
 
@@ -60,7 +60,7 @@ Naming carries the same asymmetry (ratified 2026-07-07, PIN-26; renamed, not yet
 4. **Reality** — live data: code as it sits, runtime behavior, the target repos. Always sampled, never held in full — which is why belief exists.
 5. **The record** — the diachronic trail: git history, blips, `RESOLUTION.md`'s ratification line, done pins, the backlog ledger. Append-only fact of how the present came to be; not belief, not intent, not present state.
 
-**Register flows.** The write register (`/ari-intake` → `/ari-map`/`/ari-argue` → `/ari-port`) spends belief to change reality and appends to the record. The read register (`/ari-read`) spends reality to repair belief and audits the record. Neither subsumes the other — a work item is a change or a question, never both at once.
+**Register flows.** The write register (`/ari-intake` → `/ari-map`/`/ari-argue-rhetoric` → `/ari-code-rhetoric`) spends belief to change reality and appends to the record. The read register (`/ari-read`) spends reality to repair belief and audits the record. Neither subsumes the other — a work item is a change or a question, never both at once.
 
 **The generative check.** The five fields taken pairwise are not just a taxonomy — each divergence between two fields already names a piece of machinery this harness has, or is building:
 - user intent × ratified intent — GATE-TELOS (does the ask conflict with what the repo is for?)

@@ -3,7 +3,7 @@ trigger: manual
 description: Read both spines and the feature, classify every detail as substrate or claim, confirm claim changes with the user, write a branch-scoped contract.
 ---
 
-# ari-argue
+# ari-argue-rhetoric
 
 Argumentation: determine what a feature is claiming to the user, separate from how it happens to be implemented, and get the human to confirm anything that would change if the claim itself moved.
 
@@ -27,7 +27,7 @@ Argumentation: determine what a feature is claiming to the user, separate from h
 
 **3. Classify every detail.** Substrate (free to translate): widget library swap, renaming, file restructuring, styling, colors, fonts, animation library. Wording is substrate only when the semantic register is unchanged. Claim (requires confirmation): removing a UI element, dropping a confirmation step, relaxing validation, changing reversible to permanent. Three categories that consistently look like substrate but are not:
 
-**Interaction model.** How the user physically moves through the feature — collapse/expand, auto-advance, one-at-a-time focus, toggle behavior. Classify interaction patterns as claims by default. When writing the contract, name the invariant the interaction enforces AND the sub-tasks — not just the sub-tasks. A contract that names only sub-tasks passes to ari-port without stating what they exist to enforce.
+**Interaction model.** How the user physically moves through the feature — collapse/expand, auto-advance, one-at-a-time focus, toggle behavior. Classify interaction patterns as claims by default. When writing the contract, name the invariant the interaction enforces AND the sub-tasks — not just the sub-tasks. A contract that names only sub-tasks passes to ari-code-rhetoric without stating what they exist to enforce.
 
 **Semantic register.** Register shift is a claim: endorsement → disclaimer, celebration → warning, brand confidence → liability caveat. Two different promises, not two phrasings.
 
@@ -46,7 +46,7 @@ Write `.anima-lite/contracts/<branch-slug>.md`:
 Branch: <branch-slug>
 Generated: <date>
 Spine commit: <Commit: hash from spine-proto.md>
-Status: FROZEN FOR SESSION — do not modify without re-running ari-argue
+Status: FROZEN FOR SESSION — do not modify without re-running ari-argue-rhetoric
 
 ## The argument
 ## Substrate changes (free to translate)
@@ -54,7 +54,7 @@ Status: FROZEN FOR SESSION — do not modify without re-running ari-argue
 ## Claim changes (confirmed with user)
 - <detail> — Decision: <preserve|change-to-X> — Confirmed: <yes/default-preserve, with date>
 ## Open questions
-<ari-port must halt and escalate if it hits these>
+<ari-code-rhetoric must halt and escalate if it hits these>
 ```
 
 Once written with no open questions, the contract is frozen for the session.

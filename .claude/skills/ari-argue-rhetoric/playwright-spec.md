@@ -1,6 +1,6 @@
 # Playwright verification spec
 
-Canonical spec for the `## Playwright verification` block written into contracts by ari-argue, and read by ari-port's validation step (Step 3, checks D and E). Edit here; both skills point to this file rather than restating the shape.
+Canonical spec for the `## Playwright verification` block written into contracts by ari-argue-rhetoric, and read by ari-code-rhetoric's validation step (Step 3, checks D and E). Edit here; both skills point to this file rather than restating the shape.
 
 ## Block schema
 
@@ -42,9 +42,9 @@ Each check names the claim, the interaction steps (human-readable, the Playwrigh
 
 ## Screenshot capture for review
 
-Mirrors the `## Proto visual reference (if server reachable)` step in `ari-argue/SKILL.md` — same reachability gate, same graceful-fallback discipline, run at the opposite end of the pipeline. That step captures proto ground truth before the contract is frozen; this one captures prod result during ari-port Step 3 validation, so a human reviewer gets proto and prod side by side instead of a bare PASS/FAIL plus prose blips.
+Mirrors the `## Proto visual reference (if server reachable)` step in `ari-argue-rhetoric/SKILL.md` — same reachability gate, same graceful-fallback discipline, run at the opposite end of the pipeline. That step captures proto ground truth before the contract is frozen; this one captures prod result during ari-code-rhetoric Step 3 validation, so a human reviewer gets proto and prod side by side instead of a bare PASS/FAIL plus prose blips.
 
-**WHEN.** During the validation agent's Playwright pass (Step 3, checks D and E in `ari-port/SKILL.md`), after — or alongside — running the `expect`-clause checks. This is not a separate pass; it rides the same browser session that is already navigating to `feature_url` and exercising each check's steps.
+**WHEN.** During the validation agent's Playwright pass (Step 3, checks D and E in `ari-code-rhetoric/SKILL.md`), after — or alongside — running the `expect`-clause checks. This is not a separate pass; it rides the same browser session that is already navigating to `feature_url` and exercising each check's steps.
 
 **WHAT to capture.** One screenshot for each of:
 1. Every `check` in the contract's `## Playwright verification` block — one shot of the state described by that check's `expect` clause (post-interaction, so the shot shows the outcome being verified, not the pre-click state).
@@ -69,9 +69,9 @@ Captured: <date>, validation Step 3
 
 The prose line is the reviewable record (diffable in a PR, greppable, survives even if the PNG is never committed); the PNG is the human's eyeball aid layered on top. Write the same level of specificity the `expect` field rules above require: element counts, labels, badge text, button state — not "the section renders correctly."
 
-**Gitignore note (flag for the driver, do not act on it here).** PNGs under `.anima-lite/work/<slug>/screenshots/` should be gitignored — they're regenerable review artifacts, not durable state, and binary diffs are useless in review. `screenshots.md` should be committed — it's the durable, diffable record. This spec does not edit `.gitignore`; the validation agent or the ari-port driver should treat "add `.anima-lite/work/*/screenshots/*.png` to `.gitignore`" as a follow-up action, not something to silently skip past.
+**Gitignore note (flag for the driver, do not act on it here).** PNGs under `.anima-lite/work/<slug>/screenshots/` should be gitignored — they're regenerable review artifacts, not durable state, and binary diffs are useless in review. `screenshots.md` should be committed — it's the durable, diffable record. This spec does not edit `.gitignore`; the validation agent or the ari-code-rhetoric driver should treat "add `.anima-lite/work/*/screenshots/*.png` to `.gitignore`" as a follow-up action, not something to silently skip past.
 
-**Reachability gating and fallback.** Same discipline as `ari-argue/SKILL.md`'s proto visual reference step — this is a fallback, never a failure:
+**Reachability gating and fallback.** Same discipline as `ari-argue-rhetoric/SKILL.md`'s proto visual reference step — this is a fallback, never a failure:
 1. Attempt to navigate to `feature_url` (already required for checks D/E). If it renders, proceed with capture as above.
 2. If the target is not reachable — no JDK/Tomcat/browser runtime available, or the URL does not resolve — do not attempt capture, and do not block validation. Write to `screenshots.md` (creating it if needed):
    ```markdown

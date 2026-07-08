@@ -1,6 +1,6 @@
 # metrics-spec.md — canonical spec for all metrics artifacts
 
-Owner: ari-port. Readers: ari-backlog (backlog-health row), SessionEnd hook (session-cost row), calibration diffs. This file is the single source of truth for the shape of every metrics artifact under `.anima-lite/metrics/`. Skills and hooks that write or read metrics cite this file rather than restating the schema.
+Owner: ari-code-rhetoric. Readers: ari-backlog (backlog-health row), SessionEnd hook (session-cost row), calibration diffs. This file is the single source of truth for the shape of every metrics artifact under `.anima-lite/metrics/`. Skills and hooks that write or read metrics cite this file rather than restating the schema.
 
 **Honest-stub rule (governs all metrics artifacts):** record only what was actually observed. Where a value cannot be observed, write `not traced` — never leave the field blank, and never estimate or guess a plausible-looking number. A guessed number is worse than an absent one: it looks like data.
 
@@ -10,7 +10,7 @@ Owner: ari-port. Readers: ari-backlog (backlog-health row), SessionEnd hook (ses
 
 Path: `.anima-lite/metrics/run-<date>-<slug>.md`
 
-Written by: the main pipeline agent (not a subagent), at ari-port Step 5.5 — see `.claude/skills/ari-port/SKILL.md`.
+Written by: the main pipeline agent (not a subagent), at ari-code-rhetoric Step 5.5 — see `.claude/skills/ari-code-rhetoric/SKILL.md`.
 
 ```markdown
 # Run: <feature-slug>
@@ -55,12 +55,12 @@ Result: PASS | PASS-pending (<n> review-suggested acknowledged) | FAIL (<n> loop
 | Phase | Subagent invocations | Model tier(s) | Reasoning/effort setting | Subagent tokens | Duration |
 |---|---|---|---|---|---|
 | ari-map | <n> | <tier per invocation> | <thinking/effort setting per invocation, or "ambient — not traced"> | <from task-result usage, or "not traced"> | <or "not traced"> |
-| ari-argue | <n> | ... | ... | ... | ... |
-| plan (ari-port Step 1) | <n> | ... | ... | ... | ... |
-| execute (ari-port Step 2) | <n> | ... | ... | ... | ... |
-| validate (ari-port Step 3) | <n> | ... | ... | ... | ... |
-| critic (ari-port Step 4e(ii)) | <n> | ... | ... | ... | ... |
-| reconcile (ari-port Step 4) | <n> | ... | ... | ... | ... |
+| ari-argue-rhetoric | <n> | ... | ... | ... | ... |
+| plan (ari-code-rhetoric Step 1) | <n> | ... | ... | ... | ... |
+| execute (ari-code-rhetoric Step 2) | <n> | ... | ... | ... | ... |
+| validate (ari-code-rhetoric Step 3) | <n> | ... | ... | ... | ... |
+| critic (ari-code-rhetoric Step 4e(ii)) | <n> | ... | ... | ... | ... |
+| reconcile (ari-code-rhetoric Step 4) | <n> | ... | ... | ... | ... |
 
 **Reasoning/effort column:** thinking is a model-intensity variable (research question (c)), recorded here — not enforced by any gate. The harness does not mandate a thinking budget; it leaves that to the ambient model/ecosystem and records what was observed. Where the setting is ambient and not readable per-invocation, write `ambient — not traced` (honest-stub rule). This column exists so calibration diffs can hold thinking constant across an A/B (or deliberately vary it) rather than confounding it silently.
 
