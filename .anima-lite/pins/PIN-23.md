@@ -1,7 +1,7 @@
 ### PIN-23 — spine-anima-lite is stale + format-behind; needs full re-probe
 captured: 2026-07-07
 stub: 2
-status: open
+status: done
 home: anima-lite
 goes-stale: superseded once spine-anima-lite is re-probed fresh at current HEAD in the new format; or if the self-spine is deliberately retired
 relates-to: spine-anima-lite/*, PIN-21 (completeness overhaul), PIN-6/PIN-7/PIN-8 (the FINDING-3/5/versioning items the stale spine still tracks by name), CLAUDE.md (artifact layout), HARNESS.md §1 (gate count)
@@ -16,4 +16,4 @@ Out — anything on run5's critical path; retiring the self-spine (a separate de
 
 **Batch:** spine-completeness
 **Contract:** n/a — harness/process change, no user-facing argument to preserve
-**Resolution:**
+**Resolution:** done 2026-07-08. Full re-probe run (background agent, human-reviewed), pinned to HEAD 522e44b. All named inaccuracies fixed: commit pin, artifact layout (committed `work/<slug>/`, not gitignored `contracts/`/`blips/`), skill count (6), gate count (9 required/4 optional), backlog.md existence. Completeness-overhaul sections added: material.md §7 (artifact/spec inventory), §8 (deliberate non-capabilities), §9 (vocabulary glossary); formal.md per-skill strata + required `Seams:` lines. Corrections kept out of the artifacts, narrated in the commit (5b852bc) instead, per standing direction. Two live findings surfaced by the probe: `ari-lite.md` had pre-PIN-26 path residue in its Phase 2/3 templates (fixed same commit); `.cursor/rules/*.mdc` is stale well beyond naming, pre-dating the completeness overhaul — left alone, tracked by PIN-7/PIN-18. FINDING-3 (lite-face-lost-on-direct-invocation, PIN-6) reconfirmed still live, not resolved. Follow-on: a general spine self-correction procedure (detection/debounce/execution/exclusion) is being designed separately, PIN-25c.
