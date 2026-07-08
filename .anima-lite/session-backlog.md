@@ -6,7 +6,7 @@ Updated: 2026-07-08
 
 ## Ladder
 
-1. **PIN-26 ripple — prove it** — machinery built (renames executed, intent-artifact mode, per-leg execution + coherence check, ledger shared-origin entry). Stays open until a real N-leg feature runs through it end to end.
+1. **PIN-26 ripple — prove it (in progress)** — real run live: `work/rep-lumilo-kinesis-direct/` (lumilo-bridge + realtime-event-provider). Intent + contract frozen. Next: decide REP routing-config edit path (Open Question 1 — env-injected, not in-repo), confirm execution sequencing (Claim C+B before Claim A), then run `/ari-code-rhetoric` to build lumilo-bridge's mapping fix + activation.
 2. **PIN-30 run5 resume** — paused A/B port; proves PIN-21/22 spine-completeness work. Manifest re-check mandatory on resume — write pipeline has changed under it.
 
 ## Wider tab (outside this repo, parked per run-through-Anima ruling)
