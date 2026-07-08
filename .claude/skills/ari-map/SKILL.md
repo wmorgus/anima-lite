@@ -112,9 +112,9 @@ Refresh trigger: <the specific condition that should invalidate this spine>
 Not a mission statement — a constraint. New work either serves this purpose or contradicts it.>
 
 ## §2 Don't contradict
-- <imperative rule — what new code must not do, derived from the telos>
-- <imperative rule>
-- <imperative rule — 3-5 rules total. Concrete and checkable, not vague principles.>
+- <imperative rule — what new code must not do, derived from the telos> `lives-in: <path[s] that enforce this rule>`
+- <imperative rule> `lives-in: <path[s]>`
+- <imperative rule — 3-5 rules total. Concrete and checkable, not vague principles.> `lives-in: <path[s]>`
 
 ## §3 Cause files (reference depth)
 - [material.md](material.md) — tech stack and load-bearing dependencies
@@ -243,6 +243,19 @@ ari-code-rhetoric treats formal.md as ground truth for substrate decisions. A RE
 pattern that the code contradicts silently misdirects translations. The tag lets
 ari-code-rhetoric and human reviewers know which claims need a verification pass before
 acting on them.
+
+Connective-tissue rule: every §5 named finding also carries a `lives-in: <path[s]>`
+tag pointing at the file(s) that embody it — same discipline as §2's don't-contradict
+rules above. This is a pointer, not a cache: never copy the code or snippet into the
+spine, only the path. The spine already treats code-derived material as liquid by
+default (PHILOSOPHY.md); storing the file it lives in is stable and cheap, storing
+the code itself just creates a second staleness surface to track. If one finding is
+enforced at 3 or more call sites, flag it during authoring as a smell — the rule is
+probably too coarse and should split into narrower findings, not silently accepted
+as one finding with a long path list. This tag is what makes the spine's own
+staleness mechanically detectable: a diff touching a tagged path is a candidate stale
+rule, checkable by grep instead of a full re-read. See PHILOSOPHY.md's spine
+self-correction paragraph for the procedure this feeds.
 
 Seam protocol rule: documenting that layers exist is not documenting what crosses
 between them. A layer diagram without seam protocols is scaffolding — it names

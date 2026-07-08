@@ -73,6 +73,14 @@ Naming carries the same asymmetry (ratified and executed 2026-07-07, PIN-26): ar
 
 ---
 
+**The spine self-corrects (PIN-37).** Belief × reality is a named divergence above (`GATE-HASH, stale-spine detection, blips`); this states the standing procedure for repairing it, so a future re-probe doesn't have to be re-litigated as its own design question the way PIN-23 was. Four parts:
+1. **Detection.** Every spine rule and named finding carries a `lives-in: <path[s]>` tag (`ari-map/SKILL.md` Output) — a pointer to the file(s) that embody it, never a cached copy of the code itself. A diff touching a tagged path is a candidate stale rule, checkable by grep against the spine's `Commit:` hash — mechanical, not something a human has to notice and remember to flag.
+2. **Judgment.** A flagged rule is a candidate, not a verdict — whether the change actually altered what's promised (stale) or left it standing (cosmetic) is a human/agent call, the same conservative-default posture as everywhere else in this harness. Detection does not auto-rewrite anything.
+3. **Execution.** Today, re-probing a judged-stale rule means a full `/ari-map` re-run (the only mechanism built). Incremental, per-section re-probing — driven by which `lives-in:` paths actually changed — is the direction PIN-25 already ratified but not yet built; naming it here is not building it.
+4. **Exclusion.** The spine stays a clean current-state snapshot — belief, not a diff. What changed and why is the record, and belongs in the commit message or the pin's Resolution field, never baked into the spine artifact itself. This is the belief/record split above, applied to the spine's own maintenance rather than restated as a separate rule.
+
+---
+
 **The operator role: the claim court.** The engineer is the claim court — yes, no, here's why. The agent does everything that isn't judgment.
 
 ---

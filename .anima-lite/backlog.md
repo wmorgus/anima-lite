@@ -17,7 +17,7 @@ One line per pin: `[PIN-n](pins/PIN-n.md) — status, stub, batch — semantic h
 - [PIN-22](pins/PIN-22.md) — open, stub:2, spine-completeness — GATE-SCHEMA: pre-freeze schema-dependency check in ari-argue-rhetoric; per-claim Schema deps field; backstop to PIN-21; landed, pending run5 proof
 - [PIN-23](pins/PIN-23.md) — done, stub:2, spine-completeness — spine-anima-lite re-probed fresh at HEAD 522e44b; all stale facts fixed, completeness-overhaul sections added; surfaced ari-lite.md rename residue (fixed) and .cursor/rules drift (left, PIN-7/18)
 - [PIN-24](pins/PIN-24.md) — open, stub:2, validation-review — validation agent captures Playwright screenshots for review; reachability-gated with static-review fallback; landed, DORMANT until a prod runtime exists
-- [PIN-25](pins/PIN-25.md) — open, stub:2, reorient — identity reorientation: custodian of promise/artifact alignment; vocab ratified + docs propagated + ports/→work/ mv done; remaining: incremental spine-maintenance design
+- [PIN-25](pins/PIN-25.md) — done, stub:2, reorient — identity reorientation: custodian of promise/artifact alignment; vocab ratified, docs propagated, ports/→work/ mv done; item (c) spun out to PIN-37
 - [PIN-26](pins/PIN-26.md) — open, stub:2, reorient — ripple: machinery built (renames executed, ari-argue-rhetoric intent-artifact mode, ari-code-rhetoric per-leg execution + coherence check, ledger shared-origin entry); stays open until one ripple run completes end to end
 - [PIN-27](pins/PIN-27.md) — done, stub:2, reorient — ari-intake skill built + dogfooded (PIN-31 first item through); nothing enters unargued; intent.md with per-claim argued-by provenance; GATE-TELOS fires at intake
 - [PIN-28](pins/PIN-28.md) — done, stub:0, reorient — pipeline = four-cause decomposition of "make a software change" (intake/final, map/material, argue/formal, port/efficient); PHILOSOPHY.md carries it
@@ -29,6 +29,7 @@ One line per pin: `[PIN-n](pins/PIN-n.md) — status, stub, batch — semantic h
 - [PIN-34](pins/PIN-34.md) — done, stub:2, unbatched — /ari-read built + dogfooded: read-register doorway, reconstruction over 4 question-shapes, GATE-QUERY + GATE-MATCH (diff presentation, plain-chat medium), judgment.md artifact terminal on pin33-ratification; five-field tiling canonical in PHILOSOPHY
 - [PIN-35](pins/PIN-35.md) — done, stub:2, unbatched — backlog sharded: backlog.md → index, pins/PIN-n.md per pin; kills PIN-31(b) collision class for pin bodies
 - [PIN-36](pins/PIN-36.md) — done, stub:2, unbatched — harness-change runs a real ari-argue-rhetoric pass to contract.md now; pin Contract fields point at it, don't substitute; first instance work/pin26-ripple-contract/
+- [PIN-37](pins/PIN-37.md) — done, stub:2, spine-completeness — spine connective tissue: `lives-in:` tags on spine rules/findings (ari-map Output) + named self-correction procedure (PHILOSOPHY.md); spun from PIN-25 item (c); staleness script + promise graph explicitly deferred, untested against a real case
 
 ## Archived pins
 
