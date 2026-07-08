@@ -1,6 +1,6 @@
 ### PIN-26 — ripple: first-class multi-leg work-type (institute one promise in N repos)
 captured: 2026-07-07
-stub: 1
+stub: 2
 status: open
 home: anima-lite
 goes-stale: superseded once ari-argue carries intent-artifact input mode + per-target contract sections AND ari-port carries per-leg execution + cross-leg coherence check, with one ripple run completed
@@ -11,7 +11,7 @@ Ratified 2026-07-07: ripple is a first-class work-type, generalized to N executi
 ---
 Shaping fields.
 
-**Scope:** In — (a) ari-argue: intent-artifact input mode, GATE-SCHEMA against every target, per-target substrate-mapping contract sections (claims section stays single); (b) ari-port: per-leg execution + blips, cross-leg coherence check in validation; (c) precondition text extension (N target spines under contract apex); (d) ledger shared-origin entry type; (e) ratify or drop the two proposed rules. Out — ari-intake itself (PIN-27); building the diagnosis layer.
+**Scope:** In — (a) rename ari-argue → **ari-argue-rhetoric** and ari-port → **ari-code-rhetoric** (formal/efficient cause, folded into this build since both files are touched regardless — full surface: skill dirs, CLAUDE.md, HARNESS.md spec-ownership map, PHILOSOPHY.md four-cause claim, README.md, ledger-spec.md, all pin/backlog references); (b) ari-argue-rhetoric: intent-artifact input mode, GATE-SCHEMA against every target, per-target substrate-mapping contract sections (claims section stays single); (c) ari-code-rhetoric: per-leg execution (parallel by default) + blips, cross-leg coherence check in validation, two-tier CONTRACT-BREAK reopen (consideration on every leg, execution only where argued to better honor telos); (d) precondition text extension (N target spines under contract apex); (e) ledger shared-origin entry type. Out — ari-intake itself (PIN-27); building the diagnosis layer.
 **Batch:** reorient
-**Contract:** not traced — claim-shaped (new promise class: cross-leg claim identity); write at stub:2
+**Contract:** claim-shaped — new promise class (cross-leg claim identity) plus two skill renames. Ratified 2026-07-07 design round (operator + agent): (1) break-reopens-all-legs refined to two-tier — consideration always reopens on break, execution only where judgment argues the amendment better honors that leg's telos, closed-and-logged otherwise; (2) parallel-by-default leg execution, no privileged first leg, sequential stays available as judgment-based deviation (supersedes sequential-proto-first); (3) ari-argue→ari-argue-rhetoric, ari-port→ari-code-rhetoric, asymmetric with intake/map staying bare (only the skills that make and materialize an argument carry "rhetoric"). Full rulings in `reorient/ripple.md`.
 **Resolution:**

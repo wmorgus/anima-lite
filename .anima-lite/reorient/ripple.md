@@ -16,15 +16,20 @@ The invariant generalizes without strain: no unratified claim enters *any* repo.
 2. **Generalized to N execution legs.** Two-repo (proto+prod) is the first instance, not the definition. Geometry: target×N under a contract apex, versus port's source→target.
 3. **Sibling divergence is the named threat; cross-leg coherence in validation is the answer.** Sibling divergence — N repos making *almost*-the-same promise (same feature name, subtly different validation, different visibility gate) — already looms silently in current multi-repo setups. It is nastiest at birth: no reference implementation to diff against, only the contract. The validation step gains a **cross-leg coherence check** (integration-testing posture): substrate may differ freely per leg (each follows its own spine's idiom); claims must be identical across all legs, walked against the shared contract.
 
-## Proposed, not yet ratified
+## Rulings (2026-07-07, design round with PIN-26)
 
-- **Break-reopens-all-legs:** CONTRACT-BREAK in any leg reopens ari-argue for every leg — a claim unimplementable in one target amends the shared contract, so all legs re-check even if already passed. The price of one-promise-N-bodies. Flagged for pressure-test before it becomes a gate rule.
-- **Sequential-proto-first as default execution order** (cheap validation loop, matches plus-uno's purpose) with parallel legs allowed. Ordering is an execution policy, not a contract property.
+4. **Break reopens all legs for consideration, not automatically for execution.** CONTRACT-BREAK in any leg always reopens ari-argue-rhetoric *consideration* for every other leg: an explicit judgment is argued for whether the amendment touches that leg's already-honored claims. Execution (re-running ari-code-rhetoric) only reopens where that argument concludes the leg's telos is better honored by the amendment; otherwise the judgment is logged and closed, not silently skipped. This replaces blind full-rework and shallow auto-recheck alike — the judgment call itself is the record, and it's cheaper long-term than either extreme.
+5. **Parallel-by-default execution across legs.** No privileged first leg — the shared contract is what guarantees cross-leg coherence, so there's no correctness reason to stage one leg before the others. Sequential (proto-first or any other order) is available as a judgment-based deviation when the operator has a specific reason, same posture as ruling 4 — not a fixed default. (Supersedes the sequential-proto-first proposal below, which assumed a proto/prod hierarchy that doesn't generalize to N legs.)
+6. **Skill renames, folded into this build:** `ari-argue` → **ari-argue-rhetoric** (formal cause — makes the claim), `ari-port` → **ari-code-rhetoric** (efficient cause — makes it real). Intake and map stay bare: they surface facts (telos-sharpened, spine-read), no argument being made yet. Argue and port are where persuasion happens and then materializes — hence only those two carry "rhetoric." Rename touches: skill directories, CLAUDE.md run procedure + skill list, HARNESS.md spec-ownership map, PHILOSOPHY.md four-cause claim, README.md, ledger-spec.md ownership row, and every pin/backlog line naming the old skill IDs.
+
+## Proposed, superseded above
+
+- ~~Sequential-proto-first as default execution order~~ — superseded by ruling 5.
 
 ## Machinery deltas (extensions, no rewrites)
 
 - **ari-intake** (new, upstream — see `intake.md`): produces the argued intent artifact ripple starts from.
-- **ari-argue:** intent-artifact input mode (no source feature). GATE-SCHEMA runs against every target repo. Contract gains per-target substrate-mapping sections; the claims section stays single — one promise, N renderings.
-- **ari-port:** runs per leg against the shared contract; blips per leg; validation gains the cross-leg coherence check.
+- **ari-argue-rhetoric** (renamed from ari-argue): intent-artifact input mode (no source feature). GATE-SCHEMA runs against every target repo. Contract gains per-target substrate-mapping sections; the claims section stays single — one promise, N renderings.
+- **ari-code-rhetoric** (renamed from ari-port): runs per leg against the shared contract, parallel by default (ruling 5); blips per leg; validation gains the cross-leg coherence check; CONTRACT-BREAK triggers the two-tier reopen (ruling 4).
 - **Preconditions:** comparison-count language (ratified, vocab decision 3b) extends — ripple is N spines, all targets, under a contract apex.
 - **Feature ledger:** shared-origin entry type — a feature born in N repos, not ported into one.
