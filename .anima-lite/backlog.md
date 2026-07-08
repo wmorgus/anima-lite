@@ -18,17 +18,17 @@ One line per pin: `[PIN-n](pins/PIN-n.md) — status, stub, batch — semantic h
 - [PIN-23](pins/PIN-23.md) — open, stub:2, spine-completeness — spine-anima-lite stale (pins 28d8464, layout/skill-count/gate-count wrong) + format-behind; full re-probe at HEAD in new format, adapted to markdown/skill repo
 - [PIN-24](pins/PIN-24.md) — open, stub:2, validation-review — validation agent captures Playwright screenshots for review; reachability-gated with static-review fallback; landed, DORMANT until a prod runtime exists
 - [PIN-25](pins/PIN-25.md) — open, stub:2, reorient — identity reorientation: custodian of promise/artifact alignment; vocab ratified + docs propagated + ports/→work/ mv done; remaining: incremental spine-maintenance design
-- [PIN-26](pins/PIN-26.md) — open, stub:2, reorient — ripple: first-class multi-leg work-type; contract ratified (two-tier break-reopen, parallel-by-default legs, ari-argue→ari-argue-rhetoric + ari-port→ari-code-rhetoric renames folded in); NEXT per operator, build not started
+- [PIN-26](pins/PIN-26.md) — open, stub:2, reorient — ripple: formal contract at work/pin26-ripple-contract/ (two-tier break-reopen, parallel-by-default legs, argue/port rhetoric renames — first harness-change through real intake→argue, PIN-32/36); NEXT per operator, build not started
 - [PIN-27](pins/PIN-27.md) — done, stub:2, reorient — ari-intake skill built + dogfooded (PIN-31 first item through); nothing enters unargued; intent.md with per-claim argued-by provenance; GATE-TELOS fires at intake
 - [PIN-28](pins/PIN-28.md) — done, stub:0, reorient — pipeline = four-cause decomposition of "make a software change" (intake/final, map/material, argue/formal, port/efficient); PHILOSOPHY.md carries it
 - [PIN-29](pins/PIN-29.md) — done, stub:2, reorient — workstream vocabulary + suspension procedure (pause/resume first-class, paused status, State: field); run5 first dogfood; three findings → PIN-31
 - [PIN-30](pins/PIN-30.md) — paused, stub:1, run5 — run5 workstream (isolated monthly-report naive-vs-disciplined A/B); manifest .anima-lite/_run5_isolated/RESTORE.md; suspension commit 7b19d56
 - [PIN-31](pins/PIN-31.md) — done, stub:2, reorient — suspension procedure hardening: scoped pause commit, hunk-split collision maneuver, State: format; first work item through ari-intake
-- [PIN-32](pins/PIN-32.md) — open, stub:0, unbatched — intent.md work-type enum (port|ripple|debt-work) has no value for harness self-changes; hit twice (PIN-31, PIN-33); add harness-change or open the enum
+- [PIN-32](pins/PIN-32.md) — done, stub:2, unbatched — intent.md work-type enum gains `harness-change`; posture written (language provenance, single-spine); same fix as PIN-36
 - [PIN-33](pins/PIN-33.md) — done, stub:2, unbatched — RESOLUTION.md: one-sentence sovereign description above telos.md; GATE-TELOS apex layer; constitutional drift-vs-growth adjudication; ratified + built
 - [PIN-34](pins/PIN-34.md) — done, stub:2, unbatched — /ari-read built + dogfooded: read-register doorway, reconstruction over 4 question-shapes, GATE-QUERY + GATE-MATCH (diff presentation, plain-chat medium), judgment.md artifact terminal on pin33-ratification; five-field tiling canonical in PHILOSOPHY
 - [PIN-35](pins/PIN-35.md) — done, stub:2, unbatched — backlog sharded: backlog.md → index, pins/PIN-n.md per pin; kills PIN-31(b) collision class for pin bodies
-- [PIN-36](pins/PIN-36.md) — open, stub:0, unbatched — harness self-changes skip contract machinery: intake runs but no argue/contract stage; pin Contract fields stand in; same underlying fact as PIN-32 enum gap
+- [PIN-36](pins/PIN-36.md) — done, stub:2, unbatched — harness-change runs a real ari-argue-rhetoric pass to contract.md now; pin Contract fields point at it, don't substitute; first instance work/pin26-ripple-contract/
 
 ## Archived pins
 

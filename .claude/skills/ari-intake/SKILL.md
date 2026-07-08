@@ -31,6 +31,7 @@ Intake is upstream of argue for every work-type, but the amount of work intake d
 - **Port.** Near-trivial. The prototype's code already carries the argument — intake's job is to verify that argument is actually there (not assumed) and sharpen the change's telos statement, not to construct the argument from scratch. Most claims will carry `argued-by: prototype <path>`.
 - **Ripple.** Authored. There is no source code to read the argument off of — intake is real work here: translating language (a ticket, a meeting outcome, a spec, an operator's own paraphrase of a runaround email) into an argued intent. Most claims will carry `argued-by: language <source>`.
 - **Debt-work.** The diagnosis layer (identifying which of spec/epistemic/world-drift/craft divergence is present, per `PHILOSOPHY.md`) is the natural home for debt-work's intake — the diagnosis IS the argued intent for a fix. **This is ratified direction, not yet built.** Do not run debt-work intake as if the diagnosis layer exists; if a debt-work item reaches this skill today, say plainly that diagnosis machinery isn't built and route it back to backlog/human judgment rather than fabricating an intake pass.
+- **Harness-change.** A change to this repo's own skills, gates, or specs — the harness changing itself. There is no prototype and usually no external ticket; the argument most often comes from a live design round with the operator (a gate discussion, a ratified decision recorded in a pin's shaping fields). `argued-by: language <source>` where source names the round concretely — e.g. "operator ratification, design round <date>, recorded in `pins/PIN-<n>.md`." Single-spine posture: the comparison is against this repo's own spine, not a proto/prod pair (same shape as debt-work's single-repo case). Do not let a harness-change item skip straight to a pin's Contract field in place of a real `intent.md`/`contract.md` pair — that shortcut is exactly what PIN-36 named as the gap this posture entry closes.
 
 ## Active orientations
 
@@ -77,7 +78,7 @@ Write `.anima-lite/work/<slug>/intent.md`:
 ```markdown
 # Intent: <work item name>
 Slug: <slug>
-Work-type: <port | ripple | debt-work>
+Work-type: <port | ripple | debt-work | harness-change>
 Generated: <date>
 Target spine: <spine-<label>/telos.md path this was checked against>
 Target telos commit: <the Commit: hash from the target spine's telos.md at time of writing>
