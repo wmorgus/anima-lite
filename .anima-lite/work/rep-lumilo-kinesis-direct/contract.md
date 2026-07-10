@@ -149,6 +149,30 @@ handful REP's lambda historically forwarded.
     honor the operator's intent is entirely on lumilo-bridge's side (the
     extensible registry in this claim), not a REP-side loosening.
 
+- **Claim D — `commonIngestionService.ingest()` must persist NAVIGATION events,
+  not silently no-op them.** Surfaced during execution, not anticipated at
+  argue-time: `ingest()` had an explicit stub for `eventType === 'NAVIGATION'`
+  (`// NAVIGATION events from non-GraphQL sources: not yet implemented`) that
+  logged and returned. A correct Claim C mapper for the 3 navigation-type
+  Mathia classes would decode fine and then be dropped there. Presented to
+  operator as a three-way choice; operator chose to build the handling now.
+  Decision: change-to. Confirmed: yes, 2026-07-10.
+  Schema deps: `StudentMathiaData.navigationHistory` /
+  `NavigationEventSchema` (`graphql-server/src/services/mongodb/models/studentMathiaData.model.ts`)
+  — confirmed exists, required `eventType` enum
+  `['ContextChange','ContentChange','PositionChange']`.
+  **Per-target substrate mapping:**
+  - lumilo-bridge: new `handleNavigation()` private method on
+    `CommonIngestionService`, wired into `ingest()`'s NAVIGATION branch.
+    Mirrors the existing GraphQL `addContextChange`/`addContentChange`/
+    `addPositionChange` resolvers' direct-Mongo write into
+    `navigationHistory` (same schema, same shape) rather than inventing a new
+    persistence shape — the only change is that this is now the shared path,
+    not duplicated per-adapter. Does not dispatch any detectors for
+    navigation events, matching the existing GraphQL resolvers' behavior
+    exactly (no detector dispatch invented where none existed).
+  - realtime-event-provider: n/a.
+
 ## Cross-leg coherence check (ripple)
 Claims A, B, and C together describe one promise — "lumilo-bridge receives
 MATHia events via direct Kinesis consumption, with no coverage regression

@@ -81,6 +81,17 @@ GATE-TELOS: clean, no conflict, both layers.
   argued-by: language operator description, 2026-07-08 (clarifying round, during
   ari-argue-rhetoric, in response to the decodeRecord-scope confirmation question)
 
+## Claims (added during execution, 2026-07-10)
+- `commonIngestionService.ingest()` must actually persist NAVIGATION-type
+  events (the 3 Ct*Message classes), not silently no-op them. Discovered
+  during execution: even a correct Kinesis mapper would decode these
+  correctly and then vanish at `ingest()`'s explicit "not yet implemented"
+  NAVIGATION stub. Operator chose to build this now rather than defer it or
+  ship a mapper that feeds a known dead end.
+  argued-by: language operator description, 2026-07-10 (three-way choice
+  presented mid-execution: skip navigation types / build ingest() handling
+  now / map all 5 and accept the silent drop — operator chose to build it)
+
 ## Notes
 **Central open technical question, deferred to `/ari-argue-rhetoric` for
 classification, not resolved here per intake's scope fence:** whether
