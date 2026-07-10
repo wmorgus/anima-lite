@@ -114,6 +114,18 @@ lumilo-bridge must reason about actual OR semantics — a naive edit assuming AN
 could leave lumilo-bridge partially still receiving mutations for classes that
 match by class-id alone even after its tenant entries are removed.
 
+**Third leg surfaced during argue, 2026-07-10.** REP's `APPLICATION_ROUTING_CONFIG`
+(Claim A's schema dependency) is not in either original leg — it's a
+CloudFormation parameter in the company `aws-infrastructure` repo
+(`/Users/wmorgus/Desktop/via-carnegie/aws-infrastructure`,
+`lambdas/realtime-event-provider/profiles/rep-delivery/environments/{prod,staging,qa}/stack-config.yml`).
+Operator confirmed (language, 2026-07-10) direct edit access to this repo, and
+separately confirmed lumilo-bridge's existing `mathiaKinesis.service.ts` was an
+untested first LLM pass — explicit go-ahead to overwrite/extend it per Claim
+C. No spine was probed for aws-infrastructure; see `contract.md`'s Claim A for
+the judgment call on why (bounded config-block removal, not a code-behavior
+change).
+
 **Execution posture (per PIN-26 rulings, not re-argued here):** parallel-by-default
 across both legs (ruling 5) — no privileged first leg unless argue surfaces a
 specific reason to sequence them (e.g. if the shape-mismatch question above

@@ -30,19 +30,37 @@ handful REP's lambda historically forwarded.
 - **Claim A — REP stops delivering to lumilo-bridge via lambda/GraphQL.**
   Decision: change-to — remove lumilo-bridge as a routing target in REP's
   delivery leg. Confirmed: yes, 2026-07-08 (this is the ripple's core ask).
-  Schema deps: REP's `APPLICATION_ROUTING_CONFIG` — **not resolvable by
-  grep in this repo**. `rep-delivery/config/index.js` only defines local-mode
-  fallback (`getLocalRoutingConfig()`) and structural validation
-  (`validateRoutingConfig()`); the real per-environment `applications` map,
-  including whatever entry currently routes to lumilo-bridge, is injected at
-  deploy time via the `APPLICATION_ROUTING_CONFIG` env var (Jenkins/CloudFormation
-  managed), not committed to this repo. See Open Questions.
+  Schema deps: REP's `APPLICATION_ROUTING_CONFIG` is not in either target
+  repo — it's a CloudFormation parameter defined in a **third leg**, the
+  company `aws-infrastructure` repo (checkout used:
+  `/Users/wmorgus/Desktop/via-carnegie/aws-infrastructure`, currently on
+  `wip/wmorgus/DEVOPS-10085-update-rep-routing-config` — already the live
+  branch for exactly this kind of edit). Grep-confirmed (2026-07-10, no spine
+  probe run — see note below) at:
+  `lambdas/realtime-event-provider/profiles/rep-delivery/environments/{prod,staging,qa}/stack-config.yml`,
+  each containing an `applications.lumilo-bridge` block with `endpoint`,
+  `validClassIds`, `validTenantIds`. GATE-SCHEMA satisfied by direct
+  confirmation in all three environments — no spine exists for
+  `aws-infrastructure` and none is being probed for this ripple: the claim's
+  rendering here is a bounded three-file JSON-block removal, not a code
+  behavior change, so a full four-cause spine probe of a large multi-service
+  infra monorepo is disproportionate to what this claim actually touches. This
+  is a judgment call, not the ripple discipline's default — noted explicitly
+  rather than silently skipped.
   **Per-target substrate mapping:**
-  - realtime-event-provider: remove lumilo-bridge's application entry from the
-    deployed `APPLICATION_ROUTING_CONFIG` (both `validTenantIds` and
-    `validClassIds` entries — matching is OR-logic per
-    `spine-realtime-event-provider/telos.md` §2, so a partial removal leaving
-    either list still containing a lumilo-bridge value would still match).
+  - **aws-infrastructure** (third leg, added 2026-07-10 — operator confirmed
+    they can edit this repo directly): delete the `"lumilo-bridge": {...}`
+    block from `applications` in all three `stack-config.yml` files
+    (prod/staging/qa). Leave `lid-backend`'s entry untouched in every file —
+    note prod's `lid-backend` entry also lists tenant `lumiloreseb1i32w`
+    (shared with lumilo-bridge's own entry); that's lid-backend's own routing
+    scope and is unaffected by removing lumilo-bridge's separate block.
+  - realtime-event-provider: n/a for this claim's own code — `rep-delivery`
+    reads whatever `APPLICATION_ROUTING_CONFIG` it's given; once
+    aws-infrastructure's edit deploys, `getMatchingApplications` simply no
+    longer has a lumilo-bridge entry to match against. OR-logic matching
+    (`spine-realtime-event-provider/telos.md` §2) is not a residual risk here
+    since the whole block is deleted, not partially edited.
   - lumilo-bridge: n/a — this claim has no rendering on lumilo-bridge's own
     code; it only stops inbound traffic from the old path.
 
@@ -140,17 +158,16 @@ substrate mapping differs, as expected. Sequencing risk identified and
 resolved below (see Open Questions / execution order).
 
 ## Open questions
-1. **REP's real routing config is not in this repo.** `APPLICATION_ROUTING_CONFIG`
-   is env-injected per environment (Jenkins/CloudFormation), not a committed
-   file. Claim A's execution requires locating and editing that deployed
-   config per environment (dev/staging/prod) — ari-code-rhetoric cannot
-   satisfy this claim by editing files in this repo alone; it must halt and
-   escalate to the operator for the actual deployed config values/access
-   before Claim A can be executed, or Claim A's execution is out of this
-   pipeline's reach entirely and must happen as a manual ops step alongside
-   the code change. **Recommendation: treat Claim A's actual routing-config
-   edit as a manual/ops action tracked separately from ari-code-rhetoric's
-   file-level work; ari-code-rhetoric should build Claim B/C only.**
+1. ~~REP's real routing config is not in this repo~~ — **resolved 2026-07-10**.
+   Located in the third leg, `aws-infrastructure`
+   (`lambdas/realtime-event-provider/profiles/rep-delivery/environments/{prod,staging,qa}/stack-config.yml`).
+   Operator confirmed direct edit access. `/ari-code-rhetoric` should treat
+   this as a real third target for Claim A, alongside lumilo-bridge (Claims
+   B/C) — not a manual-ops carve-out.
+   Operator also confirmed (2026-07-10): lumilo-bridge's existing
+   `mathiaKinesis.service.ts` was an untested first LLM pass — explicit
+   green light to overwrite/extend it as Claim C requires, not just patch
+   around it.
 2. **Execution sequencing (not a claim — an execution-order note, per PIN-26
    ruling 5's "sequential only as an explicit judgment-based deviation").**
    Recommend: land and verify Claim C (mapping fix) and Claim B (env var /
