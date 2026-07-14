@@ -1,5 +1,5 @@
 # Telos: anima-lite (self)
-Commit: 522e44b
+Commit: 89cf4c3
 Confidence: high
 Refresh trigger: RESOLUTION.md or PHILOSOPHY.md changes, a skill added/removed/renamed, HARNESS.md §1 gate registry changes, or the work/ artifact layout changes
 
