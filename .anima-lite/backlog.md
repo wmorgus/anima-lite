@@ -36,6 +36,7 @@ One line per pin: `[PIN-n](pins/PIN-n.md) — status, stub, batch — semantic h
 - [PIN-41](pins/PIN-41.md) — done, stub:2, unbatched — ari-code-rhetoric gained a harness-change posture (single-spine, no playwright/cross-leg, in-repo reconcile, core loop preserved); built + independently validated 2026-07-14, two real propagation gaps found and fixed
 - [PIN-42](pins/PIN-42.md) — open, stub:0, unbatched — each work-type (port/ripple/debt-work/harness-change/arete) deserves its own dedicated flowchart, not one dense unified diagram
 - [PIN-43](pins/PIN-43.md) — open, stub:0, unbatched — terminology sweep "resolution"→"arete statement" across RESOLUTION.md/PHILOSOPHY.md/CLAUDE.md/HARNESS.md, deferred until arete's skills are built
+- [PIN-44](pins/PIN-44.md) — open, stub:0, unbatched — CLAUDE.md's skills-intro sentence stale against real work-type roster (port/harness-change/arete built, ripple/debt-work built partway); surfaced as a blip during arete-skills, left unfixed there
 
 ## Archived pins
 
