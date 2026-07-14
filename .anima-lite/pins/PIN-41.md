@@ -1,7 +1,7 @@
 ### PIN-41 — ari-code-rhetoric has no harness-change posture
 captured: 2026-07-14
-stub: 0
-status: open
+stub: 2
+status: done
 home: anima-lite
 goes-stale: superseded once ari-code-rhetoric/SKILL.md carries an explicit harness-change posture note (parallel to ari-argue-rhetoric's) and at least one harness-change build has run through it end to end
 relates-to: .claude/skills/ari-code-rhetoric/SKILL.md (Preconditions §1 — names port/single-repo-debt-work/world-drift, omits harness-change entirely; Inputs/Process assume spine-proto/spine-prod split, playwright, PR-to-external-repo), .claude/skills/ari-argue-rhetoric/SKILL.md ("Harness-change classification" section — the parallel fix this skill got, added when PIN-26 hit the same gap), PIN-39 (diagnosis-layer build — surfaced this gap live: contract→build skipped code-rhetoric because nothing in its spec covers single-repo self-change), PIN-26/PIN-32/PIN-36 (harness-change work-type precedent — argue-rhetoric side only)
@@ -13,5 +13,5 @@ Shaping fields.
 
 **Scope:** In — add a harness-change posture to `ari-code-rhetoric/SKILL.md`: single-repo (no spine-proto/spine-prod split — the repo's own spine and telos, same posture argue-rhetoric already uses), no playwright verification, no PR-to-external-repo (the "prod repo" and the harness repo are the same repo; reconcile step becomes a normal in-repo commit/review, not a cross-repo PR flow), but preserve the parts of the discipline that still apply regardless of posture: plan-before-execute, clean-context execution subagent reading the contract as filter, blip logging on anything the contract doesn't cover, independent validation agent checking claim implementation against the contract. Out — building anything for single-repo debt-work or world-drift postures (separate, already-named gaps in the same Preconditions line, not this pin's scope); re-litigating whether harness-change should skip code-rhetoric's discipline entirely (already answered no, per this session's design round).
 **Batch:** unbatched
-**Contract:**
-**Resolution:**
+**Contract:** claim-shaped — four claims (single-spine precondition, playwright/cross-leg skip, in-repo reconcile, core-loop preserved). Formal contract at `work/pin41-code-rhetoric-harness-posture/contract.md`. Full sources in `intent.md` (same directory).
+**Resolution:** built and independently validated 2026-07-14 — `ari-code-rhetoric/SKILL.md` gained a "Harness-change posture (PIN-41)" section plus Preconditions §1 update. Independent validation found and this pass fixed two real propagation gaps (Step 4's header literally contradicted the new note; Step 2's execution-subagent inputs still hard-required both spines) — both closed, plus the top-level Inputs section and 4a's PR-target check. Final validation: PASS. Not yet dogfooded on a fresh harness-change build (this build itself ran ad hoc, the same way PIN-39's did, since the posture didn't exist yet to apply to itself) — that's a future proof-by-use, not blocking done.

@@ -1,6 +1,6 @@
 ### PIN-40 — connective tissue v2: cross-spine edges, external-reference tiers, folded-in staleness
 captured: 2026-07-14
-stub: 1
+stub: 2
 status: open
 home: anima-lite
 goes-stale: superseded once scope crosses to stub:2 with a written contract (claim-shaped — extends `lives-in:` tag semantics), or once the shelved ripple case (`work/rep-lumilo-kinesis-direct/` — lumilo-bridge + realtime-event-provider) is used as the real design target for the cross-spine graph
@@ -20,5 +20,5 @@ Shaping fields.
 
 **Scope:** In — (1)+(2) unified cross-spine/promise graph design (target case: shelved ripple run); (3) edge-kind vocabulary; (4) three-tier external-reference classification + `unspineable` recheck field; (5) staleness detection as an `ari-code-rhetoric` execution-time check against a `lives-in:` reverse index (supersedes PIN-37's deferred standalone script — that script is now explicitly out, not just deferred); (6) `unspineable` absence-representation tie-in with PIN-21. Out — building the diagnosis layer (PIN-39, separate); resuming the shelved ripple workstream itself (still paused, operator's to resume).
 **Batch:** spine-completeness
-**Contract:** not yet written — claim-shaped (extends what `lives-in:` promises: cross-repo resolution, edge semantics, and a terminal "we cannot mechanically know" state), needs a real `ari-argue-rhetoric` pass per the harness-change precedent (PIN-32/36) before stub:2.
-**Resolution:**
+**Contract:** frozen 2026-07-14 — six claims (cross-spine reference, unified promise graph, edge-kind vocabulary, three-tier external-reference + `unspineable` fields, staleness-into-execution, `unspineable` as structural fact). Formal contract at `work/pin40-connective-tissue-v2/contract.md`. Full sources in `intent.md` (same directory).
+**Resolution:** contract frozen, not yet built. Build target for claims 1-3 is `work/rep-lumilo-kinesis-direct/` (read-only reference — resuming that paused ripple workstream stays out of scope). Claim 5 touches `ari-code-rhetoric/SKILL.md` — first real build to invoke PIN-41's harness-change posture directly instead of improvising it.

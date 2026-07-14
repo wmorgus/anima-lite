@@ -32,8 +32,8 @@ One line per pin: `[PIN-n](pins/PIN-n.md) — status, stub, batch — semantic h
 - [PIN-37](pins/PIN-37.md) — done, stub:2, spine-completeness — spine connective tissue: `lives-in:` tags on spine rules/findings (ari-map Output) + named self-correction procedure (PHILOSOPHY.md); spun from PIN-25 item (c); staleness script + promise graph explicitly deferred, untested against a real case
 - [PIN-38](pins/PIN-38.md) — done, stub:2, unbatched — metrics/summary.md header stale-path fix; also became PIN-39's first real dogfood run (diagnose→intake→argue→fix)
 - [PIN-39](pins/PIN-39.md) — done, stub:2, reorient — the diagnosis layer: `/ari-diagnose` built + independently validated 2026-07-14; dogfooded end to end on PIN-38's stale path (diagnose→intake→argue→fix)
-- [PIN-40](pins/PIN-40.md) — open, stub:1, spine-completeness — connective tissue v2: cross-spine promise graph + edge kind, three-tier external-reference (spine-built/spine-buildable/unspineable), staleness folded into ari-code-rhetoric execution not a script; spun from PIN-37
-- [PIN-41](pins/PIN-41.md) — open, stub:0, unbatched — ari-code-rhetoric has no harness-change posture (argue-rhetoric has one, code-rhetoric doesn't); surfaced live when PIN-39's build skipped code-rhetoric's execute/validate discipline entirely
+- [PIN-40](pins/PIN-40.md) — open, stub:2, spine-completeness — connective tissue v2: cross-spine promise graph + edge kind, three-tier external-reference (spine-built/spine-buildable/unspineable), staleness folded into ari-code-rhetoric execution not a script; contract frozen 2026-07-14, not yet built; spun from PIN-37
+- [PIN-41](pins/PIN-41.md) — done, stub:2, unbatched — ari-code-rhetoric gained a harness-change posture (single-spine, no playwright/cross-leg, in-repo reconcile, core loop preserved); built + independently validated 2026-07-14, two real propagation gaps found and fixed
 
 ## Archived pins
 

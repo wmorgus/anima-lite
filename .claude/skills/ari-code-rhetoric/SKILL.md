@@ -9,17 +9,17 @@ Four steps: plan → execute → validate → reconcile. The hard epistemic work
 
 ## Inputs
 
-- `.anima-lite/spine-proto/telos.md` — commit hash for precondition check.
-- `.anima-lite/spine-prod/formal.md` — primary reference for substrate translation. This is the guide for idiom and structure: new code must follow the prod repo's architectural patterns, not copy the proto's.
-- `.anima-lite/spine-prod/telos.md` — for the don't-contradict rules; substrate translations must not violate them.
+- `.anima-lite/spine-proto/telos.md` — commit hash for precondition check. (Harness-change: this repo's own `spine-<label>/telos.md` — no separate proto spine exists.)
+- `.anima-lite/spine-prod/formal.md` — primary reference for substrate translation. This is the guide for idiom and structure: new code must follow the prod repo's architectural patterns, not copy the proto's. (Harness-change: this repo's own `formal.md` — there is no substrate to translate between repos, only this repo's own dominant patterns to follow.)
+- `.anima-lite/spine-prod/telos.md` — for the don't-contradict rules; substrate translations must not violate them. (Harness-change: same file as the proto-spine row above — single spine, read once.)
 - Pull `material.md` or `efficient.md` from either spine directory if a specific translation decision requires it.
 - `.anima-lite/work/<branch-slug>/contract.md` for the current branch and feature.
-- The prototype code being translated.
+- The prototype code being translated. (Harness-change: the harness files themselves, changed in place — no separate prototype.)
 - `.claude/skills/ari-code-rhetoric/metrics-spec.md` — canonical spec for the run row written at Step 5.5.
 
 ## Preconditions
 
-1. The spine(s) relevant to this work item's comparison exist and `telos.md` in each is current — two spines for a port, one for single-repo debt work (the repo's own spine), zero additional spines for a pure world-drift check. Port is the only work-type fully specified today: both `spine-proto/` and `spine-prod/` must exist and be current. Single-repo debt work and pure world-drift checks are ratified direction, not yet built — this skill does not yet run them end to end. If a required spine is stale or missing: halt, request ari-map for the affected repo.
+1. The spine(s) relevant to this work item's comparison exist and `telos.md` in each is current — two spines for a port, one for single-repo debt work or harness-change (the repo's own spine — no `spine-proto`/`spine-prod` split), zero additional spines for a pure world-drift check. Port and harness-change are the only work-types fully specified today (harness-change per the posture note below, PIN-41). Single-repo debt work (beyond a harness self-change) and pure world-drift checks are ratified direction, not yet built — this skill does not yet run them end to end. If a required spine is stale or missing: halt, request ari-map for the affected repo.
 2. `work/<branch-slug>/contract.md` exists for the current branch and feature, status is not "DRAFT," and has no unconfirmed items in Open Questions. If any fail: halt, request ari-argue-rhetoric.
 3. The contract's `Spine commit:` hash matches `spine-proto/telos.md`'s current `Commit:`. If mismatched — another branch refreshed the spine since this contract was confirmed — don't auto-fail or proceed silently. Summarize what changed and ask the user whether the contract still holds or needs a quick re-pass through ari-argue-rhetoric.
 
@@ -32,6 +32,15 @@ Do not proceed on partial or mismatched context. This is the failure mode the wh
 **Conservative default.** When the contract does not cover a decision, preserve current behavior and log a blip. Do not guess which bucket an uncovered case belongs in. Do not resolve ambiguity by choosing the option that makes the port simpler or faster. The conservative default is a mechanism: it makes gaps visible rather than hiding them behind a plausible-looking implementation. A blip saying "preserved by default, contract gap" is a correct artifact; a silently-resolved gap is a failure mode.
 
 **Bidirectional audit.** The execution and validation agents read the contract, plan, spines, and ledger as binding context — and are the first readers who check those artifacts against the full prod codebase rather than against each other. Drift found in any direction (spine vs. code, contract vs. proto source, ledger vs. the current chain) is blip material, with the direction named in the `Why:` field, citing the spine § or artifact section that drifted (consistent with the mandatory-citation rule below). The CONTRACT-BREAK and contract-clarity mechanisms already below are instances of this orientation pointed specifically at the contract; this extends the same attention to every artifact these agents read, not only the contract.
+
+## Harness-change posture (PIN-41)
+
+A harness self-change (a skill file, `HARNESS.md`, `CLAUDE.md`, a spec support file) executes through this skill same as a port, minus the parts of the process that assume two different repos. What's degraded, and what isn't:
+
+- **No spine-proto/spine-prod split.** Comparison is against this repo's own spine (`spine-<label>/`), same as debt-work's single-repo posture. Step 1's plan and Step 2's execution subagent read the contract and this repo's own `formal.md`/`telos.md` — there is no second spine to translate substrate against.
+- **No playwright verification.** Step 3 D/E (browser pass, screenshot capture) does not apply — there is no running feature to navigate to. Skip both without noting `dev-server-not-reachable`; this is not a degraded-fallback case, it's out of scope for the work-type. Step 3 F (cross-leg coherence) likewise does not apply outside ripple.
+- **No cross-repo PR flow.** Step 4's "prod repo" is this repo. Feature-branch-first and commit-per-claim discipline (Step 2) still apply exactly as written. Step 4d-4f's PR flow still applies if the harness's own convention calls for a PR against its integration branch; a harness-change small enough to land as a direct reviewed commit (no PR) is an acceptable deviation — name it plainly in the reconcile summary rather than silently skipping 4d-4f, so a reader can tell "no PR" was a decision, not an omission.
+- **What is NOT degraded — the core loop stays intact.** Step 1 (plan before execute), Step 2's clean-context execution subagent working the contract as the filter for every decision (with blip logging on anything uncovered), and Step 3's independent validation agent running checks A (claim implementation) and B (blip classification quality) — all apply to a harness-change exactly as they apply to a port. A harness-change contract is not a shortcut around this loop; skipping it because "it's just a doc/skill file" is exactly the failure mode this posture note exists to close (PIN-41, surfaced when PIN-39's diagnosis-layer build skipped this loop entirely for lack of a written posture).
 
 ## Process
 
@@ -88,10 +97,10 @@ Do not make any commits on a long-lived branch. All port commits must land on th
 
 The execution subagent receives:
 - The contract (`.anima-lite/work/<branch-slug>/contract.md`)
-- Both spine telos files (`spine-proto/telos.md` and `spine-prod/telos.md`) — for don't-contradict rules
+- Spine telos file(s) for don't-contradict rules — both `spine-proto/telos.md` and `spine-prod/telos.md` for a port; this repo's own `spine-<label>/telos.md` only for a harness-change (no second spine exists to receive)
 - The plan (`.anima-lite/work/<branch-slug>/plan.md`)
-- The prototype source files being translated
-- The prod repo path and current branch name
+- The prototype source files being translated (harness-change: the harness files themselves, being changed in place — there is no separate prototype to translate from)
+- The prod repo path and current branch name (harness-change: this repo's own path and current branch)
 
 Reading these inputs against the real prod code is also an audit of them — see Bidirectional audit above; flag drift as a blip rather than silently working around it.
 
@@ -221,9 +230,9 @@ Contract `playwright:` block format and the worked example: see `.claude/skills/
 
 ### Step 4 — Reconcile
 
-After validation PASS, prepare the working tree for PR. This step runs in the prod repo, not the anima-lite repo.
+After validation PASS, prepare the working tree for PR. This step runs in the prod repo, not the anima-lite repo — **except for a harness-change, where the prod repo is the anima-lite repo** (posture note above, Claim 3): the rest of this step's mechanics (feature branch, unrelated-change separation, staged diff, PR or direct-commit deviation) apply against anima-lite's own working tree instead of an external one.
 
-**4a. Confirm you are on the feature branch.** Run `git branch --show-current` and verify the current branch is the feature branch created in Step 2 (named after the contract slug). If you are still on a long-lived branch (`dev`, `main`, etc.) with uncommitted port changes, stop. Create the feature branch now (`git checkout -b <slug>`), move the commits there (`git cherry-pick` if needed), and reset the long-lived branch to its pre-port state. The PR target is the integration branch (e.g. `dev`) — confirm it exists on the remote before running `gh pr create`.
+**4a. Confirm you are on the feature branch.** Run `git branch --show-current` and verify the current branch is the feature branch created in Step 2 (named after the contract slug). If you are still on a long-lived branch (`dev`, `main`, etc.) with uncommitted port changes, stop. Create the feature branch now (`git checkout -b <slug>`), move the commits there (`git cherry-pick` if needed), and reset the long-lived branch to its pre-port state. The PR target is the integration branch (e.g. `dev`) — confirm it exists on the remote before running `gh pr create`. **Harness-change exception:** if the direct-reviewed-commit deviation (posture note, Claim 3) applies, there is no PR target to confirm — name the deviation in the reconcile summary instead and skip straight to 4b.
 
 **4b. Identify and separate unrelated changes.** Run `git diff HEAD` and inspect every modified file. Flag any change not traceable to a contract claim or its required substrate. Common sources:
 - Dev-only config (`hbm2ddl.auto=none`, dummy secret files, local build properties)
