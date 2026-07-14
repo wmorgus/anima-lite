@@ -34,6 +34,8 @@ One line per pin: `[PIN-n](pins/PIN-n.md) — status, stub, batch — semantic h
 - [PIN-39](pins/PIN-39.md) — done, stub:2, reorient — the diagnosis layer: `/ari-diagnose` built + independently validated 2026-07-14; dogfooded end to end on PIN-38's stale path (diagnose→intake→argue→fix)
 - [PIN-40](pins/PIN-40.md) — done, stub:2, spine-completeness — connective tissue v2: cross-spine promise graph (relates-to tag) + edge kind, §10 three-tier external-reference (spine-built/spine-buildable/unspineable), staleness folded into ari-code-rhetoric execution not a script; built + validated 2026-07-14, first proof-by-use of PIN-41's harness-change posture; spun from PIN-37
 - [PIN-41](pins/PIN-41.md) — done, stub:2, unbatched — ari-code-rhetoric gained a harness-change posture (single-spine, no playwright/cross-leg, in-repo reconcile, core loop preserved); built + independently validated 2026-07-14, two real propagation gaps found and fixed
+- [PIN-42](pins/PIN-42.md) — open, stub:0, unbatched — each work-type (port/ripple/debt-work/harness-change/arete) deserves its own dedicated flowchart, not one dense unified diagram
+- [PIN-43](pins/PIN-43.md) — open, stub:0, unbatched — terminology sweep "resolution"→"arete statement" across RESOLUTION.md/PHILOSOPHY.md/CLAUDE.md/HARNESS.md, deferred until arete's skills are built
 
 ## Archived pins
 
