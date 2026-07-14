@@ -46,6 +46,7 @@ Every required and optional gate currently defined across the six skill files, p
 | Resolution artifact (`RESOLUTION.md` format + adjudication procedure) | `RESOLUTION.md` (the sentence + ratification line); operative adjudication procedure in `.claude/skills/ari-intake/SKILL.md` (GATE-TELOS apex layer) | ari-intake | ari-argue-rhetoric (conditional backstop), every doc that cites the sentence |
 | Judgment artifact format (`work/<slug>/judgment.md`) | `.claude/skills/ari-read/SKILL.md` (Output section) | ari-read | operator (GATE-MATCH reading), ari-backlog (when a judgment feeds a pin) |
 | Diagnosis artifact format (`work/<slug>/diagnosis.md`) | `.claude/skills/ari-diagnose/SKILL.md` (Output section) | ari-diagnose | ari-intake (debt-work's source, same role prototype plays for port) |
+| Cross-spine/tier vocabulary (`relates-to:` edge-kind tags; material.md §10 spine-built/spine-buildable/unspineable tiers) | `.claude/skills/ari-map/SKILL.md` (Output section) | ari-map | ari-code-rhetoric (Claim 5's reverse-index check, Step 2), ari-argue-rhetoric (GATE-SCHEMA, per-leg schema check) |
 
 ---
 
