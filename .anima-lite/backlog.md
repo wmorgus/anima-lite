@@ -37,8 +37,8 @@ One line per pin: `[PIN-n](pins/PIN-n.md) — status, stub, batch — semantic h
 - [PIN-42](pins/PIN-42.md) — open, stub:0, unbatched — each work-type (port/ripple/debt-work/harness-change/arete) deserves its own dedicated flowchart, not one dense unified diagram
 - [PIN-43](pins/PIN-43.md) — open, stub:0, unbatched — terminology sweep "resolution"→"arete statement" across RESOLUTION.md/PHILOSOPHY.md/CLAUDE.md/HARNESS.md, deferred until arete's skills are built
 - [PIN-44](pins/PIN-44.md) — open, stub:0, unbatched — CLAUDE.md's skills-intro sentence stale against real work-type roster (port/harness-change/arete built, ripple/debt-work built partway); surfaced as a blip during arete-skills, left unfixed there
-- [PIN-45](pins/PIN-45.md) — open, stub:0, unbatched — arete's movement-map artifact (ruling 12): design questions resolved (layer/step/cell mapping, cut judges against it, system-level-mandatory), movement.md placed as a general fifth spine file; backbone generalization spun to PIN-46
-- [PIN-46](pins/PIN-46.md) — open, stub:0, unbatched — "spine under the spine": one shared scenario×path×step coordinate backbone under material/formal/efficient (not three independent grids), operator-confirmed direction, schema not yet designed
+- [PIN-45](pins/PIN-45.md) — open, stub:0, unbatched — arete's scaffold (ruling 12, renamed from "movement map"): design questions resolved (layer/step/cell mapping, cut judges against it, system-level-mandatory), placed as a general fifth spine file (`scaffold.md`); backbone generalization owned by PIN-46
+- [PIN-46](pins/PIN-46.md) — open, stub:1, unbatched — "spine under the spine": shared scenario×path×step coordinate backbone under material/formal/efficient; schema resolved (one row, three columns, markdown-native), skeleton-vs-ledger distinction, ledger-rooting field, telos-growth two-tier reopen mechanism — all design-resolved, none built
 
 ## Archived pins
 
