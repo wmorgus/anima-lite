@@ -45,6 +45,7 @@ Every required and optional gate currently defined across the six skill files, p
 | Metrics artifact spec (run row, backlog-health row, session-cost row, summary.md) | `.claude/skills/ari-code-rhetoric/metrics-spec.md` | ari-code-rhetoric | ari-backlog (backlog-health row), SessionEnd hook (session-cost row), calibration diffs |
 | Resolution artifact (`RESOLUTION.md` format + adjudication procedure) | `RESOLUTION.md` (the sentence + ratification line); operative adjudication procedure in `.claude/skills/ari-intake/SKILL.md` (GATE-TELOS apex layer) | ari-intake | ari-argue-rhetoric (conditional backstop), every doc that cites the sentence |
 | Judgment artifact format (`work/<slug>/judgment.md`) | `.claude/skills/ari-read/SKILL.md` (Output section) | ari-read | operator (GATE-MATCH reading), ari-backlog (when a judgment feeds a pin) |
+| Diagnosis artifact format (`work/<slug>/diagnosis.md`) | `.claude/skills/ari-diagnose/SKILL.md` (Output section) | ari-diagnose | ari-intake (debt-work's source, same role prototype plays for port) |
 
 ---
 

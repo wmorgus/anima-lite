@@ -1,0 +1,24 @@
+### PIN-40 — connective tissue v2: cross-spine edges, external-reference tiers, folded-in staleness
+captured: 2026-07-14
+stub: 1
+status: open
+home: anima-lite
+goes-stale: superseded once scope crosses to stub:2 with a written contract (claim-shaped — extends `lives-in:` tag semantics), or once the shelved ripple case (`work/rep-lumilo-kinesis-direct/` — lumilo-bridge + realtime-event-provider) is used as the real design target for the cross-spine graph
+relates-to: PIN-37 (spine connective tissue — `lives-in:` tags, self-correction procedure; this pin is a direct follow-on, same pattern PIN-37 was spun from PIN-25), PIN-26 (ripple — deferred promise→promise graph, and the real GATE-SCHEMA gap this pin answers: REP's env-injected routing config, flagged as an Open Question with no vocabulary for "unspineable"), PIN-21 (spine completeness — absence-representation; capabilities-NOT-present precedent), `.anima-lite/reorient/spine-self-correction.md` (PIN-37's design record, to be extended not replaced)
+
+`lives-in:` (PIN-37) only points inside the single repo being probed, and PIN-37's own staleness-check script + promise-graph were both explicitly deferred. Both gaps surfaced for real during the ripple run: GATE-SCHEMA hit a promise (REP's routing config) with nothing in-repo to point at, and had no way to say anything sharper than "Open Question." This pin captures five extensions, converged in conversation 2026-07-14:
+
+1. **Cross-spine references.** Once two repos are both anima-lite-ingested (each has its own `spine-<label>/`), a rule in spine A should be able to point at a rule/finding in spine B directly — not just describe the relationship in prose. Folds into (2), same graph.
+2. **Promise→promise graph** (PIN-26's deferred item) is the same structure as (1) — build one graph, not two. Design against the real shelved case: `spine-lumilo-bridge` / `spine-realtime-event-provider`.
+3. **Edge kind, not just existence.** A cross-spine edge needs to say whether A's promise is *enforced by* B's code (dependency) or *constrains* what B may promise (contract) — this is what PIN-26's cross-leg coherence check needs to run mechanically instead of by re-reading contracts by hand.
+4. **External-reference tiers**, three-way: `spine-built` (pointer resolves into another repo's spine, per (1)), `spine-buildable` (names a real repo anima-lite has access to but hasn't mapped — a legitimate "go run `/ari-map`" backlog signal, not a dead end), `unspineable` (true third-party/vendor boundary, no source access ever — pointer terminates at a contract surface: API version, schema, endpoint). `unspineable` pointers get an owner-of-record + manual-recheck-date field, since the 3+-path smell threshold (PIN-37) can't apply where there are no paths to count.
+5. **Staleness folds into the reasoning pattern, not a script.** Operator correction on PIN-37's deferred staleness-check: it should not be a standalone sweep tool. When `ari-code-rhetoric` touches a path during normal execution, it checks that path against a reverse index of `lives-in:` targets and flags any promise touched, inline in the blip — self-correction as a side effect of doing the work, matching PHILOSOPHY.md's existing "the spine self-corrects" framing rather than adding a second mechanical pass beside it.
+6. **`unspineable` as first-class absence.** Ties into PIN-21's capabilities-NOT-present work — a permanently-opaque enforcement boundary should read as a stated structural fact on the spine, not a dangling tag a reader has to chase.
+
+---
+Shaping fields.
+
+**Scope:** In — (1)+(2) unified cross-spine/promise graph design (target case: shelved ripple run); (3) edge-kind vocabulary; (4) three-tier external-reference classification + `unspineable` recheck field; (5) staleness detection as an `ari-code-rhetoric` execution-time check against a `lives-in:` reverse index (supersedes PIN-37's deferred standalone script — that script is now explicitly out, not just deferred); (6) `unspineable` absence-representation tie-in with PIN-21. Out — building the diagnosis layer (PIN-39, separate); resuming the shelved ripple workstream itself (still paused, operator's to resume).
+**Batch:** spine-completeness
+**Contract:** not yet written — claim-shaped (extends what `lives-in:` promises: cross-repo resolution, edge semantics, and a terminal "we cannot mechanically know" state), needs a real `ari-argue-rhetoric` pass per the harness-change precedent (PIN-32/36) before stub:2.
+**Resolution:**

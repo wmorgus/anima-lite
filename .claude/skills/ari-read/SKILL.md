@@ -55,7 +55,7 @@ Read is the reconstruction skill: truth about the system is scattered — across
 **3. Build the question's ontology.** Once intent is confirmed, decide which elements from which of the five fields actually bear on answering it, and classify the question-shape:
 
 - **state** — "what is this system now?" Feeds nothing downstream; the answer is the deliverable.
-- **honoring** — "does prod still honor what a run ported?" A failure feeds the write register (a pin, then a debt-work intent).
+- **honoring** — "does prod still honor what a run ported?" A failure feeds the write register (a pin, then `/ari-diagnose`, then a debt-work intent — see `.claude/skills/ari-diagnose/SKILL.md`'s entry mode (b), which takes this judgment directly as its starting evidence).
 - **record** — "did that gate get engaged or just checked off?" A compliance-vs-substance reading of the harness's own record; feeds calibration.
 - **adjudication** — "is this resolution divergence drift or growth?" A prepared adjudication the operator ratifies; feeds a blocked gate.
 
@@ -75,7 +75,7 @@ Name the shape and the fields consulted explicitly before reconstructing — thi
 > Present the return the same way GATE-QUERY presents the door: the confirmed intent restated alongside the judgment's core finding, so the operator reads the match itself, not a claim that a match exists.
 > Once it holds, the judgment is presented for the operator's reading — not self-certified as final. The artifact is not terminal until the operator has read it and the Operator reading section is filled. The agent's job ends at presentation; the operator's reading is a separate, required step, not a formality assumed to happen.
 
-**7. Record the destination.** State plainly in the judgment's `Feeds:` field what this judgment feeds, per its question-shape: nothing, a pin/debt-work handoff, calibration, or a blocked gate. If it feeds the write register, fire the fast-lane pin per `/ari-backlog`, citing the judgment's path as what surfaced it.
+**7. Record the destination.** State plainly in the judgment's `Feeds:` field what this judgment feeds, per its question-shape: nothing, a pin/debt-work handoff (for `honoring`, this means the pin routes to `/ari-diagnose` before `/ari-intake`, not straight to intake), calibration, or a blocked gate. If it feeds the write register, fire the fast-lane pin per `/ari-backlog`, citing the judgment's path as what surfaced it.
 
 ## Output
 

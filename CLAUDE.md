@@ -28,6 +28,7 @@ Artifacts land in `.anima-lite/` in this directory. Everything under `.anima-lit
 ## Skills
 
 - `/ari-intake` — mint the workstream slug, sharpen the work item's telos, ensure every claim is argued for (by prototype or by language), write `work/<slug>/intent.md`
+- `/ari-diagnose` — debt-work's intake source, upstream of `/ari-intake`: locate a divergence, classify it against the four primitives (spec/epistemic/world-drift/craft), cite evidence, write `work/<slug>/diagnosis.md`. Two entry modes only — operator-nominated pointer, or `/ari-read` honoring-failure handoff. Does not authorize a fix — see `.claude/skills/ari-diagnose/SKILL.md`.
 - `/ari-read` — the read-register doorway: a question about the system in, a telos-matched judgment out, presented for the operator's own reading. Mints its own slug, writes `work/<slug>/judgment.md`. Sibling to `/ari-intake`, not a step in the port sequence — see `.claude/skills/ari-read/SKILL.md`.
 - `/ari-map` — probe a repo, write a four-cause spine (material/formal/efficient/final)
 - `/ari-argue-rhetoric` — classify feature details as substrate or claim, confirm claim changes one at a time

@@ -18,7 +18,7 @@ One line per pin: `[PIN-n](pins/PIN-n.md) — status, stub, batch — semantic h
 - [PIN-23](pins/PIN-23.md) — done, stub:2, spine-completeness — spine-anima-lite re-probed fresh at HEAD 522e44b; all stale facts fixed, completeness-overhaul sections added; surfaced ari-lite.md rename residue (fixed) and .cursor/rules drift (left, PIN-7/18)
 - [PIN-24](pins/PIN-24.md) — open, stub:2, validation-review — validation agent captures Playwright screenshots for review; reachability-gated with static-review fallback; landed, DORMANT until a prod runtime exists
 - [PIN-25](pins/PIN-25.md) — done, stub:2, reorient — identity reorientation: custodian of promise/artifact alignment; vocab ratified, docs propagated, ports/→work/ mv done; item (c) spun out to PIN-37
-- [PIN-26](pins/PIN-26.md) — open, stub:2, reorient — ripple: machinery built + first real run in progress (work/rep-lumilo-kinesis-direct — lumilo-bridge + realtime-event-provider, two real prod repos, first-time probe); intent+contract frozen, execution paused at operator checkpoint; stays open until execution completes
+- [PIN-26](pins/PIN-26.md) — paused, stub:2, reorient — ripple: machinery built + first real run shelved (work/rep-lumilo-kinesis-direct — lumilo-bridge + aws-infrastructure, two real prod repos, first-time probe); intent+contract frozen, code uncommitted in both external repos awaiting operator review; shelved 2026-07-14 in favor of PIN-39
 - [PIN-27](pins/PIN-27.md) — done, stub:2, reorient — ari-intake skill built + dogfooded (PIN-31 first item through); nothing enters unargued; intent.md with per-claim argued-by provenance; GATE-TELOS fires at intake
 - [PIN-28](pins/PIN-28.md) — done, stub:0, reorient — pipeline = four-cause decomposition of "make a software change" (intake/final, map/material, argue/formal, port/efficient); PHILOSOPHY.md carries it
 - [PIN-29](pins/PIN-29.md) — done, stub:2, reorient — workstream vocabulary + suspension procedure (pause/resume first-class, paused status, State: field); run5 first dogfood; three findings → PIN-31
@@ -30,6 +30,10 @@ One line per pin: `[PIN-n](pins/PIN-n.md) — status, stub, batch — semantic h
 - [PIN-35](pins/PIN-35.md) — done, stub:2, unbatched — backlog sharded: backlog.md → index, pins/PIN-n.md per pin; kills PIN-31(b) collision class for pin bodies
 - [PIN-36](pins/PIN-36.md) — done, stub:2, unbatched — harness-change runs a real ari-argue-rhetoric pass to contract.md now; pin Contract fields point at it, don't substitute; first instance work/pin26-ripple-contract/
 - [PIN-37](pins/PIN-37.md) — done, stub:2, spine-completeness — spine connective tissue: `lives-in:` tags on spine rules/findings (ari-map Output) + named self-correction procedure (PHILOSOPHY.md); spun from PIN-25 item (c); staleness script + promise graph explicitly deferred, untested against a real case
+- [PIN-38](pins/PIN-38.md) — done, stub:2, unbatched — metrics/summary.md header stale-path fix; also became PIN-39's first real dogfood run (diagnose→intake→argue→fix)
+- [PIN-39](pins/PIN-39.md) — done, stub:2, reorient — the diagnosis layer: `/ari-diagnose` built + independently validated 2026-07-14; dogfooded end to end on PIN-38's stale path (diagnose→intake→argue→fix)
+- [PIN-40](pins/PIN-40.md) — open, stub:1, spine-completeness — connective tissue v2: cross-spine promise graph + edge kind, three-tier external-reference (spine-built/spine-buildable/unspineable), staleness folded into ari-code-rhetoric execution not a script; spun from PIN-37
+- [PIN-41](pins/PIN-41.md) — open, stub:0, unbatched — ari-code-rhetoric has no harness-change posture (argue-rhetoric has one, code-rhetoric doesn't); surfaced live when PIN-39's build skipped code-rhetoric's execute/validate discipline entirely
 
 ## Archived pins
 

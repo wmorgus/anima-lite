@@ -1,0 +1,17 @@
+### PIN-41 — ari-code-rhetoric has no harness-change posture
+captured: 2026-07-14
+stub: 0
+status: open
+home: anima-lite
+goes-stale: superseded once ari-code-rhetoric/SKILL.md carries an explicit harness-change posture note (parallel to ari-argue-rhetoric's) and at least one harness-change build has run through it end to end
+relates-to: .claude/skills/ari-code-rhetoric/SKILL.md (Preconditions §1 — names port/single-repo-debt-work/world-drift, omits harness-change entirely; Inputs/Process assume spine-proto/spine-prod split, playwright, PR-to-external-repo), .claude/skills/ari-argue-rhetoric/SKILL.md ("Harness-change classification" section — the parallel fix this skill got, added when PIN-26 hit the same gap), PIN-39 (diagnosis-layer build — surfaced this gap live: contract→build skipped code-rhetoric because nothing in its spec covers single-repo self-change), PIN-26/PIN-32/PIN-36 (harness-change work-type precedent — argue-rhetoric side only)
+
+`ari-argue-rhetoric` has an explicit "Harness-change classification" carve-out (no `Schema deps:`, no playwright, single-spine posture) — added when PIN-26 first ran a harness self-change through real intake→argue. `ari-code-rhetoric` never got the equivalent. Its Preconditions §1 lists port, single-repo debt-work, and world-drift as postures — harness-change isn't named at all, and its Process (Steps 1-4: plan against two spines, feature-branch-in-prod-repo, PR to an external repo, playwright validation) is written entirely in port terms. When PIN-39's diagnosis-layer skill was built straight from a frozen harness-change contract, code-rhetoric's execute/validate discipline (clean-context execution subagent working the contract as a filter, independent validation agent checking claim implementation against the contract, blip logging) was skipped entirely — not by judgment, because nothing in the skill's spec said how a single-repo, no-spine-proto/prod, no-external-PR build should run through it.
+
+---
+Shaping fields.
+
+**Scope:** In — add a harness-change posture to `ari-code-rhetoric/SKILL.md`: single-repo (no spine-proto/spine-prod split — the repo's own spine and telos, same posture argue-rhetoric already uses), no playwright verification, no PR-to-external-repo (the "prod repo" and the harness repo are the same repo; reconcile step becomes a normal in-repo commit/review, not a cross-repo PR flow), but preserve the parts of the discipline that still apply regardless of posture: plan-before-execute, clean-context execution subagent reading the contract as filter, blip logging on anything the contract doesn't cover, independent validation agent checking claim implementation against the contract. Out — building anything for single-repo debt-work or world-drift postures (separate, already-named gaps in the same Preconditions line, not this pin's scope); re-litigating whether harness-change should skip code-rhetoric's discipline entirely (already answered no, per this session's design round).
+**Batch:** unbatched
+**Contract:**
+**Resolution:**
