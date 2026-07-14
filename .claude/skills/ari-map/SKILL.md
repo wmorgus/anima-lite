@@ -112,9 +112,36 @@ Refresh trigger: <the specific condition that should invalidate this spine>
 Not a mission statement — a constraint. New work either serves this purpose or contradicts it.>
 
 ## §2 Don't contradict
-- <imperative rule — what new code must not do, derived from the telos> `lives-in: <path[s] that enforce this rule>`
-- <imperative rule> `lives-in: <path[s]>`
-- <imperative rule — 3-5 rules total. Concrete and checkable, not vague principles.> `lives-in: <path[s]>`
+- <imperative rule — what new code must not do, derived from the telos> `lives-in: <path[s] that enforce this rule>` `relates-to: spine-<label>#<section> (<edge-kind>)`
+- <imperative rule> `lives-in: <path[s]>` `relates-to: spine-<label>#<section> (<edge-kind>)`
+- <imperative rule — 3-5 rules total. Concrete and checkable, not vague principles.> `lives-in: <path[s]>` `relates-to: spine-<label>#<section> (<edge-kind>)`
+
+<`relates-to:` is optional per rule — omit it entirely when the rule has no
+cross-spine relationship; do not write a placeholder tag pointing at nothing.
+When present, it extends `lives-in:`'s promise→file pointer with a
+promise→promise edge into another already-ingested spine (`spine-<label>/`
+must exist in this repo's `.anima-lite/`). One graph, two tags: `lives-in:`
+is a rule's in-repo enforcement, `relates-to:` is the same rule's relationship
+to a rule/finding recorded in a different repo's spine. `<section>` is the
+target spine's §-number (e.g. `spine-lumilo-bridge#§2`), not a file path —
+cite the section, consistent with this file's own citable-section
+convention. Edge-kind is exactly one of:
+- `dependency` — this repo's promise is enforced by the target repo's code
+  (if the target's enforcement breaks, this rule silently stops holding).
+- `contract` — this repo's promise constrains what the target repo is
+  allowed to promise (the target cannot promise something that would make
+  this rule false, even though the target's own code doesn't enforce it).
+
+Worked example (reference only — read-only citation of the real shelved
+ripple case, `spine-lumilo-bridge`/`spine-realtime-event-provider`; this
+build does not touch either spine's own files):
+`- Kinesis records consumed by the ingestion path must already match the
+mapper's expected shape` `lives-in: src/services/kinesisMapping.ts`
+`relates-to: spine-realtime-event-provider#§5 (dependency)` — lumilo-bridge's
+promise ("we can decode every record we consume") is enforced by
+realtime-event-provider's own record-shape guarantee, not by any code in
+lumilo-bridge itself; if REP's shape changes, this rule goes stale even
+though nothing in lumilo-bridge's diff touched it.>
 
 ## §3 Cause files (reference depth)
 - [material.md](material.md) — tech stack and load-bearing dependencies
@@ -256,6 +283,19 @@ as one finding with a long path list. This tag is what makes the spine's own
 staleness mechanically detectable: a diff touching a tagged path is a candidate stale
 rule, checkable by grep instead of a full re-read. See PHILOSOPHY.md's spine
 self-correction paragraph for the procedure this feeds.
+
+Cross-spine rule: a named finding may also carry a `relates-to: spine-<label>#<section>
+(<edge-kind>)` tag, same optional-per-finding, section-not-path, edge-kind vocabulary
+as §2's don't-contradict rules above — one unified promise graph, not a second system.
+`lives-in:` and `relates-to:` are two tags on the same rule line answering two different
+questions: where is this enforced in THIS repo (`lives-in:`), and what does this promise
+depend on or constrain in ANOTHER already-ingested repo's spine (`relates-to:`). Edge-kind
+is exactly one of `dependency` (this finding's truth is enforced by the target spine's code)
+or `contract` (this finding constrains what the target spine may promise). Worked example
+(reference only, real shelved case, files untouched by this build): a lumilo-bridge finding
+"the Kinesis consumer assumes REP's record envelope never changes shape without a version
+bump" `lives-in: src/services/kinesisMapping.ts` `relates-to: spine-realtime-event-provider#§5
+(dependency)` — see §2 above for the full edge-kind definitions, not restated here.
 
 Seam protocol rule: documenting that layers exist is not documenting what crosses
 between them. A layer diagram without seam protocols is scaffolding — it names
