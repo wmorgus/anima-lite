@@ -39,6 +39,7 @@ One line per pin: `[PIN-n](pins/PIN-n.md) — status, stub, batch — semantic h
 - [PIN-44](pins/PIN-44.md) — open, stub:0, unbatched — CLAUDE.md's skills-intro sentence stale against real work-type roster (port/harness-change/arete built, ripple/debt-work built partway); surfaced as a blip during arete-skills, left unfixed there
 - [PIN-45](pins/PIN-45.md) — open, stub:0, unbatched — arete's scaffold (ruling 12, renamed from "movement map"): design questions resolved (layer/step/cell mapping, cut judges against it, system-level-mandatory), placed as a general fifth spine file (`scaffold.md`); backbone generalization owned by PIN-46
 - [PIN-46](pins/PIN-46.md) — open, stub:1, unbatched — "spine under the spine": shared scenario×path×step coordinate backbone under material/formal/efficient; schema resolved (one row, three columns, markdown-native), skeleton-vs-ledger distinction, ledger-rooting field, telos-growth two-tier reopen mechanism — all design-resolved, none built
+- [PIN-47](pins/PIN-47.md) — open, stub:1, unbatched — cascade registry (`~/.anima-lite`), core project repo (`.anima-lite`-only, no code) for cascade statements, `ARETE.md` citation format, living/custodied seed context feeding PIN-46's growth-reopen mechanism — first harness state living outside a git repo
 
 ## Archived pins
 
