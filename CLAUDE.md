@@ -34,6 +34,8 @@ Artifacts land in `.anima-lite/` in this directory. Everything under `.anima-lit
 - `/ari-argue-rhetoric` — classify feature details as substrate or claim, confirm claim changes one at a time
 - `/ari-code-rhetoric` — translate substrate freely, implement confirmed claims exactly, log blips
 - `/ari-backlog` — capture and sweep the backlog (`.anima-lite/backlog.md` index + `.anima-lite/pins/PIN-<n>.md` per-pin files); run before every calibration run
+- `/ari-arete` — found a telos by iterative language for a repo with no final cause on record: hard seed-context gate, draft→iterate→ratify pass, cascades top-down from a system-level statement to derived components. Writes `work/<slug>/arete-statement.md` — see `.claude/skills/ari-arete/SKILL.md`
+- `/ari-arete-pan` — sort an existing repo's code against a ratified arete statement into nugget/ore/slag, draft→iterate→ratify a batch cut, hand nuggets/ore to `/ari-argue-rhetoric`'s arete posture. Independent entry point — runs whenever a ratified statement exists, not only right after `/ari-arete`. Writes `work/<slug>/cut.md` — see `.claude/skills/ari-arete-pan/SKILL.md`
 
 The backlog is committed durable state, not scratch: `.anima-lite/backlog.md` is the searchable index (one line per pin), each pin's full block lives in `.anima-lite/pins/PIN-<n>.md` — see `.claude/skills/ari-backlog/SKILL.md` for the pin format, index-line format, and sweep process.
 

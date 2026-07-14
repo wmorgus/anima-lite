@@ -37,7 +37,7 @@ When unsure: ask whether a user who understood the feature's promise would notic
 
 Every work item enters through a declared register, never through an undeclared default: an intent to *change* the repo enters via `/ari-intake`; a question *about* the repo enters via `/ari-read`. Each doorway names the fork explicitly and routes to the other if a work item shows up at the wrong one — nothing enters unregistered.
 
-## Six skills
+## Eight skills
 
 **`/ari-intake`** — sharpen the work item's telos and ensure everything it asks for is argued for, either by prototype (the proto feature's code carries the argument) or by language derived from context (tickets, meetings, specs, an operator's own translation). Mints the workstream slug and writes the argued-intent artifact, `work/<slug>/intent.md`. Runs first, upstream of `/ari-map` and `/ari-argue-rhetoric` — nothing enters the pipeline unargued.
 
@@ -50,6 +50,10 @@ Every work item enters through a declared register, never through an undeclared 
 **`/ari-code-rhetoric`** — four steps: plan → execute → validate → reconcile (+ harvest). Translates substrate freely, implements confirmed claims exactly, logs everything else as a blip. Halts back to ari-argue-rhetoric if the contract is actively contradicted by the real code.
 
 **`/ari-backlog`** — capture and sweep the backlog (`.anima-lite/backlog.md` index + one `.anima-lite/pins/PIN-<n>.md` file per pin), a two-speed pin system for captured-but-not-yet-scheduled work. Runs before every calibration run. This is orthogonal to the per-port flow below, not a step inside it — it doesn't sit between ari-map/ari-argue-rhetoric/ari-code-rhetoric, it brackets the whole pipeline.
+
+**`/ari-arete`** — founds a telos by iterative language for a repo that has none on record, the context-starved case every other work-type's already-legible intent doesn't cover. A hard seed-context gate (starting rule: an index file, list grows by design) precedes a draft→iterate→ratify pass producing a caveman-dense arete statement, cascading top-down from a system-level statement to each derived component. Writes `work/<slug>/arete-statement.md`. Does not judge existing code — that's `/ari-arete-pan`, downstream and independently invocable.
+
+**`/ari-arete-pan`** — sorts an existing repo's code against a ratified arete statement into nugget (kept)/ore (real pressure, rewritten from a recorded pressure-note)/slag (discarded), then draft→iterate→ratify a single batch cut before any code moves — a different judgment shape from `/ari-argue-rhetoric`'s per-claim confirm, because everything here dies by the absence of a defending telos, not an argued change. Writes `work/<slug>/cut.md`; nuggets and ore feed `/ari-argue-rhetoric`'s arete posture, which classifies against the new, empty repo `/ari-code-rhetoric`'s own arete posture builds (the old repo stays read-only evidence throughout). Independent entry point — its only precondition is a ratified statement existing, not `/ari-arete` having just run.
 
 Full detail on each — inputs, preconditions, output format — lives in that skill's `SKILL.md`, not here.
 

@@ -25,6 +25,8 @@ Every required and optional gate currently defined across the six skill files, p
 | GATE-PIN-CLAIM | Claim-shaped pin | Optional | ari-backlog | A pin's Contract is classified claim-shaped during the slow-lane sweep (step 4) | User reviews the contract paragraph or explicitly skips |
 | GATE-QUERY | Question intent | Required | ari-read | The question is recorded verbatim (step 1); its restated intent must be confirmed before reconstruction begins (step 2) | Operator confirms the restatement matches what they meant, or corrects it — confirming is not staking the question's frame |
 | GATE-MATCH | Telos match + operator reading | Required | ari-read | The prepared judgment is checked against the confirmed intent from GATE-QUERY before presentation (step 6) | Operator reads the presented judgment and fills its Operator reading section — the artifact is not terminal until this happens |
+| GATE-SEED-CONTEXT | Seed-context readiness | Required | ari-arete | Before drafting begins: the operator-assembled seed context must satisfy the current starting rule list (today: exactly one rule — an index file naming what everything is) | Operator supplies the missing piece the check named; no soft-fail path — the gate is hard, not advisory |
+| GATE-ARETE-CUT | Batch cut ratification | Required | ari-arete-pan | The draft nugget/ore/slag cut has stabilized through iteration (step 3) — fires once over the whole cut, not per item | Operator explicitly ratifies the whole cut as a batch before any item reaches ari-argue-rhetoric or any code moves |
 
 **On GATE-HASH's inline form:** it is not written as a `> **⛔ REQUIRED GATE**` callout in ari-code-rhetoric's SKILL.md — it is stated as precondition 3's paragraph ("If mismatched... don't auto-fail or proceed silently... ask the user whether the contract still holds"). It is included here because it functions identically to a required gate: it halts the pipeline pending explicit user resolution. Skill authors should treat any precondition phrased this way as gate-registry material even without the callout formatting.
 
@@ -47,6 +49,8 @@ Every required and optional gate currently defined across the six skill files, p
 | Judgment artifact format (`work/<slug>/judgment.md`) | `.claude/skills/ari-read/SKILL.md` (Output section) | ari-read | operator (GATE-MATCH reading), ari-backlog (when a judgment feeds a pin) |
 | Diagnosis artifact format (`work/<slug>/diagnosis.md`) | `.claude/skills/ari-diagnose/SKILL.md` (Output section) | ari-diagnose | ari-intake (debt-work's source, same role prototype plays for port) |
 | Cross-spine/tier vocabulary (`relates-to:` edge-kind tags; material.md §10 spine-built/spine-buildable/unspineable tiers) | `.claude/skills/ari-map/SKILL.md` (Output section) | ari-map | ari-code-rhetoric (Claim 5's reverse-index check, Step 2), ari-argue-rhetoric (GATE-SCHEMA, per-leg schema check) |
+| Arete-statement artifact format (`work/<slug>/arete-statement.md`) | `.claude/skills/ari-arete/SKILL.md` (Output section) | ari-arete | ari-arete-pan (Inputs — the only hard precondition), ari-argue-rhetoric (arete posture — the argument, step 2) |
+| Arete-cut artifact format (`work/<slug>/cut.md`) | `.claude/skills/ari-arete-pan/SKILL.md` (Output section) | ari-arete-pan | ari-argue-rhetoric (arete posture — primary input) |
 
 ---
 
@@ -78,7 +82,7 @@ Metadata only, same discipline as Sections 1–3: each fact below has exactly on
 | Fact | Canonical home | What others do |
 |---|---|---|
 | Artifact layout `work/<slug>/{intent,contract,blips,plan,catchup,pr}.md` | Skill files (intent/spine/contract/blip formats), indexed by HARNESS.md §2 | README.md points to HARNESS.md §2 instead of drawing the tree. **Renamed 2026-07-07:** the directory noun `ports/<slug>/` became `work/<slug>/` (skill name `ari-port` was kept as-is at that time) per vocab decision 2b, once run5's staged git state resolved. The skill name itself was renamed separately, same day, to `ari-code-rhetoric` per PIN-26 ruling 6 (formal/efficient cause naming, folded into the ripple build). `intent.md` (ari-intake) added 2026-07-07, PIN-27 — the workstream now starts at intake, not at contract. |
-| Skill roster (6 skills) | README.md (narrative one-liners) + CLAUDE.md (command list) | Everyone else links to `.claude/skills/<name>/SKILL.md` rather than restating what a skill does |
+| Skill roster (8 skills) | README.md (narrative one-liners) + CLAUDE.md (command list) | Everyone else links to `.claude/skills/<name>/SKILL.md` rather than restating what a skill does |
 | Gate registry (count + IDs) | HARNESS.md §1 | README.md states no count — points to "see HARNESS.md §1" |
 | Gitignore/commit policy | CLAUDE.md + `.gitignore` itself | Nothing else states this fact |
 | Target-repo paths | CLAUDE.md | Nothing else states paths |
