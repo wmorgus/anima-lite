@@ -82,7 +82,7 @@ Metadata only, same discipline as Sections 1–3: each fact below has exactly on
 | Fact | Canonical home | What others do |
 |---|---|---|
 | Artifact layout `work/<slug>/{intent,contract,blips,plan,catchup,pr}.md` | Skill files (intent/spine/contract/blip formats), indexed by HARNESS.md §2 | README.md points to HARNESS.md §2 instead of drawing the tree. **Renamed 2026-07-07:** the directory noun `ports/<slug>/` became `work/<slug>/` (skill name `ari-port` was kept as-is at that time) per vocab decision 2b, once run5's staged git state resolved. The skill name itself was renamed separately, same day, to `ari-code-rhetoric` per PIN-26 ruling 6 (formal/efficient cause naming, folded into the ripple build). `intent.md` (ari-intake) added 2026-07-07, PIN-27 — the workstream now starts at intake, not at contract. |
-| Skill roster (8 skills) | README.md (narrative one-liners) + CLAUDE.md (command list) | Everyone else links to `.claude/skills/<name>/SKILL.md` rather than restating what a skill does |
+| Skill roster (9 skills) | README.md (narrative one-liners) + CLAUDE.md (command list) | Everyone else links to `.claude/skills/<name>/SKILL.md` rather than restating what a skill does |
 | Gate registry (count + IDs) | HARNESS.md §1 | README.md states no count — points to "see HARNESS.md §1" |
 | Gitignore/commit policy | CLAUDE.md + `.gitignore` itself | Nothing else states this fact |
 | Target-repo paths | CLAUDE.md | Nothing else states paths |

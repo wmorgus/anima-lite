@@ -37,7 +37,7 @@ When unsure: ask whether a user who understood the feature's promise would notic
 
 Every work item enters through a declared register, never through an undeclared default: an intent to *change* the repo enters via `/ari-intake`; a question *about* the repo enters via `/ari-read`. Each doorway names the fork explicitly and routes to the other if a work item shows up at the wrong one — nothing enters unregistered.
 
-## Eight skills
+## Nine skills
 
 **`/ari-intake`** — sharpen the work item's telos and ensure everything it asks for is argued for, either by prototype (the proto feature's code carries the argument) or by language derived from context (tickets, meetings, specs, an operator's own translation). Mints the workstream slug and writes the argued-intent artifact, `work/<slug>/intent.md`. Runs first, upstream of `/ari-map` and `/ari-argue-rhetoric` — nothing enters the pipeline unargued.
 
@@ -50,6 +50,8 @@ Every work item enters through a declared register, never through an undeclared 
 **`/ari-code-rhetoric`** — four steps: plan → execute → validate → reconcile (+ harvest). Translates substrate freely, implements confirmed claims exactly, logs everything else as a blip. Halts back to ari-argue-rhetoric if the contract is actively contradicted by the real code.
 
 **`/ari-backlog`** — capture and sweep the backlog (`.anima-lite/backlog.md` index + one `.anima-lite/pins/PIN-<n>.md` file per pin), a two-speed pin system for captured-but-not-yet-scheduled work. Runs before every calibration run. This is orthogonal to the per-port flow below, not a step inside it — it doesn't sit between ari-map/ari-argue-rhetoric/ari-code-rhetoric, it brackets the whole pipeline.
+
+**`/ari-diagnose`** — debt-work's intake, upstream of `/ari-intake`: locates a divergence, classifies it against the four primitives (spec/epistemic/world-drift/craft), cites the evidence, writes `work/<slug>/diagnosis.md`. Two entry modes only — operator-nominated pointer, or an `/ari-read` honoring-failure handoff. Does not authorize a fix — that's still `/ari-argue-rhetoric`'s binary substrate/claim cut, downstream. (Pre-existing gap this pass corrected: this skill predates this session, PIN-39, but this section had never carried its blurb.)
 
 **`/ari-arete`** — founds a telos by iterative language for a repo that has none on record, the context-starved case every other work-type's already-legible intent doesn't cover. A hard seed-context gate (starting rule: an index file, list grows by design) precedes a draft→iterate→ratify pass producing a caveman-dense arete statement, cascading top-down from a system-level statement to each derived component. Writes `work/<slug>/arete-statement.md`. Does not judge existing code — that's `/ari-arete-pan`, downstream and independently invocable.
 

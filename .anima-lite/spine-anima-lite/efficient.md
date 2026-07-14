@@ -5,7 +5,7 @@
 None. No compiler, bundler, or build step of any kind — `SKILL.md` files are read directly by the Claude Code skill runner at invocation time (code-derived: file enumeration finds no build config anywhere in the repo).
 
 ## §2 Key targets
-- `/ari-intake`, `/ari-map`, `/ari-argue-rhetoric`, `/ari-code-rhetoric`, `/ari-backlog`, `/ari-read` — the six invocable skills (slash commands map 1:1 to `.claude/skills/<name>/SKILL.md`)
+- `/ari-intake`, `/ari-map`, `/ari-argue-rhetoric`, `/ari-code-rhetoric`, `/ari-backlog`, `/ari-read`, `/ari-diagnose`, `/ari-arete`, `/ari-arete-pan` — the nine invocable skills (slash commands map 1:1 to `.claude/skills/<name>/SKILL.md`)
 - The `ari-lite` agent (`.claude/agents/ari-lite.md`) — an alternate invocation surface wrapping the three port-relevant skills (map/argue/port) in one agent face; the only place the three-faces model is currently enforced (formal.md §5, FINDING-3)
 
 ## §3 CI/CD

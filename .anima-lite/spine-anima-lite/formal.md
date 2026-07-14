@@ -2,7 +2,7 @@
 (Reference depth — see telos.md for entry point and commit hash)
 
 ## §1 Layered architecture
-Six skills, not layers in the traditional sense — a pipeline of registers, entered at one of two doorways (change vs. question), with one orthogonal maintenance skill. Two-level four-cause nesting (PHILOSOPHY.md): the skill pipeline is itself the four-cause decomposition of "make a software change" — intake=final, map=material, argue=formal, port=efficient — one level up from each target repo's own four-cause spine.
+Eight skills, not layers in the traditional sense — a pipeline of registers, entered at one of two doorways (change vs. question), with one orthogonal maintenance skill, plus a third doorway pair (found vs. judge) for the arete work-type. Two-level four-cause nesting (PHILOSOPHY.md): the skill pipeline is itself the four-cause decomposition of "make a software change" — intake=final, map=material, argue=formal, port=efficient — one level up from each target repo's own four-cause spine.
 
 ## §2 Module boundaries
 Each skill is a self-contained `SKILL.md` (Inputs → Preconditions → Active orientations → Process → Output → Escalation/Notes). Three support files are canonical sub-specs, not restated in their owning skill: `ari-map/ledger-spec.md`, `ari-argue-rhetoric/playwright-spec.md`, `ari-code-rhetoric/metrics-spec.md`. `HARNESS.md` owns cross-skill metadata (gate registry, spec ownership, enforcement levels, doc ownership) and never carries operative behavioral prose (its own governing rule).
@@ -29,6 +29,14 @@ Seams: "Driver's independent break-scan is not optional" (Escalation/Notes) exis
 Two-speed: fast lane (zero-ceremony `stub:0` pin capture, any time) and slow lane (sweep — advance stubs, classify Contract, archive done pins, write the backlog-health row). Orthogonal to the port pipeline, run before every calibration.
 Seams: "No priority ranks" — batch + status are the only ordering the backlog itself asserts; the actual working order lives in an operator-owned, unshaped `session-backlog.md` outside this skill's discipline entirely.
 
+### ari-arete
+Founds a telos by iterative language for a repo with no final cause on record — bare, asserts rather than argues. Hard-precondition GATE-SEED-CONTEXT (starting rule: index file, list grows by design) gates a draft→iterate→ratify pass producing a caveman-dense arete statement, cascading top-down (system, then each derived component). Writes `work/<slug>/arete-statement.md`.
+Seams: does not judge existing code against the statement it produces — that's `ari-arete-pan`'s exclusive job, kept deliberately separate rather than folded in as a final step of the same pass (arete.md ruling 1).
+
+### ari-arete-pan
+Sorts an existing repo's code against a ratified arete statement into nugget/ore/slag; draft→iterate→ratify a single batch cut (GATE-ARETE-CUT) before any code moves or any item reaches `ari-argue-rhetoric`. Independent entry point — precondition is a ratified statement existing, not `ari-arete` having just run. Writes `work/<slug>/cut.md`.
+Seams: explicitly not a fifth `ari-diagnose` primitive — the skill's own Active orientations states the category distinction in its own words (drift-from-existing-telos vs. founding-into-nothing) rather than by cross-reference alone, per the contract that built it.
+
 ### ari-read
 Sibling doorway to ari-intake, not a step inside the pipeline. Confirms question intent (GATE-QUERY) without staking it for the asker, reconstructs from the five fields, presents (never self-certifies) at GATE-MATCH. Writes `judgment.md`; terminal only once the operator fills Operator reading.
 Seams: "Route-out is not a failure" — discovering mid-read that a question is actually a change request is a named normal outcome, not an error, and hands off to ari-intake; this is the mirror of ari-intake's own halt-and-route-to-ari-read precondition.
@@ -40,7 +48,10 @@ Seams: "Route-out is not a failure" — discovering mid-read that a question is 
 - port → argue (reverse seam): CONTRACT-BREAK sends a specific delta back, not a redo signal — ari-argue-rhetoric treats it as "new evidence" and writes an amendment, never a from-scratch re-contract (ari-argue-rhetoric Escalation/Notes).
 - port → backlog: blips and catchup gaps are candidate pin sources; ari-backlog's Inputs name "whatever surfaced the pin" including a blip.
 - read → backlog / intake: a `judgment.md` with `Feeds: pin/debt-work handoff` fires a fast-lane pin (per ari-read step 7) or routes to intake if the read discovers a change-shaped ask mid-reconstruction.
-Seams: none found beyond the above — every cross-skill boundary observed carries an explicit artifact-shape contract (frozen contract, hash pin, `argued-by:` line, `Feeds:` field); no boundary was found passing bare prose with no checkable field.
+- arete → arete-pan: `arete-statement.md`, ratified, is `ari-arete-pan`'s only hard precondition — not "ari-arete just ran," a state-of-the-world check rather than a same-session handoff (arete.md ruling 11).
+- arete-pan → argue (arete posture): `cut.md`'s nuggets and ore, never slag, become argue-rhetoric's primary input under its arete posture — replacing intent.md's claim list entirely for this work-type (no ari-intake pass exists for arete).
+- argue (arete posture) → code (arete posture): the frozen contract crosses the same way a port's does, but code-rhetoric's arete posture targets a new, empty repo rather than translating into the existing one — the old repo stays read-only evidence, never re-entered as a live target.
+Seams: none found beyond the above — every cross-skill boundary observed carries an explicit artifact-shape contract (frozen contract, hash pin, `argued-by:` line, `Feeds:` field, ratified-statement precondition); no boundary was found passing bare prose with no checkable field.
 
 ## §5 Named findings
 
