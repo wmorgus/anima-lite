@@ -216,6 +216,45 @@ nouns instead of rediscovering them. One line per noun.
 
 - <noun> = <what it actually is, e.g. "enrollment = row in StudentSessionItem">
 - <noun> = <what it actually is, e.g. "capacity = tutor-staffing only, not student-side">>
+
+## §10 External references
+
+<Same precedent as §8 (PIN-21): an absence recorded here is a stated structural
+fact, not silence. §8 records domain-noun capabilities this repo does NOT have;
+§10 records where a promise this repo depends on actually lives when that place
+is outside this repo's own git tree — a vendor, another team's repo, a managed
+service, a config injected at deploy time rather than checked in. Populate only
+when a confirmed rule or finding (§2/§5 elsewhere in the spine) depends on
+something external; this is not an invitation to catalog every vendor the repo
+touches. Three tiers, exactly these three, no others:
+
+- **spine-built** — the external dependency has its own `spine-<label>/` already
+  ingested in this repo's `.anima-lite/`. Cite it via the `relates-to:` tag on
+  the rule/finding that depends on it (see formal.md §5's cross-spine rule) —
+  don't duplicate the citation here, this tier is a pointer to "go look at the
+  relates-to tag," not a second copy of it.
+- **spine-buildable** — no spine exists yet, but the dependency is a real repo
+  this harness could `/ari-map` if the work justified it (an internal service,
+  a sibling team's codebase). Record the repo/path if known, so a future agent
+  doesn't have to rediscover that mapping it is possible.
+- **unspineable** — a true vendor boundary: a managed cloud service, a
+  third-party SaaS, a config injected at deploy time with no repo this harness
+  could ever probe. This is the stated-absence case (PIN-21 precedent, applied
+  cross-repo): the dependency is real and load-bearing, but structurally outside
+  what `/ari-map` can ever confirm in code. Every `unspineable` entry carries two
+  required fields, same required-field discipline as §7/§8's tables — an absent
+  field is a gap, not a default:
+  - `owner-of-record:` — who/what team, vendor, or account actually controls
+    this dependency (so a future agent knows who to ask, not just that asking
+    is necessary).
+  - `manual-recheck-date:` — when this entry was last confirmed against the
+    actual external state; `unspineable` facts are timed facts (same class as
+    §1's EOL/advisory caveat) and go stale silently without a recheck date.
+
+Format, one entry per line:
+- <dependency name> — tier: <spine-built|spine-buildable|unspineable> — <one-line
+  what depends on it and why> — [`unspineable` only] `owner-of-record: <who>`
+  `manual-recheck-date: <date>`>
 ```
 
 ---
