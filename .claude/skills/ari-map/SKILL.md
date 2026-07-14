@@ -132,16 +132,21 @@ convention. Edge-kind is exactly one of:
   allowed to promise (the target cannot promise something that would make
   this rule false, even though the target's own code doesn't enforce it).
 
-Worked example (reference only — read-only citation of the real shelved
-ripple case, `spine-lumilo-bridge`/`spine-realtime-event-provider`; this
-build does not touch either spine's own files):
-`- Kinesis records consumed by the ingestion path must already match the
-mapper's expected shape` `lives-in: src/services/kinesisMapping.ts`
-`relates-to: spine-realtime-event-provider#§5 (dependency)` — lumilo-bridge's
-promise ("we can decode every record we consume") is enforced by
-realtime-event-provider's own record-shape guarantee, not by any code in
-lumilo-bridge itself; if REP's shape changes, this rule goes stale even
-though nothing in lumilo-bridge's diff touched it.>
+Worked example (reference only — a real citation from the shelved ripple
+case, `spine-lumilo-bridge`/`spine-realtime-event-provider`; this build does
+not touch either spine's own files):
+`- Do not implement a new ingestion source's business logic outside
+commonIngestionService` `lives-in: graphql-server/src/services/commonIngestion.service.ts,
+graphql-server/src/ingestion/types.ts` `relates-to:
+spine-realtime-event-provider#§4 (dependency)` — this is
+`spine-lumilo-bridge/telos.md` §2's actual first rule, unmodified. The
+cross-spine edge cites REP's own `formal.md` §4 Seam protocols, which states
+plainly that "a new direct consumer [of the output Kinesis stream] must parse
+this exact shape": lumilo-bridge's Kinesis adapter's promise ("we can decode
+every record we consume") is enforced by REP's Flink→output-stream
+serialization, not by any code in lumilo-bridge itself — if REP's Seam
+protocol shape changes, this rule goes stale even though nothing in
+lumilo-bridge's own diff touched it.>
 
 ## §3 Cause files (reference depth)
 - [material.md](material.md) — tech stack and load-bearing dependencies
@@ -331,10 +336,17 @@ questions: where is this enforced in THIS repo (`lives-in:`), and what does this
 depend on or constrain in ANOTHER already-ingested repo's spine (`relates-to:`). Edge-kind
 is exactly one of `dependency` (this finding's truth is enforced by the target spine's code)
 or `contract` (this finding constrains what the target spine may promise). Worked example
-(reference only, real shelved case, files untouched by this build): a lumilo-bridge finding
-"the Kinesis consumer assumes REP's record envelope never changes shape without a version
-bump" `lives-in: src/services/kinesisMapping.ts` `relates-to: spine-realtime-event-provider#§5
-(dependency)` — see §2 above for the full edge-kind definitions, not restated here.
+(reference only, real citation from the shelved case, files untouched by this build): this
+is `spine-lumilo-bridge/formal.md` §5's actual third finding, unmodified — "(code-derived)
+Detector dispatch from `ingest()` is fire-and-forget; a Kinesis-direct path that needs
+at-least-once processing guarantees for detector side effects does not get them from the
+current shared pipeline." `lives-in: graphql-server/src/services/commonIngestion.service.ts`
+`relates-to: spine-realtime-event-provider#§4 (contract)` — this is a `contract` edge, not
+`dependency`: the finding constrains what realtime-event-provider's output-stream delivery
+may promise to any consumer, since REP cannot promise "the consuming app completes
+processing before a record counts as delivered" when lumilo-bridge's own ingestion path
+doesn't hold that guarantee. See §2 above for the full edge-kind definitions, not restated
+here.
 
 Seam protocol rule: documenting that layers exist is not documenting what crosses
 between them. A layer diagram without seam protocols is scaffolding — it names
@@ -376,7 +388,7 @@ How to verify a change works in this repo.>
 
 Cap each cause file's narrative sections at ~50 lines. If you're exceeding that, you're over-promising precision. Cut to load-bearing facts.
 
-**Cap exemption.** The narrative sections — material.md §1–§6, formal.md §1–§5 — must stay ≤~50 lines combined per file. material.md's §7 entity/field inventory, §8 capabilities-NOT-present, and §9 domain vocabulary are lookup APPENDICES, not narrative, and are EXEMPT from the cap: a table row is a confirmed fact, not prose that can bloat. The cap and the required tables do not contradict each other — the cap bounds how much gets asserted in flowing text; the tables absorb the field-level volume that used to either get crammed into narrative (blowing the cap) or dropped (causing silent incompleteness). The feature ledger (uncapped, per-feature) absorbs anything more granular than repo-wide — see "Domain-central features go to stub:2 at map-time" above.
+**Cap exemption.** The narrative sections — material.md §1–§6, formal.md §1–§5 — must stay ≤~50 lines combined per file. material.md's §7 entity/field inventory, §8 capabilities-NOT-present, §9 domain vocabulary, and §10 external references are lookup APPENDICES, not narrative, and are EXEMPT from the cap: a table row is a confirmed fact, not prose that can bloat. The cap and the required tables do not contradict each other — the cap bounds how much gets asserted in flowing text; the tables absorb the field-level volume that used to either get crammed into narrative (blowing the cap) or dropped (causing silent incompleteness). The feature ledger (uncapped, per-feature) absorbs anything more granular than repo-wide — see "Domain-central features go to stub:2 at map-time" above.
 
 ## Feature Ledger
 
