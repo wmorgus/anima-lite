@@ -18,6 +18,29 @@ Surfaced from a gap in the cascade design: ruling 3's system-level statement, an
 
 4. **The core project repo also holds and custodies the raw seed context — added later same session (operator: "that's an arete-worthy task").** Not a one-time pile the operator assembles fresh before each founding pass — a living directory (the GATE-SEED-CONTEXT index file included) that persists in the core repo, gets updated as the project evolves, and is subject to the *same* spine self-correction discipline as everything else in this harness (`PHILOSOPHY.md`: detection → judgment → execution → exclusion) rather than a bespoke context-freshness mechanism invented for this case. Consequence: a material shift in the seed context is upstream of the statement it founded, so it's tier-1 reconsideration bait feeding PIN-46's growth-reopen mechanism one layer further back than "the statement itself changed" — a context change doesn't automatically invalidate the statement (detection ≠ verdict, as always), but it's exactly the kind of candidate that mechanism exists to surface rather than silently miss.
 
+**Amended 2026-07-14, later same session — generalized off arete, during the scaffold-backbone
+contracting round (pin45-46-scaffold-backbone).** Surfaced from a concrete bug this fixes:
+`ledger-spec.md` currently says features live "at the anima-lite root, not under any repo spine"
+— but "the anima-lite root" is one singular location shared across *every* project this tool has
+ever touched (a port, a ripple, an eventual arete cascade), not scoped per-project. That's
+cross-*project* pooling into one tool-global bucket, not the cross-*repo, within one project* home
+the ledger actually needs. It has worked so far only because anima-lite has never run two
+projects' worth of state at once.
+
+5. **Core project repo generalizes from arete-only to universal, with a single-codebase collapse
+   rule.** Every project — not just an arete cascade — gets a core repo: the home for that
+   project's cross-repo state (feature ledger entries, cascade registry entries, arete statements
+   where applicable). **Collapse rule:** a single-codebase project does not spin up a redundant
+   empty-of-app-code repo — that one codebase's own `.anima-lite/` *is* the core repo, trivially.
+   A multi-repo project (ripple legs, an arete cascade, any future N-repo project) gets a real
+   dedicated core repo, no application code, same shape item 1 above already described for arete
+   specifically. Arete's cascade use is now one instance of this pattern, not the reason the
+   pattern exists. Consequence for `ledger-spec.md`: "features live at the anima-lite root" is
+   corrected to "features live at the project's core repo" — single-codebase default resolves to
+   the same physical location as today (no behavior change for anima-lite's own self-harness-change
+   work, which is single-codebase and already collapses), but a multi-repo project's ledger entries
+   stop pooling into an unrelated shared bucket.
+
 **Not yet designed:**
 - The registry file's exact schema (columns beyond cascade-id/location/hash — does it need a `goes-stale`-style field, same as a backlog pin?).
 - Who/what writes to `~/.anima-lite` and when — is this a manual operator step at founding time, or does `ari-arete` write it automatically as part of ratifying a system-level statement?
@@ -28,7 +51,7 @@ Surfaced from a gap in the cascade design: ruling 3's system-level statement, an
 ---
 Shaping fields.
 
-**Scope:** In — the core-project-repo pattern (reuses existing `.anima-lite/` shape, no new artifact type), the `ARETE.md` citation format (`{cascade-id, hash}`, not a path or a text copy), the `~/.anima-lite` registry's existence and rough shape, the living-seed-context framing and its tie into PIN-46's growth-reopen mechanism. Out — the registry's exact schema, the write-path (manual vs. automated), the seed-context staleness mechanism's concrete tagging, any HARNESS.md spec-ownership entry — all real build questions, not yet designed.
+**Scope:** In — the core-project-repo pattern (reuses existing `.anima-lite/` shape, no new artifact type), **now generalized to every project with a single-codebase collapse rule (item 5)**, the `ARETE.md` citation format (`{cascade-id, hash}`, not a path or a text copy), the `~/.anima-lite` registry's existence and rough shape, the living-seed-context framing and its tie into PIN-46's growth-reopen mechanism. Out — the registry's exact schema, the write-path (manual vs. automated), the seed-context staleness mechanism's concrete tagging, any HARNESS.md spec-ownership entry — all real build questions, not yet designed.
 **Batch:** unbatched
 **Contract:** n/a — ratified design direction, not yet contracted; a harness-change contract for this is real future work, likely bundled with or sequenced after PIN-45/46
 **Resolution:** not traced

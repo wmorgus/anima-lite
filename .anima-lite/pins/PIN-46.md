@@ -1,7 +1,7 @@
 ### PIN-46 — the coordinate backbone: one shared spine under material/formal/efficient ("spine under the spine")
 captured: 2026-07-14
-stub: 1
-status: open
+stub: 2
+status: scheduled
 home: anima-lite
 goes-stale: not traced
 relates-to: reorient/arete.md ruling 12, PIN-45
@@ -28,6 +28,6 @@ Not yet designed: how this interacts with `ari-map`'s existing per-cause file st
 Shaping fields.
 
 **Scope:** In — the shared coordinate schema (`scaffold.md`'s per-scenario tables, one row per (scenario,path,step), three formal/material/efficient columns), the skeleton-vs-ledger placement, the `ledger-spec.md` rooting field (`Scaffold coordinates:`/`Filled by:`), the telos-growth two-tier reopen mechanism. Out — the actual `ari-map`/`ari-arete` `SKILL.md` changes to produce/consume any of this (build work, not design; own contract when scheduled), the telos-derivation edge kind that would make tier-1 reconsideration computable (real gap, but a design question in its own right, not blocking this pin's own scope), whether non-arete repos get this backbone by default (deferred, inherits the scaffold's own already-resolved shape).
-**Batch:** unbatched
-**Contract:** n/a — not yet contracted; this pin records ratified design direction (stub:1), scheduling into a real harness-change contract is separate future work
+**Batch:** scaffold-backbone (Group A, with PIN-45)
+**Contract:** `work/pin45-46-scaffold-backbone/contract.md` — FROZEN 2026-07-14, ready for `ari-code-rhetoric` (one carve-out: Claim 6's log artifact deferred to PIN-49)
 **Resolution:** not traced

@@ -1,7 +1,7 @@
 ### PIN-45 — arete's scaffold (ruling 12): shape, home, relationship to the cut
 captured: 2026-07-14
-stub: 0
-status: open
+stub: 2
+status: scheduled
 home: anima-lite
 goes-stale: not traced
 relates-to: reorient/arete.md ruling 12, PIN-46
@@ -23,7 +23,7 @@ Follow-on discussion (2026-07-14, same session) resolved most of the design ques
 ---
 Shaping fields — not traced.
 
-**Scope:** not traced
-**Batch:** not traced
-**Contract:** not traced
+**Scope:** In — arete's requirement (always-produced, depth-gated), the cut-vs-scaffold evidence relationship. Out — the backbone's own schema (PIN-46).
+**Batch:** scaffold-backbone (Group A, with PIN-46)
+**Contract:** `work/pin45-46-scaffold-backbone/contract.md` — FROZEN 2026-07-14, ready for `ari-code-rhetoric` (one carve-out: Claim 6's log artifact deferred to PIN-49)
 **Resolution:** not traced
