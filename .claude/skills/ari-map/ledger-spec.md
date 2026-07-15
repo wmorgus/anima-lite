@@ -4,7 +4,7 @@ Canonical spec for `.anima-lite/features/<slug>.md`. Referenced by ari-map (writ
 
 ## Feature Ledger
 
-Features live at `.anima-lite/features/<slug>.md` — at the anima-lite root, not under any repo spine. A cross-repo feature (a change spanning two webapps) has a natural home there; a single-repo feature declares its repo in the header. Spines do not contain features; spines reference them by slug.
+Features live at `.anima-lite/features/<slug>.md`, at the project's **core repo** — not at a single pooled anima-lite-root location for every project this tool has ever touched. Core-project-repo is PIN-47 item 5's pattern (amended 2026-07-14), generalized off arete-only to universal, with a single-codebase collapse rule: a project with one codebase has no separate empty-of-app-code repo, so that codebase's own `.anima-lite/` *is* the core repo. For anima-lite's own self-harness-change work (including this workstream), this resolves to the same physical location as before — single-codebase, already collapses, no behavior change. It changes behavior only for a multi-repo project (a ripple's legs, an eventual arete cascade), whose ledger entries stop pooling into an unrelated shared bucket and instead live at that project's own core repo. A cross-repo feature (a change spanning two webapps within one project) has a natural home there; a single-repo feature declares its repo in the header. Spines do not contain features; spines reference them by slug.
 
 The ledger is a different artifact from the spine. The spine answers "what is true repo-wide." The ledger answers "what is true about this one feature." The different-feature test is the boundary: an observation that passes the test lives in the spine; one that fails lives in the ledger.
 
@@ -48,6 +48,16 @@ goes-stale: <one line — what would invalidate this, e.g. "DTO schema change, s
 
 ## Primary data structure
 <DTO or equivalent class + key fields observed. not traced if unconfirmed.>
+
+## Scaffold coordinates
+<`Scaffold coordinates: <scenario>/<path>/<step>[, ...]` — present when this
+ repo has a scaffold.md (`ari-map/scaffold-spec.md`) and this feature's entry
+ point maps onto one or more scaffold rows; absent entirely (not "none") when
+ this repo has no scaffold, same graceful-degradation posture as a
+ `Schema deps:` or playwright block that doesn't apply. Multiple coordinates
+ allowed, comma-separated. Populated by ari-map at probe time — the same probe
+ walk that builds the scaffold in the first place, not deferred to
+ ari-code-rhetoric's enrichment pass.>
 
 ---
 Everything below is enriched by ari-code-rhetoric after a port run.
@@ -110,6 +120,18 @@ goes-stale: <one line — what would invalidate this across ANY leg>
 - <leg-b-slug>: <leg-equivalent>
 - <leg-n-slug>: <leg-equivalent>
 
+## Per-leg scaffold coordinates
+- <leg-a-slug>: <`<scenario>/<path>/<step>[, ...]` — present when this leg's own
+  repo has a scaffold.md and this feature's entry point maps onto one or more of
+  its rows; absent (not "none") when that leg's repo has no scaffold>
+- <leg-b-slug>: <leg-equivalent>
+- <leg-n-slug>: <leg-equivalent>
+
+<One bullet per leg, following the same convention as `Per-leg entry points`/
+ `Per-leg primary data structure` above — each leg has its own repo-scoped
+ scaffold, so a flat field can't resolve which leg's scaffold a cross-repo
+ coordinate belongs to.>
+
 ---
 Everything below is enriched by ari-code-rhetoric as each leg's execution completes.
 At stub:0–2, all fields below are `not traced`.
@@ -147,5 +169,5 @@ At stub:0–2, all fields below are `not traced`.
 
 ### Field ownership
 
-- **ari-map** populates at probe time: all header fields, Identity, Entry points, Primary data structure, and status markers (`not traced` on all unconfirmed fields). For domain-central features, `Primary data structure` is expected to be populated (confirmed key fields, not `not traced`) — that's what `stub:2` at map-time means; ari-map does not get to defer this field to ari-code-rhetoric just because it's more convenient to confirm later. This applies to `origin: ported` entries only — ari-map probes existing code, and a shared-origin feature has no existing code to probe before its legs execute.
+- **ari-map** populates at probe time: all header fields, Identity, Entry points, Primary data structure, `Scaffold coordinates:` (or `Per-leg scaffold coordinates:` for a shared-origin entry, populated as each leg is probed), and status markers (`not traced` on all unconfirmed fields). For domain-central features, `Primary data structure` is expected to be populated (confirmed key fields, not `not traced`) — that's what `stub:2` at map-time means; ari-map does not get to defer this field to ari-code-rhetoric just because it's more convenient to confirm later. `Scaffold coordinates:` is populated the same probe pass that builds `scaffold.md` in the first place — not deferred to ari-code-rhetoric's enrichment pass, even though most other stub:3 fields are. This applies to `origin: ported` entries only — ari-map probes existing code, and a shared-origin feature has no existing code to probe before its legs execute.
 - **ari-code-rhetoric** enriches after a port run: Full data flow, Client-side wiring, State machine, Feature gates, Seam-specific protocols, Known quirks, Port provenance — and updates `stub:`, `source:`, and `prod-commit:` to reflect the enrichment. For non-domain-central features left at `stub:1` by ari-map, ari-code-rhetoric's enrichment pass is still the first point `Primary data structure` gets confirmed — the split narrows, it doesn't disappear. For a `shared-origin` entry, ari-code-rhetoric originates the entry itself (there is no ari-map stub to enrich) as each leg completes execution, populating that leg's bullet in every per-leg section; the entry reaches full `stub:3` coverage only once every leg named in the contract apex has executed and contributed its bullet.

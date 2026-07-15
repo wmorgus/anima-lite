@@ -27,6 +27,10 @@ A repo's telos names *what for*; `formal.md`/`material.md`/`efficient.md` name *
 
 A reader must be able to tell, from the artifact alone, whether a step wasn't looked at yet (`not traced`) or was looked at and found unremarkable (blank). Do not write `not traced` where a real "no divergence" finding exists, and do not leave a genuinely unprobed cell blank.
 
+## Reverse pointer — `Filled by:`
+
+The rooting between `scaffold.md` and the feature ledger is bidirectional. `ledger-spec.md` documents the forward pointer (`Scaffold coordinates:` on a ledger entry, populated by `ari-map` at probe time — see that spec). The reverse pointer lives here, on the scaffold side: a filled cell that a feature ledger entry points at gains an inline annotation, `Filled by: features/<slug>.md`, appended to that cell's note. Multiple slugs are allowed, comma-separated — symmetric with `Scaffold coordinates:`'s own `[, ...]` cardinality, because several features can converge on the same tangled step (exactly the tangled-attribution signal `ari-arete-pan`'s `Scaffold signal:` field is built to surface). A cell with no ledger entry pointing at it simply has no `Filled by:` annotation — absent, not a written negative.
+
 ## Per-scenario `stub:0-3` field
 
 Each scenario table carries its own `stub:0-3` field in its header, reusing the feature ledger's own stub vocabulary (`ledger-spec.md` "Stub depth") rather than inventing a parallel scale:
