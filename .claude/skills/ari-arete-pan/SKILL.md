@@ -15,7 +15,7 @@ Named for shitcorping's panning/smelting vocabulary (`corpora/anima/process.md`)
 
 - **A ratified arete statement** — `.anima-lite/work/<arete-slug>/arete-statement.md`, with its Ratification line filled. This is the only hard precondition (see below) — it does not have to have been produced in this same session, or even recently.
 - **The target repo**, read-only throughout this entire skill. Every file this skill inspects is inspected, never edited — this skill's output is a judgment about the repo, not a change to it.
-- **This repo's own spine** (`spine-<label>/`), if one exists — `ari-map`'s probe is useful evidence for locating code units and understanding what a piece of code currently does, but the *verdict* is never read off the spine the way a port's substrate/claim classification reads off a prod spine. The spine tells you what's there; the arete statement tells you whether it should stay.
+- **This repo's own spine** (`spine-<label>/`), if one exists — `ari-map`'s probe is useful evidence for locating code units and understanding what a piece of code currently does, but the *verdict* is never read off the spine the way a port's substrate/claim classification reads off a prod spine. The spine tells you what's there; the arete statement tells you whether it should stay. If the spine includes a `scaffold.md` (`ari-map/scaffold-spec.md`), it is evidence in the same sense — a unit's coordinate in the scaffold informs, never overrides, the nugget/ore/slag call.
 
 ## Preconditions
 
@@ -40,7 +40,7 @@ Named for shitcorping's panning/smelting vocabulary (`corpora/anima/process.md`)
 
 **2. Draft the cut.** For every unit enumerated in step 1, assign one of three verdicts:
    - **Nugget** — cleanly serves the statement as authored. No pressure-note needed; the reason it's a nugget is that it already matches the standard.
-   - **Ore** — a real pressure produced this, but it doesn't serve the statement cleanly as-is. Name the pressure specifically — what need was being filled, and why no easier path existed at the time. This note is what stops the eventual rewrite from reinventing a solution to a pressure nobody wrote down.
+   - **Ore** — a real pressure produced this, but it doesn't serve the statement cleanly as-is. Name the pressure specifically — what need was being filled, and why no easier path existed at the time. This note is what stops the eventual rewrite from reinventing a solution to a pressure nobody wrote down. Where this repo has a `scaffold.md` (`ari-map/scaffold-spec.md`), also record a `Scaffold signal: <coordinate> — <tag>` — a unit can serve the statement but sit at a tangled, unattributable spot in the scaffold (e.g. a step several scenarios all pass through with no clean single owner); that tangle is evidence feeding this same nugget/ore/slag call, never a second verdict axis of its own. Recorded as its own field, not folded into `Pressure:` — closed-taxonomy-shaped facts (a coordinate plus a short tag) belong in their own field, not buried in free prose that can't be counted later. Absent (not "none") when no scaffold exists for this repo or the unit's scaffold coordinate carries no signal.
    - **Slag** — no real signal to carry forward; doesn't serve the statement and there's no pressure worth preserving either. State briefly why it's slag, not just that it is — "no signal" is a finding, not a shrug.
 
 **3. Present the draft cut in full and iterate.** Every unit, its verdict, and (for ore) its pressure-note — shown to the operator as one document, not item by item. Let the operator reassign any unit between buckets, or sharpen an ore pressure-note that undersells or oversells the pressure behind it. Return to this step until the cut is stable — this is not a single presentation-and-done, it's a real revision loop, the same shape `/ari-arete`'s statement-authoring pass uses.
@@ -66,7 +66,7 @@ Target repo: <path>, read-only throughout
 - <unit> — <one line: why it already matches the statement>
 
 ## Ore
-- <unit> — Pressure: <what need was being filled, why no easier path existed at the time>
+- <unit> — Pressure: <what need was being filled, why no easier path existed at the time> — Scaffold signal: <coordinate> — <tag>
 
 ## Slag
 - <unit> — <one line: why no signal is worth carrying forward>

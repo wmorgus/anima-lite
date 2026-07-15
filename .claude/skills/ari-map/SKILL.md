@@ -1,6 +1,6 @@
 ---
 name: ari-map
-description: Produces .anima-lite/spine-<label>/ — a four-file spine directory containing telos.md (coding-agent entry point) and three cause files (material, formal, efficient). Called by ari-lite before any port begins, and re-called whenever the precondition check below fails.
+description: Produces .anima-lite/spine-<label>/ — a spine directory containing telos.md (coding-agent entry point), three cause files (material, formal, efficient), and scaffold.md (the coordinate backbone, not a fifth cause — see scaffold-spec.md). Called by ari-lite before any port begins, and re-called whenever the precondition check below fails.
 ---
 
 # ari-map
@@ -79,6 +79,10 @@ From the Final cause, derive **don't-contradict rules** — imperative constrain
 
 **Comprehensive feature map.** Attempt a comprehensive feature map — identify every user-facing feature in the repo, not just the ones tied to the current port. For each identified feature, create a stub in `.anima-lite/features/` at the deepest level the probe can confirm without over-claiming. "The feature exists and its entry point is X" is a valid `stub:1`. Do not require full-chain visibility before creating a stub; require only that every populated field was confirmed in code.
 
+**`scaffold.md` — always produced, depth-gated not existence-gated.** Every probe also writes `.anima-lite/spine-<label>/scaffold.md` — the coordinate backbone naming this repo's own scenarios and how each one moves step by step. It is not a fifth Aristotelian cause; see `ari-map/scaffold-spec.md` for why and for the full schema (one table per scenario, rows keyed by `(scenario, path, step)`, three formal/material/efficient columns). This artifact is unconditional, the same always-produced/depth-gated shape the feature ledger already has (`ledger-spec.md` "Stub depth") — no probe skips it because the port at hand doesn't need it. Minimum output on every probe is `stub:1` (scenarios named, cells unfilled, per `scaffold-spec.md`'s stub vocabulary). Depth beyond that is a judgment call: an ordinary port may stop at `stub:1`; component-level depth within a larger probe depends on whether that component has internal process complexity worth mapping. A system-level `/ari-arete` founding pass is the one case that is *not* a judgment call — it must reach `stub:2`/`stub:3`, because the scaffold is the only other legible source (besides the code itself) it has to found the telos against.
+
+**Retroactive backfill obligation.** This requirement applies to every existing `spine-<label>/` directory, not just probes run from this point forward — the obligation is retroactive, confirmed explicitly (not a forward-only default). An existing spine without a `scaffold.md` gets one backfilled at its next `/ari-map` refresh, as a one-time backfill pass distinct from that refresh's ordinary workload — name it as such in the refresh's own commit/summary rather than silently folding it into ordinary probe cadence.
+
 **Domain-central features go to stub:2 at map-time.** For features built on domain-central entities — recurring nouns that show up across the repo (sessions, students, institutions, and similar) — probe to `stub:2` (entry point + primary data structure + key fields, per ledger-spec.md), not `stub:1`. Stopping at stub:1 for these defers field-depth to ari-code-rhetoric, which runs after the contract freezes — too late for ari-argue-rhetoric to catch a claim built on a field that doesn't exist. The ledger is uncapped and per-feature, so it absorbs this field-level volume without pressuring the cause-file cap. This does not relax the honest-stub rule: populate `Primary data structure` at stub:2 only with fields the probe actually confirmed — a dishonest stub:2 is worse than an honest stub:1.
 
 How to identify features: trace entry points (servlet URL mappings, route configs, JSP file inventory) and group them by user-facing function. A feature is a user-facing capability — not a utility, not a shared service. When in doubt whether something is a feature or infrastructure, ask: does a human user interact with this directly? If yes, it is a feature.
@@ -95,7 +99,7 @@ When in doubt, keep it out. Wrong in a contract costs one feature; wrong in the 
 
 ## Output
 
-Write four files to `.anima-lite/spine-<label>/`. Section numbers make spine findings citable by ari-argue-rhetoric and ari-code-rhetoric — cite the section, not just the file.
+Write four cause files plus `scaffold.md` (see "Scaffold" below) to `.anima-lite/spine-<label>/`. Section numbers make spine findings citable by ari-argue-rhetoric and ari-code-rhetoric — cite the section, not just the file.
 
 ---
 
@@ -395,6 +399,10 @@ Cap each cause file's narrative sections at ~50 lines. If you're exceeding that,
 During probe, attempt a comprehensive feature map (see "Comprehensive feature map" above) and create an honest stub in `.anima-lite/features/<slug>.md` for every feature identified — deep as the probe can decisively confirm, no deeper. The failure mode is not the shallow stub; it is the dishonest stub, where a field is filled with an assertion the agent cannot confirm. A shallow honest stub is a correct artifact.
 
 Format, stub levels, and field ownership: see `ledger-spec.md` in this skill's directory.
+
+## Scaffold
+
+Also write `.anima-lite/spine-<label>/scaffold.md`, always, per the "always produced, depth-gated not existence-gated" rule above. `scaffold.md` is not a fifth Aristotelian cause — it is a coordinate backbone the material/formal/efficient cells attach to; see `scaffold-spec.md` in this skill's directory for the full schema, cell-honesty vocabulary (`not traced` vs. blank), and per-scenario `stub:0-3` field, and for the fuller statement of why this artifact is not a fifth cause.
 
 > **◎ OPTIONAL GATE — GATE-SPINE-REVIEW (spine review)**
 > Spine written — review before ari-argue-rhetoric runs? (skip to proceed). Especially recommended on first-time repos where probe depth is uncertain.

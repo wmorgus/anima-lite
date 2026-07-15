@@ -31,6 +31,12 @@ Seams: "No priority ranks" — batch + status are the only ordering the backlog 
 
 ### ari-arete
 Founds a telos by iterative language for a repo with no final cause on record — bare, asserts rather than argues. Hard-precondition GATE-SEED-CONTEXT (starting rule: index file, list grows by design) gates a draft→iterate→ratify pass producing a caveman-dense arete statement, cascading top-down (system, then each derived component). Writes `work/<slug>/arete-statement.md`.
+
+**Telos-growth propagation (two-tier reopen, borrowed from `reorient/ripple.md` ruling 4).** On a ratified system-level arete-statement growth event, the cascade to components and to any `scaffold.md` scenario does not automatically re-run in full, and it does not stay silently un-reconsidered either — two tiers:
+- **Tier 1 — mandatory reconsideration, always.** Every cascaded component statement and every scaffold scenario gets a reconsideration pass ("does this still follow from the new parent?"), and the judgment is logged even when the answer is no-rework-needed. This pass is not optional or skippable just because a component "probably isn't affected" — the judgment itself, yes or no and why, is the record.
+- **Tier 2 — re-founding/re-walking, only where dependency is real.** A component statement or scaffold scenario only gets re-founded or re-walked where tier 1's judgment concludes it actually depended on what changed. Where tier 1 concludes no dependency, the existing statement/scenario stands as-is.
+
+This is the same two-tier shape ripple's ruling 4 uses for a CONTRACT-BREAK's cross-leg reopen, borrowed directly rather than independently invented for arete's cascade. **The log's concrete artifact is not decided here** — ripple's own ruling 4 doesn't name a dedicated artifact for this either (it logs into the ordinary contract-amendment record); naming and scoping a durable log format for this class of triggered, coordinate-keyed, append-only observation is deferred to **PIN-49**.
 Seams: does not judge existing code against the statement it produces — that's `ari-arete-pan`'s exclusive job, kept deliberately separate rather than folded in as a final step of the same pass (arete.md ruling 1).
 
 ### ari-arete-pan

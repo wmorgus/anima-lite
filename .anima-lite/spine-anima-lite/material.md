@@ -21,7 +21,8 @@
 
 ## §4 Artifact data structures
 All committed, durable state (only `.anima-lite/work/*/screenshots/*.png` is gitignored — the prose manifest `screenshots.md` is the committed record):
-- `spine-<label>/{telos,material,formal,efficient}.md` — four files per repo; `telos.md` is hash-pinned to that repo's HEAD
+- `spine-<label>/{telos,material,formal,efficient}.md` — four cause files per repo; `telos.md` is hash-pinned to that repo's HEAD
+- `spine-<label>/scaffold.md` — fifth spine file, always produced, depth-gated; not a fifth cause — coordinate backbone the four cause files' cells attach to (`ari-map/scaffold-spec.md`)
 - `work/<slug>/{intent,contract,plan,blips,catchup,pr,judgment}.md` — per-workstream artifacts, not all present for every slug (§7)
 - `features/<slug>.md` — feature ledger, stub:0–3
 - `backlog.md` + `pins/PIN-<n>.md` — the backlog index and one file per pin
@@ -48,6 +49,7 @@ Base: `HARNESS.md` §2 (spec-ownership map) names the canonical location and own
 | `work/<slug>/judgment.md` | ari-read SKILL.md (Output) | Question (verbatim), Slug, Question-shape, Confirmed intent, Feeds, Ontology, Reconstruction, Belief repair (Believed/Observed/Where belief ends), Provenance, Operator reading | Operator (GATE-MATCH reading is terminal), ari-backlog (when a judgment feeds a pin) |
 | `spine-<label>/telos.md` | ari-map SKILL.md (Output) | Commit, Confidence, Refresh trigger, §1 Purpose, §2 Don't contradict, §3 Cause files, §4 Disclaimers | ari-intake (GATE-TELOS), ari-argue-rhetoric (Inputs), ari-code-rhetoric (Inputs) |
 | `spine-<label>/material.md`, `formal.md`, `efficient.md` | ari-map SKILL.md (Output) | Per-cause §-numbered sections; formal.md's §3 also carries required per-stratum `Seams:` lines | ari-argue-rhetoric (classification evidence), ari-code-rhetoric (substrate-translation guide) |
+| `spine-<label>/scaffold.md` | ari-map/scaffold-spec.md | Per-scenario tables, rows keyed by `(scenario, path, step)`, three formal/material/efficient columns, per-scenario `stub:0-3`, `Filled by:` reverse pointer | ari-arete-pan (evidence, `Scaffold signal:`), ari-argue-rhetoric (arete posture) |
 | `features/<slug>.md` | ari-map/ledger-spec.md | slug, repo(s), stub, source, prod-commit, goes-stale, Identity, Entry points, Primary data structure, (stub:3+) Full data flow, Client-side wiring, State machine, Feature gates, Seam-specific protocols, Known quirks, Port provenance; ripple variant adds `origin: shared-origin` and per-leg bullets | ari-map (writes stub), ari-code-rhetoric (Step 5 harvest, enriches to stub:3) |
 | `work/<branch-slug>/contract.md` | ari-argue-rhetoric SKILL.md (Output) | Branch, Generated, Spine commit, Source of truth, Status, The argument, Substrate changes, Claim changes (each with `Schema deps:`, ripple adds per-target substrate-mapping), Open questions, Proto visual reference, Playwright verification block | ari-code-rhetoric (Inputs, all steps) |
 | `.claude/skills/ari-argue-rhetoric/playwright-spec.md` | ari-argue-rhetoric (support file) | Block schema, `expect`-field rules, worked example | ari-code-rhetoric (Step 3, validation D/E) |

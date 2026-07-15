@@ -51,6 +51,7 @@ Every required and optional gate currently defined across the six skill files, p
 | Cross-spine/tier vocabulary (`relates-to:` edge-kind tags; material.md §10 spine-built/spine-buildable/unspineable tiers) | `.claude/skills/ari-map/SKILL.md` (Output section) | ari-map | ari-code-rhetoric (Claim 5's reverse-index check, Step 2), ari-argue-rhetoric (GATE-SCHEMA, per-leg schema check) |
 | Arete-statement artifact format (`work/<slug>/arete-statement.md`) | `.claude/skills/ari-arete/SKILL.md` (Output section) | ari-arete | ari-arete-pan (Inputs — the only hard precondition), ari-argue-rhetoric (arete posture — the argument, step 2) |
 | Arete-cut artifact format (`work/<slug>/cut.md`) | `.claude/skills/ari-arete-pan/SKILL.md` (Output section) | ari-arete-pan | ari-argue-rhetoric (arete posture — primary input) |
+| Scaffold artifact spec (`scaffold.md` format — not a fifth cause, a coordinate backbone the material/formal/efficient cells attach to) | `.claude/skills/ari-map/scaffold-spec.md` | ari-map | ari-arete, ari-arete-pan (evidence, Claim 4), ari-argue-rhetoric (arete posture, step 2/3) |
 
 ---
 
