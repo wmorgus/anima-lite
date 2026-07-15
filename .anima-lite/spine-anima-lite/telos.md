@@ -17,6 +17,7 @@ anima-lite is the custodian of the alignment between what a codebase promises an
 - [material.md](material.md) — artifact/spec inventory, deliberate non-capabilities, harness vocabulary
 - [formal.md](formal.md) — per-skill strata, seam protocols, named findings
 - [efficient.md](efficient.md) — invocation model, change propagation, calibration/metrics
+- [scaffold.md](scaffold.md) — coordinate backbone, this repo's own scenarios; not a fifth cause — see `ari-map/scaffold-spec.md`
 
 ## §4 Disclaimers
 This is a self-spine — anima-lite mapping itself using its own methodology. The observer and the observed are the same system; findings that touch the probe methodology itself (ari-map/SKILL.md, this spine's own template) warrant extra scrutiny, since the probe cannot easily surface its own blind spots. Where this repo's judgment calls (e.g. what counts as "entity" or "final cause" for a markdown harness rather than an app) required adaptation from ari-map's prod-shaped template, the adaptation is named explicitly in material.md/formal.md rather than silently substituted.
